@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=EvilAlarm
+Comment=An alarm clock which forces you to get up
+Exec=evilalarm
+Icon=evilalarm
+Type=Application
+Categories=Utility;

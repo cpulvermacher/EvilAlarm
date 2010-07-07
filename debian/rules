@@ -1,0 +1,68 @@
+#!/usr/bin/make -f
+
+export DH_VERBOSE=1
+
+#uncomment this if you want to build a maemo package
+maemo=foo
+
+SOURCEDIR=./
+BUILDDIR=debian/build/
+ICONDIR=usr/share/icons/hicolor/
+BINDIR=usr/games/
+RESDIR=usr/share/games/evilalarm/
+DESKTOP_DIR=usr/share/applications/
+
+ifdef maemo
+	BINDIR=usr/bin/
+	RESDIR=usr/share/evilalarm/
+	DESKTOP_DIR=usr/share/applications/hildon/
+endif
+
+build:
+	dh_testdir
+	install -d ${BUILDDIR}
+	qmake-qt4 -after "DESTDIR=debian/build"
+	$(MAKE)
+	touch build
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build
+	[ ! -f Makefile ] || $(MAKE) clean
+	dh_clean
+	rm -rf ${BUILDDIR}
+
+binary: binary-arch
+
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_installdocs
+	dh_installchangelogs
+	dh_strip
+	dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary-indep: build
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs ${BINDIR} $(RESDIR)
+	dh_install ${BUILDDIR}evilalarm ${BINDIR}
+	dh_install evilalarm.desktop $(DESKTOP_DIR)
+	dh_install icons/48x48/evilalarm.png $(ICONDIR)48x48/apps
+	dh_install icons/64x64/evilalarm.png $(ICONDIR)64x64/apps
+ifdef maemo
+#weird size
+	dh_install icons/26x26/evilalarm.png $(ICONDIR)26x26/apps
+endif
+
+.PHONY: build clean binary-arch binary install
