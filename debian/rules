@@ -2,21 +2,12 @@
 
 export DH_VERBOSE=1
 
-#uncomment this if you want to build a maemo package
-maemo=foo
-
 SOURCEDIR=./
 BUILDDIR=debian/build/
 ICONDIR=usr/share/icons/hicolor/
-BINDIR=usr/games/
-RESDIR=usr/share/games/evilalarm/
-DESKTOP_DIR=usr/share/applications/
-
-ifdef maemo
-	BINDIR=usr/bin/
-	RESDIR=usr/share/evilalarm/
-	DESKTOP_DIR=usr/share/applications/hildon/
-endif
+BINDIR=usr/bin/
+RESDIR=usr/share/evilalarm/
+DESKTOP_DIR=usr/share/applications/hildon/
 
 build:
 	dh_testdir
@@ -60,9 +51,6 @@ install: build
 	dh_install evilalarm.desktop $(DESKTOP_DIR)
 	dh_install icons/48x48/evilalarm.png $(ICONDIR)48x48/apps
 	dh_install icons/64x64/evilalarm.png $(ICONDIR)64x64/apps
-ifdef maemo
-#weird size
 	dh_install icons/26x26/evilalarm.png $(ICONDIR)26x26/apps
-endif
 
 .PHONY: build clean binary-arch binary install
