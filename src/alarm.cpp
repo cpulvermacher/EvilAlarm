@@ -26,8 +26,6 @@
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 
-#include <iostream>
-
 
 Alarm::Alarm(QWidget *parent, bool testing):
 	QDialog(parent),
@@ -36,7 +34,6 @@ Alarm::Alarm(QWidget *parent, bool testing):
 	audio_output(new Phonon::AudioOutput(Phonon::MusicCategory,  this)),
 	testing(testing)
 {
-	std::cout << "init Alarm\n";
 	setWindowTitle("EvilAlarm");
 	if(!testing)
 		setWindowState(windowState() | Qt::WindowFullScreen);
@@ -57,7 +54,7 @@ Alarm::Alarm(QWidget *parent, bool testing):
 	//setup ui
 	QVBoxLayout* layout1 = new QVBoxLayout();
 	QHBoxLayout* layout2 = new QHBoxLayout();
-	QLabel *text_label = new QLabel(testing?"<h2>Just testing</h2>":"<h2>Wake up!</h2>", this);
+	QLabel *text_label = new QLabel(tr("<h2>Wake up!</h2>")+ (testing?tr(" (just testing...)"):""), this);
 	layout1->addWidget(text_label);
 	QLabel *icon_label = new QLabel(this);
 	icon_label->setPixmap(QPixmap("/usr/share/icons/hicolor/64x64/apps/evilalarm.png"));
@@ -68,14 +65,11 @@ Alarm::Alarm(QWidget *parent, bool testing):
 
 	if(!testing)
 		start();
-	std::cout << "finished\n";
 }
 
 //actually starts the alarm, needs to be called manually when testing
 void Alarm::start()
 {
-	std::cout << "start\n";
-
 	connect(noise, SIGNAL(aboutToFinish()),
 		this, SLOT(repeatSound()));
 
@@ -95,7 +89,6 @@ void Alarm::start()
 
 Alarm::~Alarm()
 {
-	std::cout << "~Alarm\n";
 	delete accel;
 	delete noise;
 	delete audio_output;
@@ -104,7 +97,6 @@ Alarm::~Alarm()
 
 void Alarm::accelUpdate(int x, int y, int z)
 {
-	std::cout << ".";
 	static int lastx = x;
 	static int lasty = y;
 	static int lastz = z;
@@ -145,7 +137,6 @@ void Alarm::accelUpdate(int x, int y, int z)
 
 void Alarm::closeEvent(QCloseEvent*)
 {
-	std::cout << "closeEvent()";
 	hide();
 	noise->stop();
 	noise->deleteLater();
@@ -160,7 +151,6 @@ void Alarm::closeEvent(QCloseEvent*)
 
 void Alarm::repeatSound()
 {
-	std::cout << "repeatSound()";
 	noise->enqueue(noise->currentSource());
 }
 
@@ -179,7 +169,6 @@ void Alarm::grabZoomKeys(bool grab)
 
 void Alarm::test(QWidget *parent, QString sound_filename, float max_vol, int al_timeout, int in_timeout)
 {
-	std::cout << "test\n";
 	Alarm *alarm = new Alarm(parent, true);
 	alarm->max_volume = max_vol;
 	//alarm->alarm_timeout = al_timeout; //TODO put this in
@@ -191,5 +180,4 @@ void Alarm::test(QWidget *parent, QString sound_filename, float max_vol, int al_
 	alarm->exec();
 
 	delete alarm;
-	std::cout << "test finished\n";
 }
