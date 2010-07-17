@@ -80,6 +80,14 @@ void MainWindow::toggleTimer()
 		time_button->setEnabled(true);
 		activate_button->setText("Activate");
 	} else {
+		//check wether sound file exists
+		QSettings settings;
+		QFileInfo soundfile(settings.value("sound_filename", SOUND_FILE).toString());
+		if(!soundfile.exists() or !soundfile.isReadable()) {
+			QMaemo5InformationBox::information(this, "Cannot read sound file, please check your preferences.");
+			return;
+		}
+
 		int msecs = QTime::currentTime().msecsTo(wake_at);
 		if(msecs < 0)
 			msecs += 24*60*60*1000; //24h in msec
@@ -90,7 +98,6 @@ void MainWindow::toggleTimer()
 		time_button->setEnabled(false);
 		activate_button->setText("Deactivate");
 
-		QSettings settings;
 		settings.setValue("wake_at", wake_at);
 		settings.sync();
 	}

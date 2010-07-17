@@ -31,10 +31,10 @@ Preferences::Preferences(QWidget *parent):
 
 	QHBoxLayout *layout3 = new QHBoxLayout();
 	sound_filename = new QMaemo5ValueButton("Sound File", this);
-	sound_filename->setValueText(settings.value("sound_filename", "/home/user/MyDocs/.sounds/Ringtones/Beep.aac").toString());
+	sound_filename->setValueText(settings.value("sound_filename", SOUND_FILE).toString());
 	volume = new QSlider(Qt::Horizontal, this);
 	volume->setRange(1, 16); //for some reason, volume goes to 0.16
-	volume->setValue(10 * settings.value("sound_volume", 1.0).toFloat());
+	volume->setValue(10 * settings.value("sound_volume", VOLUME).toFloat());
 	volume->setMinimumWidth(100);
 	layout3->addWidget(sound_filename);
 	layout3->addWidget(volume);

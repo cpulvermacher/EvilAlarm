@@ -24,8 +24,14 @@
 #include <Phonon>
 #include <QtGui>
 
+//default values
 const int ACCELEROMETER_POLL_MSEC = 500;
 const int ACCELEROMETER_THRESHOLD = 40;
+const QString SOUND_FILE = "/home/user/MyDocs/.sounds/Ringtones/Beep.aac";
+const float VOLUME = 1.0;
+const int INACTIVITY_TIMEOUT = 4; //seconds before noise will restart after device has stopped moving
+const int ALARM_TIMEOUT = 5; //minutes the device is armed after initial alarm
+
 
 class Alarm : public QDialog {
 	Q_OBJECT

@@ -43,8 +43,8 @@ Alarm::Alarm(QWidget *parent, bool testing):
 	//load settings
 	if(!testing) {
 		QSettings settings;
-		noise->setCurrentSource(Phonon::MediaSource(settings.value("sound_filename", "/home/user/MyDocs/.sounds/Ringtones/Beep.aac").toString()));
-		max_volume = settings.value("sound_volume", 1.0).toFloat();
+		noise->setCurrentSource(Phonon::MediaSource(settings.value("sound_filename", SOUND_FILE).toString()));
+		max_volume = settings.value("sound_volume", VOLUME).toFloat();
 		alarm_timeout = settings.value("alarm_timeout", ALARM_TIMEOUT).toInt();
 		inactivity_timeout = settings.value("inactivity_timeout", INACTIVITY_TIMEOUT).toInt();
 	}

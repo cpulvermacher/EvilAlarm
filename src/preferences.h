@@ -23,10 +23,6 @@
 #include <QtGui>
 #include <QMaemo5ValueButton>
 
-//default values
-const int INACTIVITY_TIMEOUT = 4; //seconds before noise will restart after device has stopped moving
-const int ALARM_TIMEOUT = 5; //minutes the device is armed after initial alarm
-
 class Preferences : public QDialog {
 	Q_OBJECT
 public:
