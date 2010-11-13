@@ -40,13 +40,17 @@ Alarm::Alarm(QWidget *parent, bool testing):
 
 	Phonon::createPath(noise, audio_output);
 
-	//load settings
 	if(!testing) {
+		//load settings
 		QSettings settings;
 		noise->setCurrentSource(Phonon::MediaSource(settings.value("sound_filename", SOUND_FILE).toString()));
 		max_volume = settings.value("sound_volume", VOLUME).toFloat();
 		alarm_timeout = settings.value("alarm_timeout", ALARM_TIMEOUT).toInt();
 		inactivity_timeout = settings.value("inactivity_timeout", INACTIVITY_TIMEOUT).toInt();
+
+		//tell daemon to restart us if we're killed
+		settings.setValue("protect_ui", true);
+		settings.sync();
 	}
 
 	grabZoomKeys(true);
@@ -146,6 +150,10 @@ void Alarm::closeEvent(QCloseEvent*)
 	interface.call("set_profile", old_profile);
 
 	grabZoomKeys(false);
+
+	QSettings settings;
+	settings.setValue("protect_ui", false);
+	settings.sync();
 }
 
 

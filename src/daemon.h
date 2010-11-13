@@ -16,24 +16,24 @@
     with this program; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
-#ifndef MAIN_H
-#define MAIN_H
+#ifndef DAEMON_H
+#define DAEMON_H
 
-#include <QtMaemo5>
-#include <QtGui>
+#include <QtCore>
 
-class MainWindow : public QMainWindow {
+class Daemon : public QObject {
 	Q_OBJECT
 public:
-	MainWindow(QWidget *parent = 0);
+	Daemon();
+
+	static void start(); //does nothing if daemon is running
+	static void stop();
+	static bool isRunning();
 private slots:
-	void about();
-	void showPreferences();
-	void toggleAlarm();
+	void wake();
+	void uiFinished();
 private:
-	QMaemo5ValueButton *time_button;
-	QMaemo5TimePickSelector *time_picker;
-	QPushButton *activate_button;
 	QTimer timer;
+	QProcess *ui_process;
 };
 #endif

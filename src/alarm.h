@@ -36,7 +36,7 @@ const int ALARM_TIMEOUT = 5; //minutes the device is armed after initial alarm
 class Alarm : public QDialog {
 	Q_OBJECT
 public:
-	Alarm(QWidget *parent, bool testing = false);
+	Alarm(QWidget *parent = 0, bool testing = false);
 	~Alarm();
 	static void test(QWidget *parent, QString sound_filename, float max_vol, int al_timeout, int in_timeout);
 protected:
