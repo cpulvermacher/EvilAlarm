@@ -57,7 +57,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	connect(pref_button, SIGNAL(clicked()),
 		this, SLOT(showPreferences()));
-	connect(activate_button, SIGNAL(clicked()),
+	connect(activate_button, SIGNAL(toggled(bool)),
 		this, SLOT(toggleAlarm()));
 	connect(&timer, SIGNAL(timeout()),
 		this, SLOT(toggleAlarm()));
