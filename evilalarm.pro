@@ -6,7 +6,7 @@ CONFIG += silent debug
 OBJECTS_DIR = $${PWD}/tmp
 MOC_DIR = $${PWD}/tmp
 VPATH = $${PWD}/src
-INCLUDEPATH = $${PWD}/src
+INCLUDEPATH += $${PWD}/src
 
 # Input
 HEADERS += main.h accelerometer.h preferences.h alarm.h daemon.h

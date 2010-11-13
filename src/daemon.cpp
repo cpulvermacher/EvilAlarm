@@ -16,6 +16,7 @@
     with this program; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #include "daemon.h"
 
 #include <QtCore>
@@ -32,8 +33,6 @@ Daemon::Daemon()
 		std::cerr << "Invalid alarm time, aborting\n";
 		exit(1);
 	}
-
-	settings.setValue("daemon_pid", QCoreApplication::applicationPid());
 
 	int msecs = QTime::currentTime().msecsTo(wake_at);
 	if(msecs < 0) //alarm tomorrow?
@@ -83,8 +82,13 @@ void Daemon::start()
 	if(isRunning())
 		return;
 
-	const bool success = QProcess::startDetached(QCoreApplication::applicationFilePath(), QStringList("--daemon"));
+	qint64 pid;
+	const bool success = QProcess::startDetached(QCoreApplication::applicationFilePath(), QStringList("--daemon"), QString(), &pid);
 	Q_ASSERT(success);
+
+	QSettings settings;
+	settings.setValue("daemon_pid", pid);
+	settings.sync();
 }
 
 void Daemon::stop()
