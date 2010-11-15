@@ -3,7 +3,6 @@
 #include <QtDBus>
 #include <QTimer>
 
-
 #include <mce/mode-names.h>
 #include <mce/dbus-names.h>
 

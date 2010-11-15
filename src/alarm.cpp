@@ -17,34 +17,26 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 #include "alarm.h"
-#include "preferences.h"
+//#include "preferences.h"
 
 #include <QtDBus>
 #include <QtGui>
-#include <QX11Info>
 
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
+#include <iostream>
 
 
 Alarm::Alarm(QWidget *parent, bool testing):
 	QDialog(parent),
 	label(new QLabel(this)),
-	noise(new Phonon::MediaObject(this)),
-	audio_output(new Phonon::AudioOutput(Phonon::MusicCategory,  this)),
-	testing(testing)
+	testing(testing),
+	alarm_playing(false)
 {
 	setWindowTitle("EvilAlarm");
-	if(!testing)
+	if(!testing) {
 		setWindowState(windowState() | Qt::WindowFullScreen);
 
-	Phonon::createPath(noise, audio_output);
-
-	if(!testing) {
 		//load settings
 		QSettings settings;
-		noise->setCurrentSource(Phonon::MediaSource(settings.value("sound_filename", SOUND_FILE).toString()));
-		max_volume = settings.value("sound_volume", VOLUME).toFloat();
 		alarm_timeout = settings.value("alarm_timeout", ALARM_TIMEOUT).toInt();
 		inactivity_timeout = settings.value("inactivity_timeout", INACTIVITY_TIMEOUT).toInt();
 
@@ -52,8 +44,6 @@ Alarm::Alarm(QWidget *parent, bool testing):
 		settings.setValue("protect_ui", true);
 		settings.sync();
 	}
-
-	grabZoomKeys(true);
 
 	//setup ui
 	QVBoxLayout* layout1 = new QVBoxLayout();
@@ -68,22 +58,13 @@ Alarm::Alarm(QWidget *parent, bool testing):
 	setLayout(layout1);
 
 	if(!testing)
-		start();
+		initialize();
 }
 
 //actually starts the alarm, needs to be called manually when testing
-void Alarm::start()
+void Alarm::initialize()
 {
-	connect(noise, SIGNAL(aboutToFinish()),
-		this, SLOT(repeatSound()));
-
-	//switch to 'general' profile
-	QDBusInterface interface("com.nokia.profiled", "/com/nokia/profiled", "com.nokia.profiled");
-	QDBusReply<QString> profile = interface.call("get_profile");
-	old_profile = profile;
-	interface.call("set_profile", "general");
-
-	noise->play();
+	start();
 	alarm_started = QTime::currentTime();
 
 	accel = new Accelerometer(this, ACCELEROMETER_POLL_MSEC);
@@ -94,38 +75,26 @@ void Alarm::start()
 Alarm::~Alarm()
 {
 	delete accel;
-	delete noise;
-	delete audio_output;
 }
-
 
 void Alarm::accelUpdate(int x, int y, int z)
 {
+	if(alarm_started.elapsed()/1000 > alarm_timeout*60) {
+		close();
+	}
+
 	static int lastx = x;
 	static int lasty = y;
 	static int lastz = z;
 	static QTime last_active = QTime::currentTime();
 
-	if(alarm_started.elapsed()/1000 > alarm_timeout*60) {
-		close();
-	}
-
-	const qreal volume_step = 0.1;
 	if(qAbs(lastx - x) > ACCELEROMETER_THRESHOLD
 	or qAbs(lasty - y) > ACCELEROMETER_THRESHOLD
 	or qAbs(lastz - z) > ACCELEROMETER_THRESHOLD) { //device moved
-		audio_output->setVolume(audio_output->volume() - volume_step);
+		stop();
 		last_active.restart();
 	} else if(last_active.elapsed()/1000 > inactivity_timeout) { //not moved for a while
-		noise->play();
-		if(audio_output->volume() < max_volume)
-			audio_output->setVolume(audio_output->volume() + volume_step);
-	}
-
-	//Phonon thinks it's OK to set the volume to 'nan' if we set something < 0
-	if(audio_output->volume() != audio_output->volume()) {
-		audio_output->setVolume(0.0);
-		noise->pause();
+		start();
 	}
 
 	int secs_remaining = alarm_timeout*60 - alarm_started.elapsed()/1000;
@@ -142,14 +111,7 @@ void Alarm::accelUpdate(int x, int y, int z)
 void Alarm::closeEvent(QCloseEvent*)
 {
 	hide();
-	noise->stop();
-	noise->deleteLater();
-
-	//reset profile
-	QDBusInterface interface("com.nokia.profiled", "/com/nokia/profiled", "com.nokia.profiled");
-	interface.call("set_profile", old_profile);
-
-	grabZoomKeys(false);
+	stop();
 
 	QSettings settings;
 	settings.setValue("protect_ui", false);
@@ -157,35 +119,60 @@ void Alarm::closeEvent(QCloseEvent*)
 }
 
 
+//TODO remove
 void Alarm::repeatSound()
 {
-	noise->enqueue(noise->currentSource());
+	//noise->enqueue(noise->currentSource());
 }
 
 
-void Alarm::grabZoomKeys(bool grab)
-{
-	unsigned long val = (grab)?1:0;
-	Atom atom = XInternAtom(QX11Info::display(), "_HILDON_ZOOM_KEY_ATOM", False);
-	if(!atom) {
-		qWarning("Couldn't get zoom key atom");
-		return;
-	}
-	XChangeProperty(QX11Info::display(), winId(), atom, XA_INTEGER,
-		32, PropModeReplace, reinterpret_cast<unsigned char *>(&val), 1);
-}
-
-void Alarm::test(QWidget *parent, QString sound_filename, float max_vol, int al_timeout, int in_timeout)
+void Alarm::test(QWidget *parent, int al_timeout, int in_timeout)
 {
 	Alarm *alarm = new Alarm(parent, true);
-	alarm->max_volume = max_vol;
-	//alarm->alarm_timeout = al_timeout; //TODO put this in
-	alarm->alarm_timeout = 1;
+	alarm->alarm_timeout = al_timeout;
 	alarm->inactivity_timeout = in_timeout;
-	alarm->noise->setCurrentSource(Phonon::MediaSource(sound_filename));
 
-	alarm->start();
+	alarm->initialize();
 	alarm->exec();
 
 	delete alarm;
+}
+
+void Alarm::start()
+{
+	if(alarm_playing)
+		return;
+
+	QDBusInterface interface("org.freedesktop.Notifications", "/org/freedesktop/Notifications", "org.freedesktop.Notifications");
+	QVariantMap hints;
+	hints.insert("vibra", "PatternIncomingCall");
+	hints.insert("alarm-type", "clock"); //necessary for repeat
+	//hints.insert("sound-file", ...); //ignored
+	hints.insert("category", "alarm-event");
+	//hints.insert("volume", qRound(max_volume*100)); //ignored
+
+	QDBusReply<quint32> dbus_reply = interface.call("Notify",
+		"evilalarm", //app_name
+		quint32(0), //replaces_id
+		"", //app_icon
+		"alarm", //summary
+		"", //body
+		QStringList(), //actions
+		hints, //hints
+		qint32(0) //expire_timeout
+	);
+	Q_ASSERT(dbus_reply.isValid());
+
+	notify_id = dbus_reply.value();
+	alarm_playing = true;
+}
+
+void Alarm::stop()
+{
+	if(!alarm_playing)
+		return;
+
+	QDBusInterface interface("org.freedesktop.Notifications", "/org/freedesktop/Notifications", "org.freedesktop.Notifications");
+	interface.call("CloseNotification", notify_id);
+	alarm_playing = false;
 }

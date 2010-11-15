@@ -25,6 +25,7 @@
 
 class QTimer;
 
+//emits orientationChanged() every interval miliseconds
 class Accelerometer : public QObject {
 	Q_OBJECT
 public:

@@ -24,23 +24,21 @@
 Preferences::Preferences(QWidget *parent):
 	QDialog(parent)
 {
-	setWindowTitle("Preferences");
+	setWindowTitle(tr("Preferences"));
 
 	QHBoxLayout *layout1 = new QHBoxLayout();
 	QVBoxLayout *layout2 = new QVBoxLayout();
 
-	QHBoxLayout *layout3 = new QHBoxLayout();
-	sound_filename = new QMaemo5ValueButton("Sound File", this);
-	sound_filename->setValueText(settings.value("sound_filename", SOUND_FILE).toString());
+	/*
 	volume = new QSlider(Qt::Horizontal, this);
 	volume->setRange(1, 16); //for some reason, volume goes to 0.16
 	volume->setValue(10 * settings.value("sound_volume", VOLUME).toFloat());
 	volume->setMinimumWidth(100);
-	layout3->addWidget(sound_filename);
 	layout3->addWidget(volume);
+	*/
 	
 	QHBoxLayout *layout4 = new QHBoxLayout();
-	QLabel *alarm_timeout_label = new QLabel("Turn off after");
+	QLabel *alarm_timeout_label = new QLabel(tr("Turn off after"));
 	alarm_timeout = new QSpinBox();
 	alarm_timeout->setSuffix(" min");
 	alarm_timeout->setValue(settings.value("alarm_timeout", ALARM_TIMEOUT).toInt());
@@ -48,19 +46,18 @@ Preferences::Preferences(QWidget *parent):
 	layout4->addWidget(alarm_timeout);
 
 	QHBoxLayout *layout5 = new QHBoxLayout();
-	QLabel *inactivity_timeout_label = new QLabel("Inactivity Timeout");
+	QLabel *inactivity_timeout_label = new QLabel(tr("Inactivity Timeout"));
 	inactivity_timeout = new QSpinBox();
 	inactivity_timeout->setSuffix(" s");
 	inactivity_timeout->setValue(settings.value("inactivity_timeout", INACTIVITY_TIMEOUT).toInt());
 	layout5->addWidget(inactivity_timeout_label);
 	layout5->addWidget(inactivity_timeout);
 
-	layout2->addLayout(layout3);
 	layout2->addLayout(layout4);
 	layout2->addLayout(layout5);
 
-	QPushButton *ok = new QPushButton("OK");
-	QPushButton *test = new QPushButton("Test", this);
+	QPushButton *ok = new QPushButton(tr("OK"));
+	QPushButton *test = new QPushButton(tr("Test"), this);
 
 	layout1->addLayout(layout2);
 	QVBoxLayout *layout6 = new QVBoxLayout();
@@ -70,8 +67,6 @@ Preferences::Preferences(QWidget *parent):
 
 	setLayout(layout1);
 
-	connect(sound_filename, SIGNAL(clicked()),
-		this, SLOT(pickSoundFile()));
 	connect(test, SIGNAL(clicked()),
 		this, SLOT(testAlarm()));
 	connect(ok, SIGNAL(clicked()),
@@ -80,22 +75,10 @@ Preferences::Preferences(QWidget *parent):
 		this, SLOT(save()));
 }
 
-Preferences::~Preferences()
-{
-
-}
-
-void Preferences::pickSoundFile()
-{
-	QString name = QFileDialog::getOpenFileName(this, tr("Choose Sound File"), sound_filename->valueText(), "Sound Files(*.wav *.mp3 *.ogg *.aac)");
-	if(!name.isEmpty())
-		sound_filename->setValueText(name);
-}
+Preferences::~Preferences() { }
 
 void Preferences::save()
 {
-	settings.setValue("sound_filename", sound_filename->valueText());
-	settings.setValue("sound_volume", volume->value()/10.0);
 	settings.setValue("alarm_timeout", alarm_timeout->value());
 	settings.setValue("inactivity_timeout", inactivity_timeout->value());
 	settings.sync();
@@ -103,6 +86,5 @@ void Preferences::save()
 
 void Preferences::testAlarm()
 {
-	Alarm::test(this, sound_filename->valueText(), volume->value()/10.0, alarm_timeout->value(), inactivity_timeout->value());
+	Alarm::test(this, alarm_timeout->value(), inactivity_timeout->value());
 }
-

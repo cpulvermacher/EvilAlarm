@@ -30,12 +30,10 @@ public:
 	~Preferences();
 private slots:
 	void save();
-	void pickSoundFile();
 	void testAlarm();
 private:
 	QSettings settings;
-	QMaemo5ValueButton *sound_filename;
-	QSlider *volume;
+	//QSlider *volume;
 	QSpinBox *alarm_timeout;
 	QSpinBox *inactivity_timeout;
 };

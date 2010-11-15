@@ -21,14 +21,11 @@
 
 #include "accelerometer.h"
 
-#include <Phonon>
 #include <QtGui>
 
 //default values
 const int ACCELEROMETER_POLL_MSEC = 500;
 const int ACCELEROMETER_THRESHOLD = 40;
-const QString SOUND_FILE = "/home/user/MyDocs/.sounds/Ringtones/Beep.aac";
-const float VOLUME = 1.0;
 const int INACTIVITY_TIMEOUT = 4; //seconds before noise will restart after device has stopped moving
 const int ALARM_TIMEOUT = 5; //minutes the device is armed after initial alarm
 
@@ -38,24 +35,22 @@ class Alarm : public QDialog {
 public:
 	Alarm(QWidget *parent = 0, bool testing = false);
 	~Alarm();
-	static void test(QWidget *parent, QString sound_filename, float max_vol, int al_timeout, int in_timeout);
+	static void test(QWidget *parent, int al_timeout, int in_timeout);
 protected:
 	void closeEvent(QCloseEvent*);
+	void initialize();
+	void start();
+	void stop();
 private slots:
 	void accelUpdate(int, int, int);
 	void repeatSound();
 private:
-	void grabZoomKeys(bool grab);
-	void start();
-
 	QLabel *label;
 	Accelerometer *accel;
-	Phonon::MediaObject* noise;
-	Phonon::AudioOutput* audio_output;
-	QTime alarm_started;
-	int alarm_timeout, inactivity_timeout;
-	float max_volume;
-	QString old_profile;
 	bool testing;
+	QTime alarm_started;
+	bool alarm_playing;
+	int alarm_timeout, inactivity_timeout;
+	quint32 notify_id;
 };
 #endif

@@ -33,9 +33,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	//create menu
 	menuBar()->addAction(tr("&About"), this, SLOT(about()));
+	menuBar()->addAction(tr("&Preferences"), this, SLOT(showPreferences()));
 
 	QWidget *centerwidget = new QWidget(this);
-	QVBoxLayout *layout1 = new QVBoxLayout(centerwidget);
+	QHBoxLayout *layout1 = new QHBoxLayout(centerwidget);
+
+	activate_button = new QPushButton(tr("Alarm Active"), this);
+	activate_button->setCheckable(true);
 
 	time_button = new QMaemo5ValueButton(tr("Wake me at ..."), this);
 	time_picker = new QMaemo5TimePickSelector(this);
@@ -43,20 +47,11 @@ MainWindow::MainWindow(QWidget *parent) :
 	time_picker->setCurrentTime(settings.value("wake_at", QTime::currentTime()).toTime());
 	time_button->setPickSelector(time_picker);
 
-	QHBoxLayout *layout2 = new QHBoxLayout();
-	QPushButton *pref_button = new QPushButton(tr("Preferences"), this);
-	activate_button = new QPushButton(tr("Alarm Active"), this);
-	activate_button->setCheckable(true);
-
-	layout2->addWidget(pref_button);
-	layout2->addWidget(activate_button);
+	layout1->addWidget(activate_button);
 	layout1->addWidget(time_button);
-	layout1->addLayout(layout2);
 
 	setCentralWidget(centerwidget);
 
-	connect(pref_button, SIGNAL(clicked()),
-		this, SLOT(showPreferences()));
 	connect(activate_button, SIGNAL(toggled(bool)),
 		this, SLOT(toggleAlarm()));
 	connect(&timer, SIGNAL(timeout()),
@@ -81,13 +76,6 @@ void MainWindow::toggleAlarm()
 	if(activate_alarm) { 
 		QSettings settings;
 
-		//check wether sound file exists
-		QFileInfo soundfile(settings.value("sound_filename", SOUND_FILE).toString());
-		if(!soundfile.exists() or !soundfile.isReadable()) {
-			QMaemo5InformationBox::information(this, tr("Cannot read sound file, please check your preferences."));
-			return;
-		}
-
 		QTime wake_at = time_picker->currentTime();
 		settings.setValue("wake_at", wake_at);
 		settings.sync();
@@ -104,7 +92,6 @@ void MainWindow::toggleAlarm()
 
 	} else {
 		timer.stop();
-
 		Daemon::stop();
 	}
 
@@ -129,7 +116,7 @@ int main(int argc, char* argv[])
 	QCoreApplication::setApplicationName("EvilAlarm");
 
 	if(QCoreApplication::arguments().contains(QString("--daemon"))) {
-		Daemon *daemon = new Daemon;
+		new Daemon;
 	} else if(QCoreApplication::arguments().contains(QString("--wakeup"))) {
 		QWidget *widget = new Alarm;
 		widget->show();
