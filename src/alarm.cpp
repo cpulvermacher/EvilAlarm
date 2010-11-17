@@ -17,7 +17,6 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 #include "alarm.h"
-//#include "preferences.h"
 
 #include <QtDBus>
 #include <QtGui>
@@ -29,7 +28,11 @@ Alarm::Alarm(QWidget *parent, bool testing):
 	QDialog(parent),
 	label(new QLabel(this)),
 	testing(testing),
-	alarm_playing(false)
+	alarm_playing(false),
+	lastx(0),
+	lasty(0),
+	lastz(0),
+	last_active(QTime::currentTime())
 {
 	setWindowTitle("EvilAlarm");
 	if(!testing) {
@@ -82,11 +85,6 @@ void Alarm::accelUpdate(int x, int y, int z)
 	if(alarm_started.elapsed()/1000 > alarm_timeout*60) {
 		close();
 	}
-
-	static int lastx = x;
-	static int lasty = y;
-	static int lastz = z;
-	static QTime last_active = QTime::currentTime();
 
 	if(qAbs(lastx - x) > ACCELEROMETER_THRESHOLD
 	or qAbs(lasty - y) > ACCELEROMETER_THRESHOLD

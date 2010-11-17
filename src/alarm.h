@@ -52,5 +52,8 @@ private:
 	bool alarm_playing;
 	int alarm_timeout, inactivity_timeout;
 	quint32 notify_id;
+
+	int lastx, lasty, lastz;
+	QTime last_active;
 };
 #endif
