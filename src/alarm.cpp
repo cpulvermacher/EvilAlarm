@@ -21,8 +21,6 @@
 #include <QtDBus>
 #include <QtGui>
 
-#include <iostream>
-
 
 Alarm::Alarm(QWidget *parent, bool testing):
 	QDialog(parent),

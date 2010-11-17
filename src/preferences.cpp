@@ -58,6 +58,8 @@ Preferences::Preferences(QWidget *parent):
 
 	QPushButton *ok = new QPushButton(tr("OK"));
 	QPushButton *test = new QPushButton(tr("Test"), this);
+	ok->setMaximumWidth(100);
+	test->setMaximumWidth(100);
 
 	layout1->addLayout(layout2);
 	QVBoxLayout *layout6 = new QVBoxLayout();

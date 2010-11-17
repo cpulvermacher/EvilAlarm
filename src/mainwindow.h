@@ -16,8 +16,8 @@
     with this program; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
-#ifndef MAIN_H
-#define MAIN_H
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
 #include <QtMaemo5>
 #include <QtGui>
@@ -33,7 +33,7 @@ private slots:
 private:
 	QMaemo5ValueButton *time_button;
 	QMaemo5TimePickSelector *time_picker;
-	QPushButton *activate_button;
+	QCheckBox *activate_alarm;
 	QTimer timer;
 };
 #endif

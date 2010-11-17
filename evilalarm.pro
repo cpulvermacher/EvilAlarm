@@ -9,5 +9,5 @@ VPATH = $${PWD}/src
 INCLUDEPATH += $${PWD}/src
 
 # Input
-HEADERS += main.h accelerometer.h preferences.h alarm.h daemon.h
-SOURCES += main.cpp accelerometer.cpp preferences.cpp alarm.cpp daemon.cpp
+HEADERS += accelerometer.h preferences.h alarm.h daemon.h mainwindow.h
+SOURCES += main.cpp accelerometer.cpp preferences.cpp alarm.cpp daemon.cpp mainwindow.cpp
