@@ -43,7 +43,6 @@ protected:
 	void stop();
 private slots:
 	void accelUpdate(int, int, int);
-	void repeatSound();
 private:
 	QLabel *label;
 	Accelerometer *accel;

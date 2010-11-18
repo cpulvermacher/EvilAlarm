@@ -49,7 +49,7 @@ Alarm::Alarm(QWidget *parent, bool testing):
 	//setup ui
 	QVBoxLayout* layout1 = new QVBoxLayout();
 	QHBoxLayout* layout2 = new QHBoxLayout();
-	QLabel *text_label = new QLabel(tr("<h2>Wake up!</h2>")+ (testing?tr(" (just testing...)"):""), this);
+	QLabel *text_label = new QLabel(tr("<center><h2>Wake up!</h2></center>"), this);
 	layout1->addWidget(text_label);
 	QLabel *icon_label = new QLabel(this);
 	icon_label->setPixmap(QPixmap("/usr/share/icons/hicolor/64x64/apps/evilalarm.png"));
@@ -82,6 +82,7 @@ void Alarm::accelUpdate(int x, int y, int z)
 {
 	if(alarm_started.elapsed()/1000 > alarm_timeout*60) {
 		close();
+		return;
 	}
 
 	if(qAbs(lastx - x) > ACCELEROMETER_THRESHOLD
@@ -112,13 +113,6 @@ void Alarm::closeEvent(QCloseEvent*)
 	QSettings settings;
 	settings.setValue("protect_ui", false);
 	settings.sync();
-}
-
-
-//TODO remove
-void Alarm::repeatSound()
-{
-	//noise->enqueue(noise->currentSource());
 }
 
 

@@ -32,13 +32,14 @@ MainWindow::MainWindow(QWidget *parent) :
 	setWindowTitle("EvilAlarm");
 
 	//create menu
-	menuBar()->addAction(tr("&About"), this, SLOT(about()));
 	menuBar()->addAction(tr("&Preferences"), this, SLOT(showPreferences()));
+	menuBar()->addAction(tr("&About"), this, SLOT(about()));
 
 	QWidget *centerwidget = new QWidget(this);
 	QHBoxLayout *layout1 = new QHBoxLayout(centerwidget);
 
 	activate_alarm = new QCheckBox(this);
+	activate_alarm->setMaximumWidth(70);
 
 	time_button = new QMaemo5ValueButton(tr("Wake me at ..."), this);
 	time_picker = new QMaemo5TimePickSelector(this);
