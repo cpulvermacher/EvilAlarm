@@ -29,8 +29,7 @@ Alarm::Alarm(QWidget *parent, bool testing):
 	alarm_playing(false),
 	lastx(0),
 	lasty(0),
-	lastz(0),
-	last_active(QTime::currentTime())
+	lastz(0)
 {
 	setWindowTitle("EvilAlarm");
 	if(!testing) {
@@ -87,12 +86,17 @@ void Alarm::accelUpdate(int x, int y, int z)
 		return;
 	}
 
-	if(qAbs(lastx - x) > ACCELEROMETER_THRESHOLD
+	if(lastx == 0 and lasty == 0 and lastz == 0) {
+		//initialize
+		last_active.restart();
+	} else if(qAbs(lastx - x) > ACCELEROMETER_THRESHOLD
 	or qAbs(lasty - y) > ACCELEROMETER_THRESHOLD
-	or qAbs(lastz - z) > ACCELEROMETER_THRESHOLD) { //device moved
+	or qAbs(lastz - z) > ACCELEROMETER_THRESHOLD) {
+		//device moved
 		stop();
 		last_active.restart();
-	} else if(last_active.elapsed()/1000 > inactivity_timeout) { //not moved for a while
+	} else if(last_active.elapsed()/1000 > inactivity_timeout) {
+		//not moved for a while
 		start();
 	}
 
