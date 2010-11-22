@@ -47,15 +47,12 @@ Alarm::Alarm(QWidget *parent, bool testing):
 	}
 
 	//setup ui
-	QVBoxLayout* layout1 = new QVBoxLayout();
-	QHBoxLayout* layout2 = new QHBoxLayout();
-	QLabel *text_label = new QLabel(tr("<center><h2>Wake up!</h2></center>"), this);
-	layout1->addWidget(text_label);
+	QHBoxLayout* layout1 = new QHBoxLayout();
 	QLabel *icon_label = new QLabel(this);
 	icon_label->setPixmap(QPixmap("/usr/share/icons/hicolor/64x64/apps/evilalarm.png"));
-	layout2->addWidget(icon_label);
-	layout2->addWidget(label);
-	layout1->addLayout(layout2);
+	icon_label->setMaximumWidth(70);
+	layout1->addWidget(icon_label);
+	layout1->addWidget(label);
 	setLayout(layout1);
 
 	if(!testing)
@@ -63,6 +60,7 @@ Alarm::Alarm(QWidget *parent, bool testing):
 }
 
 //actually starts the alarm, needs to be called manually when testing
+//TODO use additional constructor arguments for testing and remove this
 void Alarm::initialize()
 {
 	start();
@@ -71,6 +69,10 @@ void Alarm::initialize()
 	accel = new Accelerometer(this, ACCELEROMETER_POLL_MSEC);
 	connect(accel, SIGNAL(orientationChanged(int, int, int)),
 		this, SLOT(accelUpdate(int, int, int)));
+
+	//activate display
+	QDBusInterface interface("com.nokia.mce", "/com/nokia/mce/request", "com.nokia.mce.request", QDBusConnection::systemBus());
+	interface.call("req_tklock_mode_change", "unlocked");
 }
 
 Alarm::~Alarm()
@@ -94,13 +96,15 @@ void Alarm::accelUpdate(int x, int y, int z)
 		start();
 	}
 
+	QString remaining_string;
 	int secs_remaining = alarm_timeout*60 - alarm_started.elapsed()/1000;
 	if(secs_remaining < 60) {
-		label->setText(tr("%1 seconds remaining").arg(secs_remaining));
+		remaining_string = tr("%1 seconds remaining").arg(secs_remaining);
 	} else {
 		int mins_remaining = qRound(secs_remaining/60);
-		label->setText(tr("%1 minutes remaining").arg(mins_remaining));
+		remaining_string = tr("%1 minutes remaining").arg(mins_remaining);
 	}
+	label->setText(tr("<center><h1>%1</h1>").arg(QTime::currentTime().toString(Qt::SystemLocaleShortDate)) + remaining_string + "</center>");
 
 	lastx = x; lasty = y; lastz = z;
 }
