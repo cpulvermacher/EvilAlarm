@@ -28,7 +28,7 @@ public:
 	MainWindow(QWidget *parent = 0);
 private slots:
 	void about();
-	void showPreferences();
+	void showSettings();
 	void toggleAlarm();
 private:
 	QMaemo5ValueButton *time_button;

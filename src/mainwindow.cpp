@@ -19,7 +19,7 @@
 #include "alarm.h"
 #include "daemon.h"
 #include "mainwindow.h"
-#include "preferences.h"
+#include "settings.h"
 
 #include <QtMaemo5>
 #include <QtGui>
@@ -32,8 +32,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	setWindowTitle("EvilAlarm");
 
 	//create menu
-	menuBar()->addAction(tr("&Preferences"), this, SLOT(showPreferences()));
-	menuBar()->addAction(tr("&About"), this, SLOT(about()));
+	menuBar()->addAction(tr("Settings"), this, SLOT(showSettings()));
+	menuBar()->addAction(tr("About"), this, SLOT(about()));
 
 	QWidget *centerwidget = new QWidget(this);
 	QHBoxLayout *layout1 = new QHBoxLayout(centerwidget);
@@ -62,11 +62,9 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 
-void MainWindow::showPreferences()
+void MainWindow::showSettings()
 {
-	Preferences *p = new Preferences(this);
-	p->exec();
-	delete p;
+	Settings(this).exec();
 }
 
 
