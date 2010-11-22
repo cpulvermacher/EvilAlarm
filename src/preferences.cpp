@@ -38,19 +38,21 @@ Preferences::Preferences(QWidget *parent):
 	*/
 	
 	QHBoxLayout *layout4 = new QHBoxLayout();
-	QLabel *alarm_timeout_label = new QLabel(tr("Turn off after"));
+	QLabel *alarm_timeout_label = new QLabel(tr("Completely shutdown after"));
 	alarm_timeout = new QSpinBox();
 	alarm_timeout->setSuffix(" min");
 	alarm_timeout->setRange(1, 60);
 	alarm_timeout->setValue(settings.value("alarm_timeout", ALARM_TIMEOUT).toInt());
+	alarm_timeout->setMaximumWidth(250);
 	layout4->addWidget(alarm_timeout_label);
 	layout4->addWidget(alarm_timeout);
 
 	QHBoxLayout *layout5 = new QHBoxLayout();
-	QLabel *inactivity_timeout_label = new QLabel(tr("Inactivity Timeout"));
+	QLabel *inactivity_timeout_label = new QLabel(tr("Restart alarm if phone not moved for"));
 	inactivity_timeout = new QSpinBox();
 	inactivity_timeout->setSuffix(" s");
 	inactivity_timeout->setValue(settings.value("inactivity_timeout", INACTIVITY_TIMEOUT).toInt());
+	inactivity_timeout->setMaximumWidth(250);
 	layout5->addWidget(inactivity_timeout_label);
 	layout5->addWidget(inactivity_timeout);
 
