@@ -41,6 +41,7 @@ Preferences::Preferences(QWidget *parent):
 	QLabel *alarm_timeout_label = new QLabel(tr("Turn off after"));
 	alarm_timeout = new QSpinBox();
 	alarm_timeout->setSuffix(" min");
+	alarm_timeout->setRange(1, 60);
 	alarm_timeout->setValue(settings.value("alarm_timeout", ALARM_TIMEOUT).toInt());
 	layout4->addWidget(alarm_timeout_label);
 	layout4->addWidget(alarm_timeout);
