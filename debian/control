@@ -2,7 +2,7 @@ Source: evilalarm
 Section: user/utilities
 Priority: optional
 Maintainer: Christian Pulvermacher <pulvermacher@gmx.de>
-Build-Depends: libqt4-dev, debhelper (>= 5.0.0), mce-dev, libx11-dev
+Build-Depends: libqt4-dev, debhelper (>= 5.0.0), mce-dev
 #Homepage: 
 Standards-Version: 3.7.3
 

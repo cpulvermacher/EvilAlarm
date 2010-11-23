@@ -1,6 +1,9 @@
 evilalarm (0.3) unstable; urgency=low
 
-  * Use daemon to start alarm and keep UI alive
+  * For consistent volume, alarm now uses same method as the builtin alarm clock;
+    To set the sound file, tap status area -> Clock & Alams -> Menu -> Alarm Settings -> Alarm Tone
+  * Use daemon to start alarm (window can be closed after activating alarm; alarm can't be killed from UI)
+  * Alarm now activates display
 
  -- Christian Pulvermacher <pulvermacher@gmx.de>  Fri, 12 Nov 2010 16:29:40 +0100
 
