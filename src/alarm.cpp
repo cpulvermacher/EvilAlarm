@@ -17,6 +17,7 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 #include "alarm.h"
+#include "settings.h"
 
 #include <QtDBus>
 #include <QtGui>
@@ -25,11 +26,8 @@
 Alarm::Alarm(QWidget *parent, bool testing):
 	QDialog(parent),
 	label(new QLabel(this)),
-	testing(testing),
-	alarm_playing(false),
-	lastx(0),
-	lasty(0),
-	lastz(0)
+	accel(0),
+	testing(testing)
 {
 	setWindowTitle("EvilAlarm");
 	if(!testing) {
@@ -46,13 +44,21 @@ Alarm::Alarm(QWidget *parent, bool testing):
 	}
 
 	//setup ui
+	QVBoxLayout* layout0 = new QVBoxLayout();
 	QHBoxLayout* layout1 = new QHBoxLayout();
 	QLabel *icon_label = new QLabel(this);
 	icon_label->setPixmap(QPixmap("/usr/share/icons/hicolor/64x64/apps/evilalarm.png"));
 	icon_label->setMaximumWidth(70);
 	layout1->addWidget(icon_label);
 	layout1->addWidget(label);
-	setLayout(layout1);
+
+	layout0->addLayout(layout1);
+	snooze_button = new QPushButton(tr("Snooze"), this);
+	layout1->addWidget(snooze_button);
+	setLayout(layout0);
+
+	connect(snooze_button, SIGNAL(clicked()),
+		this, SLOT(snooze()));
 
 	if(!testing)
 		initialize();
@@ -62,6 +68,10 @@ Alarm::Alarm(QWidget *parent, bool testing):
 //TODO use additional constructor arguments for testing and remove this
 void Alarm::initialize()
 {
+	alarm_playing = false;
+	lastx = lasty = lastz = 0;
+	snooze_button->setEnabled(true);
+
 	start();
 	alarm_started = QTime::currentTime();
 
@@ -173,4 +183,27 @@ void Alarm::stop()
 	QDBusInterface interface("org.freedesktop.Notifications", "/org/freedesktop/Notifications", "org.freedesktop.Notifications");
 	interface.call("CloseNotification", notify_id);
 	alarm_playing = false;
+}
+
+//turns of alarm for snooze_time minutes, then restarts alarm
+//
+void Alarm::snooze()
+{
+	stop();
+
+	//stop polling
+	delete accel;
+	accel = 0; //in case destructor is called
+	//TODO: also stops screen updates, but I want to show left time, current time etc.
+	//TODO: set status variable
+
+	QSettings settings;
+	const int snooze_time = settings.value("snooze_time", SNOOZE_TIME).toInt();
+	const int snooze_time_msecs = snooze_time * 60 * 1000;
+
+	QTimer::singleShot(snooze_time_msecs, this, SLOT(initialize()));
+
+	snooze_button->setEnabled(false);
+	label->setText(tr("Snoozing for %1 minutes").arg(snooze_time));
+	//TODO: limit number of snoozes
 }

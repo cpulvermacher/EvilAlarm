@@ -28,8 +28,8 @@
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent)
 {
-	QSettings settings;
 	setWindowTitle("EvilAlarm");
+	setAttribute(Qt::WA_Maemo5StackedWindow);
 
 	//create menu
 	menuBar()->addAction(tr("Settings"), this, SLOT(showSettings()));
@@ -41,9 +41,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	activate_alarm = new QCheckBox(this);
 	activate_alarm->setMaximumWidth(70);
 
+	QSettings settings;
 	time_button = new QMaemo5ValueButton(tr("Wake me at ..."), this);
 	time_picker = new QMaemo5TimePickSelector(this);
-	//time_picker->setMinuteStep(5);
 	time_picker->setCurrentTime(settings.value("wake_at", QTime::currentTime()).toTime());
 	time_button->setPickSelector(time_picker);
 
@@ -64,7 +64,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::showSettings()
 {
-	Settings(this).exec();
+	Settings *s = new Settings(this);
+	s->show();
+	//Settings cleans up after itself
 }
 
 

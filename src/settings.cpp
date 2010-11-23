@@ -23,21 +23,15 @@
 
 
 Settings::Settings(QWidget *parent):
-	QDialog(parent)
+	QWidget(parent)
 {
 	setWindowTitle(tr("Settings"));
+	setAttribute(Qt::WA_Maemo5StackedWindow);
+	setWindowFlags(windowFlags() | Qt::Window); //create top-level window even though parent is set
 
 	QHBoxLayout *layout1 = new QHBoxLayout();
 	QVBoxLayout *layout2 = new QVBoxLayout();
 
-	/*
-	volume = new QSlider(Qt::Horizontal, this);
-	volume->setRange(1, 16); //for some reason, volume goes to 0.16
-	volume->setValue(10 * settings.value("sound_volume", VOLUME).toFloat());
-	volume->setMinimumWidth(100);
-	layout3->addWidget(volume);
-	*/
-	
 	QHBoxLayout *layout4 = new QHBoxLayout();
 	QLabel *alarm_timeout_label = new QLabel(tr("Completely shutdown after"));
 	alarm_timeout = new QSpinBox();
@@ -57,8 +51,19 @@ Settings::Settings(QWidget *parent):
 	layout5->addWidget(inactivity_timeout_label);
 	layout5->addWidget(inactivity_timeout);
 
+	QHBoxLayout *layout6 = new QHBoxLayout();
+	QLabel *snooze_time_label = new QLabel(tr("Snooze time"));
+	snooze_time = new QSpinBox();
+	snooze_time->setSuffix(" min");
+	snooze_time->setRange(1, 60);
+	snooze_time->setValue(settings.value("snooze_time", SNOOZE_TIME).toInt());
+	snooze_time->setMaximumWidth(250);
+	layout6->addWidget(snooze_time_label);
+	layout6->addWidget(snooze_time);
+
 	layout2->addLayout(layout4);
 	layout2->addLayout(layout5);
+	layout2->addLayout(layout6);
 
 	QPushButton *ok = new QPushButton(tr("OK"));
 	QPushButton *test = new QPushButton(tr("Test"), this);
@@ -66,31 +71,31 @@ Settings::Settings(QWidget *parent):
 	test->setMaximumWidth(100);
 
 	layout1->addLayout(layout2);
-	QVBoxLayout *layout6 = new QVBoxLayout();
-	layout6->addWidget(test);
-	layout6->addWidget(ok);
-	layout1->addLayout(layout6);
+	layout1->addWidget(test);
 
 	setLayout(layout1);
 
 	connect(test, SIGNAL(clicked()),
 		this, SLOT(testAlarm()));
-	connect(ok, SIGNAL(clicked()),
-		this, SLOT(accept()));
-	connect(this, SIGNAL(accepted()),
-		this, SLOT(save()));
 }
 
-Settings::~Settings() { }
+void Settings::closeEvent(QCloseEvent*)
+{
+	save();
+	deleteLater();
+}
 
 void Settings::save()
 {
 	settings.setValue("alarm_timeout", alarm_timeout->value());
 	settings.setValue("inactivity_timeout", inactivity_timeout->value());
+	settings.setValue("snooze_time", snooze_time->value());
 	settings.sync();
 }
 
 void Settings::testAlarm()
 {
+	save();
+	//TODO: get rid of test(), use constructor directly
 	Alarm::test(this, alarm_timeout->value(), inactivity_timeout->value());
 }

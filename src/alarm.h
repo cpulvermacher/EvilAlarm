@@ -23,13 +23,6 @@
 
 #include <QtGui>
 
-//default values
-const int ACCELEROMETER_POLL_MSEC = 500;
-const int ACCELEROMETER_THRESHOLD = 40;
-const int INACTIVITY_TIMEOUT = 4; //seconds before noise will restart after device has stopped moving
-const int ALARM_TIMEOUT = 5; //minutes the device is armed after initial alarm
-
-
 class Alarm : public QDialog {
 	Q_OBJECT
 public:
@@ -38,13 +31,16 @@ public:
 	static void test(QWidget *parent, int al_timeout, int in_timeout);
 protected:
 	void closeEvent(QCloseEvent*);
+protected slots:
+	void accelUpdate(int, int, int);
 	void initialize();
+	void snooze();
 	void start();
 	void stop();
-private slots:
-	void accelUpdate(int, int, int);
 private:
 	QLabel *label;
+	QPushButton *snooze_button;
+
 	Accelerometer *accel;
 	bool testing;
 	QTime alarm_started;
