@@ -38,10 +38,8 @@ public:
 	Settings(QWidget *parent);
 protected:
 	void closeEvent(QCloseEvent*);
-private slots:
-	void save();
-	void testAlarm();
 private:
+	void save();
 	QSettings settings;
 	QSpinBox *alarm_timeout;
 	QSpinBox *inactivity_timeout;

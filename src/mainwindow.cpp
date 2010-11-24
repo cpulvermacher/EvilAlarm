@@ -31,12 +31,10 @@ MainWindow::MainWindow(QWidget *parent) :
 	setWindowTitle("EvilAlarm");
 	setAttribute(Qt::WA_Maemo5StackedWindow);
 
-	//create menu
-	menuBar()->addAction(tr("Settings"), this, SLOT(showSettings()));
 	menuBar()->addAction(tr("About"), this, SLOT(about()));
 
 	QWidget *centerwidget = new QWidget(this);
-	QHBoxLayout *layout1 = new QHBoxLayout(centerwidget);
+	QHBoxLayout *layout1 = new QHBoxLayout();
 
 	activate_alarm = new QCheckBox(this);
 	activate_alarm->setMaximumWidth(70);
@@ -50,15 +48,39 @@ MainWindow::MainWindow(QWidget *parent) :
 	layout1->addWidget(activate_alarm);
 	layout1->addWidget(time_button);
 
+	QHBoxLayout *layout2 = new QHBoxLayout();
+	QPushButton *settings_button = new QPushButton(tr("Settings"), this);
+	QPushButton *test_button = new QPushButton(tr("Test Alarm"), this);
+	layout2->addWidget(settings_button);
+	layout2->addWidget(test_button);
+
+	QVBoxLayout *layout0 = new QVBoxLayout(centerwidget);
+	layout0->addLayout(layout1);
+	layout0->addLayout(layout2);
+
 	setCentralWidget(centerwidget);
 
 	connect(activate_alarm, SIGNAL(toggled(bool)),
 		this, SLOT(toggleAlarm()));
 	connect(&timer, SIGNAL(timeout()),
 		activate_alarm, SLOT(toggle()));
+	connect(settings_button, SIGNAL(clicked()),
+		this, SLOT(showSettings()));
+	connect(test_button, SIGNAL(clicked()),
+		this, SLOT(testAlarm()));
 
 	if(Daemon::isRunning())
 		activate_alarm->toggle();
+}
+
+
+void MainWindow::about()
+{
+	QMessageBox::about(this, tr("About EvilAlarm"),
+		tr("<center><h1>EvilAlarm 0.3</h1>\
+An alarm clock which cannot be turned off while asleep\
+<small><p>&copy;2010 Christian Pulvermacher &lt;pulvermacher@gmx.de&gt</p></small></center>\
+<p>This program is free software; License: <a href=\"http://www.gnu.org/licenses/gpl-2.0.html\">GNU GPL 2</a> or later.</p>"));
 }
 
 
@@ -69,6 +91,12 @@ void MainWindow::showSettings()
 	//Settings cleans up after itself
 }
 
+
+void MainWindow::testAlarm()
+{
+	Alarm test_alarm(this);
+	test_alarm.exec();
+}
 
 void MainWindow::toggleAlarm()
 {
@@ -95,13 +123,4 @@ void MainWindow::toggleAlarm()
 	}
 
 	time_button->setEnabled(!activate_alarm->isChecked());
-}
-
-void MainWindow::about()
-{
-	QMessageBox::about(this, tr("About EvilAlarm"),
-		tr("<center><h1>EvilAlarm 0.3</h1>\
-An alarm clock which cannot be turned off while asleep\
-<small><p>&copy;2010 Christian Pulvermacher &lt;pulvermacher@gmx.de&gt</p></small></center>\
-<p>This program is free software; License: <a href=\"http://www.gnu.org/licenses/gpl-2.0.html\">GNU GPL 2</a> or later.</p>"));
 }

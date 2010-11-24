@@ -16,7 +16,6 @@
     with this program; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
-#include "alarm.h"
 #include "settings.h"
 
 #include <QtGui>
@@ -30,8 +29,7 @@ Settings::Settings(QWidget *parent):
 	setWindowFlags(windowFlags() | Qt::Window); //create top-level window even though parent is set
 	//for reference: Qt::WA_Maemo5StackedWindow doesn't seem to work with QDialog
 
-	QHBoxLayout *layout1 = new QHBoxLayout();
-	QVBoxLayout *layout2 = new QVBoxLayout();
+	QVBoxLayout *layout1 = new QVBoxLayout();
 
 	QHBoxLayout *layout4 = new QHBoxLayout();
 	QLabel *alarm_timeout_label = new QLabel(tr("Completely shutdown after"));
@@ -70,23 +68,12 @@ Settings::Settings(QWidget *parent):
 	layout7->addWidget(num_snooze_max_label);
 	layout7->addWidget(num_snooze_max);
 
-	layout2->addLayout(layout4);
-	layout2->addLayout(layout5);
-	layout2->addLayout(layout6);
-	layout2->addLayout(layout7);
-
-	QPushButton *ok = new QPushButton(tr("OK"));
-	QPushButton *test = new QPushButton(tr("Test"), this);
-	ok->setMaximumWidth(100);
-	test->setMaximumWidth(100);
-
-	layout1->addLayout(layout2);
-	layout1->addWidget(test);
+	layout1->addLayout(layout4);
+	layout1->addLayout(layout5);
+	layout1->addLayout(layout6);
+	layout1->addLayout(layout7);
 
 	setLayout(layout1);
-
-	connect(test, SIGNAL(clicked()),
-		this, SLOT(testAlarm()));
 }
 
 void Settings::closeEvent(QCloseEvent*)
@@ -102,12 +89,4 @@ void Settings::save()
 	settings.setValue("snooze_time", snooze_time->value());
 	settings.setValue("num_snooze_max", num_snooze_max->value());
 	settings.sync();
-}
-
-void Settings::testAlarm()
-{
-	save();
-
-	Alarm test_alarm(this);
-	test_alarm.exec();
 }

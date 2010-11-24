@@ -29,6 +29,7 @@ public:
 private slots:
 	void about();
 	void showSettings();
+	void testAlarm();
 	void toggleAlarm();
 private:
 	QMaemo5ValueButton *time_button;
