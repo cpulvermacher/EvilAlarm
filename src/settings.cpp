@@ -107,6 +107,7 @@ void Settings::save()
 void Settings::testAlarm()
 {
 	save();
-	//TODO: get rid of test(), use constructor directly
-	Alarm::test(this, alarm_timeout->value(), inactivity_timeout->value());
+
+	Alarm test_alarm(this);
+	test_alarm.exec();
 }

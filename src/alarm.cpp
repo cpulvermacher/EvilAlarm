@@ -23,26 +23,26 @@
 #include <QtGui>
 
 
-Alarm::Alarm(QWidget *parent, bool testing):
+Alarm::Alarm(QWidget *parent):
 	QDialog(parent),
 	label(new QLabel(this)),
 	accel(0),
-	testing(testing),
 	num_snooze(0)
 {
 	setWindowTitle("EvilAlarm");
-	if(!testing) {
-		setWindowState(windowState() | Qt::WindowFullScreen);
 
-		//load settings
-		QSettings settings;
-		alarm_timeout = settings.value("alarm_timeout", ALARM_TIMEOUT).toInt();
-		inactivity_timeout = settings.value("inactivity_timeout", INACTIVITY_TIMEOUT).toInt();
+	QSettings settings;
+	if(!parent) { //top level window? (=not testing)
+		setWindowState(windowState() | Qt::WindowFullScreen);
 
 		//tell daemon to restart us if we're killed
 		settings.setValue("protect_ui", true);
 		settings.sync();
 	}
+
+	//load settings
+	alarm_timeout = settings.value("alarm_timeout", ALARM_TIMEOUT).toInt();
+	inactivity_timeout = settings.value("inactivity_timeout", INACTIVITY_TIMEOUT).toInt();
 
 	//setup ui
 	QVBoxLayout* layout0 = new QVBoxLayout();
@@ -61,19 +61,17 @@ Alarm::Alarm(QWidget *parent, bool testing):
 	connect(snooze_button, SIGNAL(clicked()),
 		this, SLOT(snooze()));
 
-	if(!testing)
-		initialize();
+	initialize();
 }
 
-//actually starts the alarm, needs to be called manually when testing
-//TODO use additional constructor arguments for testing and remove this
+//starts/restarts the alarm
 void Alarm::initialize()
 {
 	alarm_playing = false;
 	lastx = lasty = lastz = 0;
 
 	QSettings settings;
-	int num_snooze_max = settings.value("num_snooze_max", NUM_SNOOZE_MAX).toInt();
+	const int num_snooze_max = settings.value("num_snooze_max", NUM_SNOOZE_MAX).toInt();
 	if(num_snooze_max == 0) {
 		//snooze completely disabled
 		snooze_button->setVisible(false);
@@ -143,18 +141,6 @@ void Alarm::closeEvent(QCloseEvent*)
 	settings.sync();
 }
 
-
-void Alarm::test(QWidget *parent, int al_timeout, int in_timeout)
-{
-	Alarm *alarm = new Alarm(parent, true);
-	alarm->alarm_timeout = al_timeout;
-	alarm->inactivity_timeout = in_timeout;
-
-	alarm->initialize();
-	alarm->exec();
-
-	delete alarm;
-}
 
 void Alarm::start()
 {

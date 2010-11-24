@@ -26,9 +26,8 @@
 class Alarm : public QDialog {
 	Q_OBJECT
 public:
-	Alarm(QWidget *parent = 0, bool testing = false);
+	Alarm(QWidget *parent = 0);
 	~Alarm();
-	static void test(QWidget *parent, int al_timeout, int in_timeout);
 protected:
 	void closeEvent(QCloseEvent*);
 protected slots:
@@ -42,7 +41,6 @@ private:
 	QPushButton *snooze_button;
 
 	Accelerometer *accel;
-	bool testing;
 	QTime alarm_started;
 	bool alarm_playing;
 	int alarm_timeout, inactivity_timeout;
