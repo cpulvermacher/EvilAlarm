@@ -27,7 +27,8 @@ Alarm::Alarm(QWidget *parent, bool testing):
 	QDialog(parent),
 	label(new QLabel(this)),
 	accel(0),
-	testing(testing)
+	testing(testing),
+	num_snooze(0)
 {
 	setWindowTitle("EvilAlarm");
 	if(!testing) {
@@ -53,8 +54,8 @@ Alarm::Alarm(QWidget *parent, bool testing):
 	layout1->addWidget(label);
 
 	layout0->addLayout(layout1);
-	snooze_button = new QPushButton(tr("Snooze"), this);
-	layout1->addWidget(snooze_button);
+	snooze_button = new QPushButton(this);
+	layout0->addWidget(snooze_button);
 	setLayout(layout0);
 
 	connect(snooze_button, SIGNAL(clicked()),
@@ -70,7 +71,16 @@ void Alarm::initialize()
 {
 	alarm_playing = false;
 	lastx = lasty = lastz = 0;
-	snooze_button->setEnabled(true);
+
+	QSettings settings;
+	int num_snooze_max = settings.value("num_snooze_max", NUM_SNOOZE_MAX).toInt();
+	if(num_snooze_max == 0) {
+		//snooze completely disabled
+		snooze_button->setVisible(false);
+	} else {
+		snooze_button->setEnabled(num_snooze < num_snooze_max);
+		snooze_button->setText(tr("Snooze (%1/%2)").arg(num_snooze).arg(num_snooze_max));
+	}
 
 	start();
 	alarm_started = QTime::currentTime();
@@ -197,6 +207,8 @@ void Alarm::snooze()
 	//TODO: also stops screen updates, but I want to show left time, current time etc.
 	//TODO: set status variable
 
+	num_snooze++;
+
 	QSettings settings;
 	const int snooze_time = settings.value("snooze_time", SNOOZE_TIME).toInt();
 	const int snooze_time_msecs = snooze_time * 60 * 1000;
@@ -205,5 +217,4 @@ void Alarm::snooze()
 
 	snooze_button->setEnabled(false);
 	label->setText(tr("Snoozing for %1 minutes").arg(snooze_time));
-	//TODO: limit number of snoozes
 }

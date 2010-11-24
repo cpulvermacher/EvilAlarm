@@ -28,6 +28,7 @@ Settings::Settings(QWidget *parent):
 	setWindowTitle(tr("Settings"));
 	setAttribute(Qt::WA_Maemo5StackedWindow);
 	setWindowFlags(windowFlags() | Qt::Window); //create top-level window even though parent is set
+	//for reference: Qt::WA_Maemo5StackedWindow doesn't seem to work with QDialog
 
 	QHBoxLayout *layout1 = new QHBoxLayout();
 	QVBoxLayout *layout2 = new QVBoxLayout();
@@ -61,9 +62,18 @@ Settings::Settings(QWidget *parent):
 	layout6->addWidget(snooze_time_label);
 	layout6->addWidget(snooze_time);
 
+	QHBoxLayout *layout7 = new QHBoxLayout();
+	QLabel *num_snooze_max_label = new QLabel(tr("Max. number of snoozes (0 to disable)"));
+	num_snooze_max = new QSpinBox();
+	num_snooze_max->setValue(settings.value("num_snooze_max", NUM_SNOOZE_MAX).toInt());
+	num_snooze_max->setMaximumWidth(250);
+	layout7->addWidget(num_snooze_max_label);
+	layout7->addWidget(num_snooze_max);
+
 	layout2->addLayout(layout4);
 	layout2->addLayout(layout5);
 	layout2->addLayout(layout6);
+	layout2->addLayout(layout7);
 
 	QPushButton *ok = new QPushButton(tr("OK"));
 	QPushButton *test = new QPushButton(tr("Test"), this);
@@ -90,6 +100,7 @@ void Settings::save()
 	settings.setValue("alarm_timeout", alarm_timeout->value());
 	settings.setValue("inactivity_timeout", inactivity_timeout->value());
 	settings.setValue("snooze_time", snooze_time->value());
+	settings.setValue("num_snooze_max", num_snooze_max->value());
 	settings.sync();
 }
 
