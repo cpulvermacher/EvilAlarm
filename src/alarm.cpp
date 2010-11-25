@@ -83,10 +83,12 @@ void Alarm::initialize()
 
 	start();
 	alarm_started = QTime::currentTime();
-
-	accel = new Accelerometer(this, ACCELEROMETER_POLL_MSEC);
-	connect(accel, SIGNAL(orientationChanged(int, int, int)),
-		this, SLOT(accelUpdate(int, int, int)));
+	
+	if(!accel) {
+		accel = new Accelerometer(this, ACCELEROMETER_POLL_MSEC);
+		connect(accel, SIGNAL(orientationChanged(int, int, int)),
+			this, SLOT(accelUpdate(int, int, int)));
+	}
 
 	//activate display
 	QDBusInterface interface("com.nokia.mce", "/com/nokia/mce/request", "com.nokia.mce.request", QDBusConnection::systemBus());
