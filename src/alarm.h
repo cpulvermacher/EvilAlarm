@@ -43,6 +43,7 @@ private:
 	Accelerometer *accel;
 	QTime alarm_started;
 	bool alarm_playing;
+	bool snoozing;
 	int alarm_timeout, inactivity_timeout;
 	quint32 notify_id;
 	int num_snooze;

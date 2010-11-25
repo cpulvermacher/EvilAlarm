@@ -68,6 +68,7 @@ Alarm::Alarm(QWidget *parent):
 void Alarm::initialize()
 {
 	alarm_playing = false;
+	snoozing = false;
 	lastx = lasty = lastz = 0;
 
 	QSettings settings;
@@ -99,36 +100,49 @@ Alarm::~Alarm()
 
 void Alarm::accelUpdate(int x, int y, int z)
 {
-	if(alarm_started.elapsed()/1000 > alarm_timeout*60) {
-		close();
-		return;
-	}
+	if(!snoozing) {
+		//shutdown time reached?
+		if(alarm_started.elapsed()/1000 > alarm_timeout*60) {
+			close();
+			return;
+		}
 
-	if(lastx == 0 and lasty == 0 and lastz == 0) {
-		//initialize
-		last_active.restart();
-	} else if(qAbs(lastx - x) > ACCELEROMETER_THRESHOLD
-	or qAbs(lasty - y) > ACCELEROMETER_THRESHOLD
-	or qAbs(lastz - z) > ACCELEROMETER_THRESHOLD) {
-		//device moved
-		stop();
-		last_active.restart();
-	} else if(last_active.elapsed()/1000 > inactivity_timeout) {
-		//not moved for a while
-		start();
+		if(lastx == 0 and lasty == 0 and lastz == 0) {
+			//initialize
+			last_active.restart();
+		} else if(qAbs(lastx - x) > ACCELEROMETER_THRESHOLD
+		or qAbs(lasty - y) > ACCELEROMETER_THRESHOLD
+		or qAbs(lastz - z) > ACCELEROMETER_THRESHOLD) {
+			//device moved
+			stop();
+			last_active.restart();
+		} else if(last_active.elapsed()/1000 > inactivity_timeout) {
+			//not moved for a while
+			start();
+		}
 	}
-
-	QString remaining_string;
-	int secs_remaining = alarm_timeout*60 - alarm_started.elapsed()/1000;
-	if(secs_remaining < 60) {
-		remaining_string = tr("%1 seconds remaining").arg(secs_remaining);
-	} else {
-		int mins_remaining = qRound(secs_remaining/60);
-		remaining_string = tr("%1 minutes remaining").arg(mins_remaining);
-	}
-	label->setText(tr("<center><h1>%1</h1>").arg(QTime::currentTime().toString(Qt::SystemLocaleShortDate)) + remaining_string + "</center>");
-
 	lastx = x; lasty = y; lastz = z;
+
+	//update UI
+	QString label_text;
+	label_text = tr("<center><h1>%1</h1>").arg(QTime::currentTime().toString(Qt::SystemLocaleShortDate));
+
+	if(!snoozing) {
+		int secs_remaining = alarm_timeout*60 - alarm_started.elapsed()/1000;
+		if(secs_remaining < 60) {
+			label_text += tr("%1 seconds remaining").arg(secs_remaining);
+		} else {
+			int mins_remaining = qRound(secs_remaining/60);
+			label_text += tr("%1 minutes remaining").arg(mins_remaining);
+		}
+	} else {
+		QSettings settings;
+		const int snooze_time = settings.value("snooze_time", SNOOZE_TIME).toInt();
+		label_text += tr("Snoozing for %1 minutes").arg(snooze_time);
+	}
+	label_text += "</center";
+
+	label->setText(label_text);
 }
 
 void Alarm::closeEvent(QCloseEvent*)
@@ -136,9 +150,11 @@ void Alarm::closeEvent(QCloseEvent*)
 	hide();
 	stop();
 
-	QSettings settings;
-	settings.setValue("protect_ui", false);
-	settings.sync();
+	if(!parent()) {
+		QSettings settings;
+		settings.setValue("protect_ui", false);
+		settings.sync();
+	}
 }
 
 
@@ -185,15 +201,10 @@ void Alarm::stop()
 //
 void Alarm::snooze()
 {
-	stop();
-
-	//stop polling
-	delete accel;
-	accel = 0; //in case destructor is called
-	//TODO: also stops screen updates, but I want to show left time, current time etc.
-	//TODO: set status variable
-
+	snoozing = true;
 	num_snooze++;
+
+	stop();
 
 	QSettings settings;
 	const int snooze_time = settings.value("snooze_time", SNOOZE_TIME).toInt();
@@ -202,5 +213,4 @@ void Alarm::snooze()
 	QTimer::singleShot(snooze_time_msecs, this, SLOT(initialize()));
 
 	snooze_button->setEnabled(false);
-	label->setText(tr("Snoozing for %1 minutes").arg(snooze_time));
 }
