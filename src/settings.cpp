@@ -29,51 +29,37 @@ Settings::Settings(QWidget *parent):
 	setWindowFlags(windowFlags() | Qt::Window); //create top-level window even though parent is set
 	//for reference: Qt::WA_Maemo5StackedWindow doesn't seem to work with QDialog
 
-	QVBoxLayout *layout1 = new QVBoxLayout();
+	QGridLayout *layout = new QGridLayout(this);
+	layout->setColumnStretch(0, 1);
 
-	QHBoxLayout *layout4 = new QHBoxLayout();
-	QLabel *alarm_timeout_label = new QLabel(tr("Completely shutdown after"));
+	QLabel *alarm_timeout_label = new QLabel(tr("Completely shut down after"));
 	alarm_timeout = new QSpinBox();
 	alarm_timeout->setSuffix(" min");
 	alarm_timeout->setRange(1, 60);
 	alarm_timeout->setValue(settings.value("alarm_timeout", ALARM_TIMEOUT).toInt());
-	alarm_timeout->setMaximumWidth(250);
-	layout4->addWidget(alarm_timeout_label);
-	layout4->addWidget(alarm_timeout);
+	layout->addWidget(alarm_timeout_label, 0, 0);
+	layout->addWidget(alarm_timeout, 0, 1);
 
-	QHBoxLayout *layout5 = new QHBoxLayout();
 	QLabel *inactivity_timeout_label = new QLabel(tr("Restart alarm if phone not moved for"));
 	inactivity_timeout = new QSpinBox();
 	inactivity_timeout->setSuffix(" s");
 	inactivity_timeout->setValue(settings.value("inactivity_timeout", INACTIVITY_TIMEOUT).toInt());
-	inactivity_timeout->setMaximumWidth(250);
-	layout5->addWidget(inactivity_timeout_label);
-	layout5->addWidget(inactivity_timeout);
+	layout->addWidget(inactivity_timeout_label, 1, 0);
+	layout->addWidget(inactivity_timeout, 1, 1);
 
-	QHBoxLayout *layout6 = new QHBoxLayout();
 	QLabel *snooze_time_label = new QLabel(tr("Snooze time"));
 	snooze_time = new QSpinBox();
 	snooze_time->setSuffix(" min");
 	snooze_time->setRange(1, 60);
 	snooze_time->setValue(settings.value("snooze_time", SNOOZE_TIME).toInt());
-	snooze_time->setMaximumWidth(250);
-	layout6->addWidget(snooze_time_label);
-	layout6->addWidget(snooze_time);
+	layout->addWidget(snooze_time_label, 2, 0);
+	layout->addWidget(snooze_time, 2, 1);
 
-	QHBoxLayout *layout7 = new QHBoxLayout();
 	QLabel *num_snooze_max_label = new QLabel(tr("Max. number of snoozes (0 to disable)"));
 	num_snooze_max = new QSpinBox();
 	num_snooze_max->setValue(settings.value("num_snooze_max", NUM_SNOOZE_MAX).toInt());
-	num_snooze_max->setMaximumWidth(250);
-	layout7->addWidget(num_snooze_max_label);
-	layout7->addWidget(num_snooze_max);
-
-	layout1->addLayout(layout4);
-	layout1->addLayout(layout5);
-	layout1->addLayout(layout6);
-	layout1->addLayout(layout7);
-
-	setLayout(layout1);
+	layout->addWidget(num_snooze_max_label, 3, 0);
+	layout->addWidget(num_snooze_max, 3, 1);
 }
 
 void Settings::closeEvent(QCloseEvent*)
