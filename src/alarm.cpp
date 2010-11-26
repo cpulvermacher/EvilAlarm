@@ -31,16 +31,12 @@ Alarm::Alarm(QWidget *parent):
 {
 	setWindowTitle("EvilAlarm");
 
-	QSettings settings;
 	if(!parent) { //top level window? (=not testing)
 		setWindowState(windowState() | Qt::WindowFullScreen);
-
-		//tell daemon to restart us if we're killed
-		settings.setValue("protect_ui", true);
-		settings.sync();
 	}
 
 	//load settings
+	QSettings settings;
 	alarm_timeout = settings.value("alarm_timeout", ALARM_TIMEOUT).toInt();
 	inactivity_timeout = settings.value("inactivity_timeout", INACTIVITY_TIMEOUT).toInt();
 
@@ -151,12 +147,6 @@ void Alarm::closeEvent(QCloseEvent*)
 {
 	hide();
 	stop();
-
-	if(!parent()) {
-		QSettings settings;
-		settings.setValue("protect_ui", false);
-		settings.sync();
-	}
 }
 
 

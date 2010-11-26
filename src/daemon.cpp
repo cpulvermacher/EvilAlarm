@@ -21,7 +21,6 @@
 
 #include <QtCore>
 
-#include <cstdlib>
 #include <iostream>
 
 
@@ -61,18 +60,12 @@ void Daemon::uiFinished()
 {
 	delete ui_process;
 
+	//UI exited normally, stop daemon
 	QSettings settings;
-	const bool protect_ui = settings.value("protect_ui").toBool();
+	settings.setValue("daemon_pid", 0);
+	settings.sync();
 
-	if(protect_ui) {
-		//UI killed, restart.
-		wake();
-	} else {
-		//UI exited normally, stop daemon
-		settings.setValue("daemon_pid", 0);
-		settings.sync();
-		QCoreApplication::quit();
-	}
+	QCoreApplication::quit();
 }
 
 
