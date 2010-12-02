@@ -21,15 +21,13 @@
 
 #include <QtCore>
 
-#include <iostream>
-
 
 Daemon::Daemon()
 {
 	QSettings settings;
 	QTime wake_at = settings.value("wake_at").toTime();
 	if(!wake_at.isValid()) {
-		std::cerr << "Invalid alarm time, aborting\n";
+		//Invalid alarm time, aborting
 		exit(1);
 	}
 
