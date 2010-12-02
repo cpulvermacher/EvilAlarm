@@ -55,11 +55,15 @@ Settings::Settings(QWidget *parent):
 	layout->addWidget(snooze_time_label, 2, 0);
 	layout->addWidget(snooze_time, 2, 1);
 
-	QLabel *num_snooze_max_label = new QLabel(tr("Max. number of snoozes (0 to disable)"));
+	QLabel *num_snooze_max_label = new QLabel(tr("Max. number of snoozes (0 to disable snooze)"));
 	num_snooze_max = new QSpinBox();
 	num_snooze_max->setValue(settings.value("num_snooze_max", NUM_SNOOZE_MAX).toInt());
 	layout->addWidget(num_snooze_max_label, 3, 0);
 	layout->addWidget(num_snooze_max, 3, 1);
+
+	fullscreen = new QCheckBox(tr("Full screen - No other apps (including Phone app) can be used until alarm shuts down"));
+	fullscreen->setChecked(settings.value("fullscreen", FULLSCREEN).toBool());
+	layout->addWidget(fullscreen, 4, 0, 1, 2);
 }
 
 void Settings::closeEvent(QCloseEvent*)
@@ -74,5 +78,6 @@ void Settings::save()
 	settings.setValue("inactivity_timeout", inactivity_timeout->value());
 	settings.setValue("snooze_time", snooze_time->value());
 	settings.setValue("num_snooze_max", num_snooze_max->value());
+	settings.setValue("fullscreen", fullscreen->isChecked());
 	settings.sync();
 }

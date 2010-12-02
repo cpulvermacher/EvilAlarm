@@ -31,7 +31,7 @@ public:
 	static bool isRunning();
 private slots:
 	void wake();
-	void uiFinished();
+	void uiFinished(int, QProcess::ExitStatus);
 private:
 	QTimer timer;
 	QProcess *ui_process;

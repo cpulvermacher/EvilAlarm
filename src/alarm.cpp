@@ -31,12 +31,15 @@ Alarm::Alarm(QWidget *parent):
 {
 	setWindowTitle("EvilAlarm");
 
-	if(!parent) { //top level window? (=not testing)
-		setWindowState(windowState() | Qt::WindowFullScreen);
-	}
-
 	//load settings
 	QSettings settings;
+	if(parent == 0)  { //top level window?
+		if(settings.value("fullscreen", FULLSCREEN).toBool())
+			setWindowState(windowState() | Qt::WindowFullScreen);
+		else
+			setWindowFlags(Qt::Window); //allow multitasking
+	}
+
 	alarm_timeout = settings.value("alarm_timeout", ALARM_TIMEOUT).toInt();
 	inactivity_timeout = settings.value("inactivity_timeout", INACTIVITY_TIMEOUT).toInt();
 
@@ -98,6 +101,7 @@ Alarm::~Alarm()
 
 void Alarm::accelUpdate(int x, int y, int z)
 {
+	int max_diff = qMax(qAbs(lastx - x), qMax(qAbs(lasty -y), qAbs(lastz - z)));
 	if(!snoozing) {
 		//shutdown time reached?
 		if(alarm_started.elapsed()/1000 > alarm_timeout*60) {
@@ -108,9 +112,7 @@ void Alarm::accelUpdate(int x, int y, int z)
 		if(lastx == 0 and lasty == 0 and lastz == 0) {
 			//initialize
 			last_active.restart();
-		} else if(qAbs(lastx - x) > ACCELEROMETER_THRESHOLD
-		or qAbs(lasty - y) > ACCELEROMETER_THRESHOLD
-		or qAbs(lastz - z) > ACCELEROMETER_THRESHOLD) {
+		} else if(max_diff > ACCELEROMETER_THRESHOLD) {
 			//device moved
 			stop();
 			last_active.restart();
@@ -138,13 +140,20 @@ void Alarm::accelUpdate(int x, int y, int z)
 		const int snooze_time = settings.value("snooze_time", SNOOZE_TIME).toInt();
 		label_text += tr("Snoozing for %1 minutes").arg(snooze_time);
 	}
+	label_text += tr(" - diff: %1").arg(max_diff);
 	label_text += "</center";
 
 	label->setText(label_text);
 }
 
-void Alarm::closeEvent(QCloseEvent*)
+void Alarm::closeEvent(QCloseEvent* ev)
 {
+	if(parent() == 0 and ev->spontaneous()) {
+		//user tried to close window
+		ev->ignore();
+		return;
+	}
+
 	hide();
 	stop();
 }
@@ -190,7 +199,6 @@ void Alarm::stop()
 }
 
 //turns of alarm for snooze_time minutes, then restarts alarm
-//
 void Alarm::snooze()
 {
 	snoozing = true;

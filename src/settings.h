@@ -30,6 +30,7 @@ const int INACTIVITY_TIMEOUT = 4; //seconds before noise will restart after devi
 const int ALARM_TIMEOUT = 5; //minutes the device is armed after initial alarm
 const int SNOOZE_TIME = 10; //minutes
 const int NUM_SNOOZE_MAX = 1;
+const bool FULLSCREEN = false;
 
 
 class Settings : public QWidget {
@@ -45,5 +46,6 @@ private:
 	QSpinBox *inactivity_timeout;
 	QSpinBox *snooze_time;
 	QSpinBox *num_snooze_max;
+	QCheckBox *fullscreen;
 };
 #endif

@@ -1,3 +1,9 @@
+evilalarm (0.4) unstable; urgency=low
+
+  * Make full screen alarm optional (off by default)
+
+ -- Christian Pulvermacher <pulvermacher@gmx.de>  Sat, 27 Nov 2010 17:17:44 +0100
+
 evilalarm (0.3) unstable; urgency=low
 
   * Added snooze button, duration and number of times it can be used are configurable

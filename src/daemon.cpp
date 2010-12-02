@@ -51,21 +51,26 @@ void Daemon::wake()
 	//start evilalarm --wakeup
 	ui_process = new QProcess(this);
 	connect(ui_process, SIGNAL(finished(int, QProcess::ExitStatus)),
-		this, SLOT(uiFinished()));
+		this, SLOT(uiFinished(int, QProcess::ExitStatus)));
 	ui_process->start(QCoreApplication::applicationFilePath(), QStringList("--wakeup"));
 }
 
 
-void Daemon::uiFinished()
+void Daemon::uiFinished(int, QProcess::ExitStatus status)
 {
 	delete ui_process;
 
-	//UI exited normally, stop daemon
-	QSettings settings;
-	settings.setValue("daemon_pid", 0);
-	settings.sync();
+	if(status == QProcess::CrashExit) {
+		//UI probably got killed, restart.
+		wake();
+	} else {
+		//UI exited normally, stop daemon
+		QSettings settings;
+		settings.setValue("daemon_pid", 0);
+		settings.sync();
 
-	QCoreApplication::quit();
+		QCoreApplication::quit();
+	}
 }
 
 
