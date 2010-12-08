@@ -25,7 +25,7 @@
 
 //default values
 const int ACCELEROMETER_POLL_MSEC = 500;
-const int ACCELEROMETER_THRESHOLD = 40;
+const int ACCELEROMETER_THRESHOLD = 50;
 const int INACTIVITY_TIMEOUT = 4; //seconds before noise will restart after device has stopped moving
 const int ALARM_TIMEOUT = 5; //minutes the device is armed after initial alarm
 const int SNOOZE_TIME = 10; //minutes

@@ -101,7 +101,11 @@ Alarm::~Alarm()
 
 void Alarm::accelUpdate(int x, int y, int z)
 {
-	int max_diff = qMax(qAbs(lastx - x), qMax(qAbs(lasty -y), qAbs(lastz - z)));
+	//TODO: remove
+	//int max_diff = qMax(qAbs(lastx - x), qMax(qAbs(lasty -y), qAbs(lastz - z)));
+
+	int max_diff = qAbs(lastx - x); //x-axis is not affected by vibration
+
 	if(!snoozing) {
 		//shutdown time reached?
 		if(alarm_started.elapsed()/1000 > alarm_timeout*60) {
@@ -140,8 +144,7 @@ void Alarm::accelUpdate(int x, int y, int z)
 		const int snooze_time = settings.value("snooze_time", SNOOZE_TIME).toInt();
 		label_text += tr("Snoozing for %1 minutes").arg(snooze_time);
 	}
-	label_text += tr(" - diff: %1").arg(max_diff);
-	label_text += "</center";
+	label_text += "</center>";
 
 	label->setText(label_text);
 }
