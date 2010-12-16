@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
 	if(QCoreApplication::arguments().contains(QString("--daemon"))) {
 		new Daemon;
 	} else if(QCoreApplication::arguments().contains(QString("--wakeup"))) {
-		QWidget *widget = new Alarm;
+		QWidget *widget = Alarm::getModuleInstance();
 		widget->show();
 	} else {
 		QWidget *widget = new MainWindow;

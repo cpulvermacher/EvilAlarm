@@ -16,31 +16,30 @@
     with this program; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
-#ifndef ALARM_H
-#define ALARM_H
+#ifndef ALARM_MOVEMENT_H
+#define ALARM_MOVEMENT_H
+
+#include "accelerometer.h"
+#include "alarm.h"
 
 #include <QtGui>
 
-//abstract base class for alarm modules
-class Alarm : public QDialog {
+class AlarmMovement : public Alarm {
 	Q_OBJECT
 public:
-	Alarm(QWidget *parent);
-	virtual ~Alarm() = 0;
-	static Alarm* getModuleInstance(QWidget *parent = 0);
-protected:
-	virtual void closeEvent(QCloseEvent*);
+	AlarmMovement(QWidget *parent = 0);
+	~AlarmMovement();
 protected slots:
+	void accelUpdate(int, int, int);
 	virtual void restart();
 	virtual void snooze();
-	virtual void play();
-	virtual void pause();
-protected:
-	QTime alarm_started;
-	bool alarm_playing;
-	bool snoozing;
-	int alarm_timeout;
-	quint32 notify_id;
-	int num_snooze;
+private:
+	QLabel *label;
+	QPushButton *snooze_button;
+
+	Accelerometer *accel;
+	int inactivity_timeout;
+	int lastx, lasty, lastz;
+	QTime last_active;
 };
 #endif

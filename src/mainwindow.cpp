@@ -94,8 +94,9 @@ void MainWindow::showSettings()
 
 void MainWindow::testAlarm()
 {
-	Alarm test_alarm(this);
-	test_alarm.exec();
+	Alarm* test_alarm = Alarm::getModuleInstance(this);
+	test_alarm->exec();
+	delete test_alarm;
 }
 
 void MainWindow::toggleAlarm()

@@ -27,7 +27,6 @@ Settings::Settings(QWidget *parent):
 	setWindowTitle(tr("Settings"));
 	setAttribute(Qt::WA_Maemo5StackedWindow);
 	setWindowFlags(windowFlags() | Qt::Window); //create top-level window even though parent is set
-	//for reference: Qt::WA_Maemo5StackedWindow doesn't seem to work with QDialog
 
 	QGridLayout *layout = new QGridLayout(this);
 	layout->setColumnStretch(0, 1);
@@ -61,7 +60,7 @@ Settings::Settings(QWidget *parent):
 	layout->addWidget(num_snooze_max_label, 3, 0);
 	layout->addWidget(num_snooze_max, 3, 1);
 
-	fullscreen = new QCheckBox(tr("Full screen - No other apps (including Phone app) can be used until alarm shuts down"));
+	fullscreen = new QCheckBox(tr("Disable multi-tasking (including Phone app)"));
 	fullscreen->setChecked(settings.value("fullscreen", FULLSCREEN).toBool());
 	layout->addWidget(fullscreen, 4, 0, 1, 2);
 }
