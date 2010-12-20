@@ -16,30 +16,42 @@
     with this program; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
-#ifndef ALARM_H
-#define ALARM_H
+#ifndef BACKEND_H
+#define BACKEND_H
 
-#include <QtGui>
+#include <QtCore>
+#include <Phonon>
 
-class Backend;
-
-//abstract base class for alarm modules
-class Alarm : public QDialog {
+//handles audio & vibration
+class Backend : public QObject {
 	Q_OBJECT
 public:
-	Alarm(QWidget *parent);
-	virtual ~Alarm() = 0;
-	static Alarm* getModuleInstance(QWidget *parent = 0);
-protected:
-	virtual void closeEvent(QCloseEvent*);
-protected slots:
-	virtual void restart();
-	virtual void snooze();
-protected:
-	Backend *backend;
+	Backend();
+	~Backend();
+	bool isPlaying(); //audio is playing
+	bool isVibrating(); //is vibrator on right _now_ ?
+public slots:
+	void play();
+	void pause();
+	void volumeUp();
+	void volumeDown();
+	void setVolume(int v);
+private slots:
+	void repeatSound();
+	void setVibratorStateOff();
+	void startVibrator();
+	void stopVibrator();
+private:
+	Phonon::MediaObject* noise;
+	Phonon::AudioOutput* audio_output;
 	QTime alarm_started;
+	bool alarm_playing;
+	bool is_vibrating;
+	bool use_vibration;
 	bool snoozing;
 	int alarm_timeout;
-	int num_snooze;
+	int max_volume;
+	int volume;
+	QString old_profile;
 };
 #endif

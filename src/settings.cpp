@@ -31,38 +31,53 @@ Settings::Settings(QWidget *parent):
 	QGridLayout *layout = new QGridLayout(this);
 	layout->setColumnStretch(0, 1);
 
+	sound_filename = new QMaemo5ValueButton("Sound File", this);
+	sound_filename->setValueText(settings.value("sound_filename", SOUND_FILE).toString());
+	volume = new QSlider(Qt::Horizontal, this);
+	volume->setRange(10, 100);
+	volume->setValue(settings.value("max_volume", MAX_VOLUME).toInt());
+	volume->setMinimumWidth(100);
+	layout->addWidget(sound_filename, 0, 0);
+	layout->addWidget(volume, 0, 1);
+	connect(sound_filename, SIGNAL(clicked()),
+		this, SLOT(pickSoundFile()));
+
+	vibration = new QCheckBox(tr("Enable vibration"));
+	vibration->setChecked(settings.value("use_vibration", USE_VIBRATION).toBool());
+	layout->addWidget(vibration, 1, 0, 1, 2);
+
 	QLabel *alarm_timeout_label = new QLabel(tr("Completely shut down after"));
 	alarm_timeout = new QSpinBox();
 	alarm_timeout->setSuffix(" min");
 	alarm_timeout->setRange(1, 60);
 	alarm_timeout->setValue(settings.value("alarm_timeout", ALARM_TIMEOUT).toInt());
-	layout->addWidget(alarm_timeout_label, 0, 0);
-	layout->addWidget(alarm_timeout, 0, 1);
+	layout->addWidget(alarm_timeout_label, 2, 0);
+	layout->addWidget(alarm_timeout, 2, 1);
 
 	QLabel *inactivity_timeout_label = new QLabel(tr("Restart alarm if phone not moved for"));
 	inactivity_timeout = new QSpinBox();
 	inactivity_timeout->setSuffix(" s");
 	inactivity_timeout->setValue(settings.value("inactivity_timeout", INACTIVITY_TIMEOUT).toInt());
-	layout->addWidget(inactivity_timeout_label, 1, 0);
-	layout->addWidget(inactivity_timeout, 1, 1);
+	layout->addWidget(inactivity_timeout_label, 3, 0);
+	layout->addWidget(inactivity_timeout, 3, 1);
 
 	QLabel *snooze_time_label = new QLabel(tr("Snooze time"));
 	snooze_time = new QSpinBox();
 	snooze_time->setSuffix(" min");
 	snooze_time->setRange(1, 60);
 	snooze_time->setValue(settings.value("snooze_time", SNOOZE_TIME).toInt());
-	layout->addWidget(snooze_time_label, 2, 0);
-	layout->addWidget(snooze_time, 2, 1);
+	layout->addWidget(snooze_time_label, 4, 0);
+	layout->addWidget(snooze_time, 4, 1);
 
 	QLabel *num_snooze_max_label = new QLabel(tr("Max. number of snoozes (0 to disable snooze)"));
 	num_snooze_max = new QSpinBox();
 	num_snooze_max->setValue(settings.value("num_snooze_max", NUM_SNOOZE_MAX).toInt());
-	layout->addWidget(num_snooze_max_label, 3, 0);
-	layout->addWidget(num_snooze_max, 3, 1);
+	layout->addWidget(num_snooze_max_label, 5, 0);
+	layout->addWidget(num_snooze_max, 5, 1);
 
 	fullscreen = new QCheckBox(tr("Disable multi-tasking (including Phone app)"));
 	fullscreen->setChecked(settings.value("fullscreen", FULLSCREEN).toBool());
-	layout->addWidget(fullscreen, 4, 0, 1, 2);
+	layout->addWidget(fullscreen, 6, 0, 1, 2);
 }
 
 void Settings::closeEvent(QCloseEvent*)
@@ -71,8 +86,18 @@ void Settings::closeEvent(QCloseEvent*)
 	deleteLater();
 }
 
+void Settings::pickSoundFile()
+{
+	QString name = QFileDialog::getOpenFileName(this, tr("Choose Sound File"), sound_filename->valueText(), "Sound Files(*.wav *.mp3 *.ogg *.aac)");
+	if(!name.isEmpty())
+		sound_filename->setValueText(name);
+}
+
 void Settings::save()
 {
+	settings.setValue("sound_filename", sound_filename->valueText());
+	settings.setValue("max_volume", volume->value());
+	settings.setValue("use_vibration", vibration->isChecked());
 	settings.setValue("alarm_timeout", alarm_timeout->value());
 	settings.setValue("inactivity_timeout", inactivity_timeout->value());
 	settings.setValue("snooze_time", snooze_time->value());

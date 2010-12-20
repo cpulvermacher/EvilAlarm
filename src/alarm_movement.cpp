@@ -17,10 +17,13 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 #include "alarm_movement.h"
+#include "backend.h"
 #include "settings.h"
 
 #include <QtDBus>
 #include <QtGui>
+
+#include <iostream>
 
 
 AlarmMovement::AlarmMovement(QWidget *parent):
@@ -80,10 +83,7 @@ AlarmMovement::~AlarmMovement()
 
 void AlarmMovement::accelUpdate(int x, int y, int z)
 {
-	//TODO: remove
-	//int max_diff = qMax(qAbs(lastx - x), qMax(qAbs(lasty -y), qAbs(lastz - z)));
-
-	int max_diff = qAbs(lastx - x); //x-axis is not affected by vibration
+	int max_diff = qMax(qAbs(lastx - x), qMax(qAbs(lasty - y), qAbs(lastz - z)));
 
 	if(!snoozing) {
 		//shutdown time reached?
@@ -95,16 +95,22 @@ void AlarmMovement::accelUpdate(int x, int y, int z)
 		if(lastx == 0 and lasty == 0 and lastz == 0) {
 			//initialize
 			last_active.restart();
-		} else if(max_diff > ACCELEROMETER_THRESHOLD) {
+		} else if(max_diff > ACCELEROMETER_THRESHOLD and !backend->isVibrating()) {
 			//device moved
-			pause();
+			backend->volumeDown();
 			last_active.restart();
-		} else if(last_active.elapsed()/1000 > inactivity_timeout) {
+		} else if(last_active.elapsed()/1000 > inactivity_timeout and !backend->isVibrating()) {
 			//not moved for a while
-			play();
+			backend->volumeUp();
 		}
 	}
-	lastx = x; lasty = y; lastz = z;
+	if(!backend->isVibrating()) //ignore huge spikes
+		lastx = x; lasty = y; lastz = z;
+
+	std::cout << max_diff;
+	if(backend->isVibrating())
+		std::cout << " (vib)";
+	std::cout << "\n";
 
 	//update UI
 	QString label_text;

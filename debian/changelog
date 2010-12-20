@@ -1,5 +1,6 @@
 evilalarm (0.4) unstable; urgency=low
 
+  * Revert to old playback mechanism, plus better volume control
   * Make full screen alarm optional (off by default)
 
  -- Christian Pulvermacher <pulvermacher@gmx.de>  Sat, 27 Nov 2010 17:17:44 +0100
