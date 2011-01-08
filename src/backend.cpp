@@ -19,33 +19,42 @@
 #include "backend.h"
 #include "settings.h"
 
+#include <QFile>
 #include <QtDBus>
 
+#include <cstdlib>
 #include <iostream>
 
 //same as PatternIncomingCall defaults
 const int VIBRATOR_ON_MSECS = 900;
 const int VIBRATOR_OFF_MSECS = 1000;
 
+const qreal VOLUME_STEP = 0.1;
+
 Backend::Backend():
 	noise(new Phonon::MediaObject(this)),
 	audio_output(new Phonon::AudioOutput(Phonon::MusicCategory,  this)),
 	alarm_playing(false),
-	is_vibrating(false)
+	is_vibrating(false),
+	volume(1.0)
 {
 	QSettings settings;
 
 	Phonon::createPath(noise, audio_output);
-	noise->setCurrentSource(Phonon::MediaSource(settings.value("sound_filename", SOUND_FILE).toString()));
-	max_volume = settings.value("max_volume", MAX_VOLUME).toInt();
-	volume = max_volume;
+	int max_volume = settings.value("max_volume", MAX_VOLUME).toInt();
 	use_vibration = settings.value("use_vibration", USE_VIBRATION).toBool();
+	QString sound_filename = settings.value("sound_filename", SOUND_FILE).toString();
 
-	//TODO: if sound_filename isn't found, enable vibration anyway
+	if(QFile::exists(sound_filename)) {
+		noise->setCurrentSource(Phonon::MediaSource(sound_filename));
+	} else {
+		//no sound file, enable vibration as fallback
+		std::cout << "no sound file, enable vibration as fallback\n";
+		use_vibration = true;
+	}
 
 	connect(noise, SIGNAL(aboutToFinish()),
 		this, SLOT(repeatSound()));
-	audio_output->setVolume(100);
 
 	//save old profile
 	QDBusInterface interface("com.nokia.profiled", "/com/nokia/profiled", "com.nokia.profiled");
@@ -58,12 +67,15 @@ Backend::Backend():
 	pasr.start("pasr --store");
 	pasr.waitForFinished(2000); //don't destroy process before it's done
 
-	std::cout << "Backend() finished\n";
+	//reset volume and profile regularly
+	keepvolume.start(QString("sh /usr/share/evilalarm/keepvolume.sh %1").arg(max_volume));
 }
 
 Backend::~Backend()
 {
-	std::cout << "~Backend()\n";
+	pause();
+
+	keepvolume.kill();
 
 	//restore
 	QProcess pasr;
@@ -72,7 +84,7 @@ Backend::~Backend()
 	pasr.waitForFinished(2000); //don't destroy process before it's done
 	QProcess::execute("rm /tmp/evilalarm_sinkstate.backup");
 
-	//reset profile
+	//restore profile
 	QDBusInterface interface("com.nokia.profiled", "/com/nokia/profiled", "com.nokia.profiled");
 	interface.call("set_profile", old_profile);
 
@@ -85,18 +97,12 @@ void Backend::play()
 	if(alarm_playing)
 		return;
 
-	//switch to 'general' profile (user can switch it back, so we do this here to foil that)
-	QDBusInterface interface("com.nokia.profiled", "/com/nokia/profiled", "com.nokia.profiled");
-	interface.call("set_profile", "general");
-
-	//and make sure volume is ok
-	setVolume(volume);
-
+	std::cout << "Backend::play()\n";
 	alarm_playing = true;
+
 	noise->play();
 	if(use_vibration)
 		startVibrator();
-
 }
 
 void Backend::pause()
@@ -104,51 +110,44 @@ void Backend::pause()
 	if(!alarm_playing)
 		return;
 
+	std::cout << "Backend::pause()\n";
 	alarm_playing = false;
+
 	noise->pause();
 	stopVibrator();
 }
 
-//increase/decrease volume by 1/7 of max_volume, or at least 1%
-void Backend::volumeUp() { setVolume(volume + qMax(qRound(max_volume/7.0), 1)); }
-void Backend::volumeDown() { setVolume(volume - qMax(qRound(max_volume/7.0), 1)); }
+void Backend::volumeUp() { setVolume(volume + VOLUME_STEP); }
+void Backend::volumeDown() { setVolume(volume - VOLUME_STEP); }
 
-void Backend::setVolume(int v)
+void Backend::setVolume(qreal v)
 {
-	std::cout << "setVolume(" << v << ")\n";
+	if(v > 1.0)
+		v = 1.0;
+
 	if(v <= 0) {
-		std::cout << "volume to 0, pause playback\n";
-		volume = 0;
+		v = 0;
 		pause();
-	} else if(v > max_volume) {
-		volume = max_volume;
-	} else {
-		if(volume == 0 and v > volume) {//volume up from 0?
-			std::cout << "volume up from 0\n";
-			play();
-		}
-		volume = v;
+	} else if(v > volume and !alarm_playing) {
+		play();
 	}
+	volume = v;
 
-	QProcess::execute(QString("pasr -u -s sink-input-by-media-role:x-maemo -l %1").arg(volume));
+	//doesn't work?
+	audio_output->setVolume(volume);
 }
 
-void Backend::repeatSound()
-{
-	noise->enqueue(noise->currentSource());
-}
+void Backend::repeatSound() { noise->enqueue(noise->currentSource()); }
 
 bool Backend::isPlaying() { return alarm_playing; }
 
 bool Backend::isVibrating() { return is_vibrating; }
 
-void Backend::setVibratorStateOff() { 
-	std::cout << "setVibratorStateOff()\n";
-	is_vibrating = false; }
+//used to change status after some delay, see stopVibrator()
+void Backend::setVibratorStateOff() { is_vibrating = false; }
 
 void Backend::startVibrator()
 {
-	std::cout << "startVibrator()\n";
 	if(!alarm_playing or is_vibrating)
 		return;
 

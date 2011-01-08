@@ -52,7 +52,7 @@ void Alarm::restart()
 	snoozing = false;
 
 	backend->play();
-	backend->setVolume(100); //set volume to the configured maximum
+	backend->setVolume(1.0); //start with max volume
 	alarm_started = QTime::currentTime();
 	
 	//activate display

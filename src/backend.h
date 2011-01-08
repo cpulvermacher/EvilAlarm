@@ -35,7 +35,7 @@ public slots:
 	void pause();
 	void volumeUp();
 	void volumeDown();
-	void setVolume(int v);
+	void setVolume(qreal v);
 private slots:
 	void repeatSound();
 	void setVibratorStateOff();
@@ -50,8 +50,8 @@ private:
 	bool use_vibration;
 	bool snoozing;
 	int alarm_timeout;
-	int max_volume;
-	int volume;
+	qreal volume;
+	QProcess keepvolume;
 	QString old_profile;
 };
 #endif
