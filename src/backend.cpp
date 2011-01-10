@@ -73,23 +73,30 @@ Backend::Backend():
 
 Backend::~Backend()
 {
+	//TODO: hangs upon execution again :(
 	pause();
+	std::cout << "~Backend\n";
 
 	keepvolume.kill();
+	keepvolume.waitForFinished(2000); //don't destroy process before it's done
+
+	std::cout << ".\n";
 
 	//restore
 	QProcess pasr;
 	pasr.setStandardInputFile("/tmp/evilalarm_sinkstate.backup");
 	pasr.start("pasr --restore");
 	pasr.waitForFinished(2000); //don't destroy process before it's done
-	QProcess::execute("rm /tmp/evilalarm_sinkstate.backup");
 
+	std::cout << ".\n";
 	//restore profile
 	QDBusInterface interface("com.nokia.profiled", "/com/nokia/profiled", "com.nokia.profiled");
 	interface.call("set_profile", old_profile);
 
+	std::cout << ".\n";
 	delete noise;
 	delete audio_output;
+	std::cout << "done\n";
 }
 
 void Backend::play()

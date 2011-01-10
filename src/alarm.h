@@ -38,8 +38,9 @@ protected slots:
 protected:
 	Backend *backend;
 	QTime alarm_started;
-	bool snoozing;
 	int alarm_timeout;
+	bool snoozing;
+	QTime snooze_till;
 	int num_snooze;
 };
 #endif

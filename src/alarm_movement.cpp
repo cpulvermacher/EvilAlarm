@@ -25,7 +25,6 @@
 
 #include <iostream>
 
-
 AlarmMovement::AlarmMovement(QWidget *parent):
 	Alarm(parent),
 	label(new QLabel(this)),
@@ -52,6 +51,12 @@ AlarmMovement::AlarmMovement(QWidget *parent):
 
 	//actually start alarm
 	restart();
+
+	//refresh UI every second
+	QTimer *ui_timer = new QTimer(this);
+	connect(ui_timer, SIGNAL(timeout()),
+		this, SLOT(updateScreen()));
+	ui_timer->start(1000);
 }
 
 //starts/restarts the alarm
@@ -83,53 +88,57 @@ AlarmMovement::~AlarmMovement()
 
 void AlarmMovement::accelUpdate(int x, int y, int z)
 {
-	int max_diff = qMax(qAbs(lastx - x), qMax(qAbs(lasty - y), qAbs(lastz - z)));
-
-	if(!snoozing) {
-		//shutdown time reached?
-		if(alarm_started.elapsed()/1000 > alarm_timeout*60) {
-			close();
-			return;
-		}
-
-		if(lastx == 0 and lasty == 0 and lastz == 0) {
-			//initialize
-			last_active.restart();
-		} else if(max_diff > ACCELEROMETER_THRESHOLD and !backend->isVibrating()) {
-			//device moved
-			backend->volumeDown();
-			last_active.restart();
-		} else if(last_active.elapsed()/1000 > inactivity_timeout and !backend->isVibrating()) {
-			//not moved for a while
-			backend->volumeUp();
-		}
+	if(snoozing) {
+		std::cout << "this shouldnt hpapen\n";
+		return;
 	}
-	if(!backend->isVibrating()) //ignore huge spikes
-		lastx = x; lasty = y; lastz = z;
 
+	//shutdown time reached?
+	if(alarm_started.elapsed()/1000 > alarm_timeout*60) {
+		close();
+		return;
+	}
+
+	int max_diff = qMax(qAbs(lastx - x), qMax(qAbs(lasty - y), qAbs(lastz - z)));
+	if(lastx == 0 and lasty == 0 and lastz == 0) {
+		//initialize
+		last_active.restart();
+	} else if(max_diff > ACCELEROMETER_THRESHOLD and !backend->isVibrating()) {
+		//device moved
+		backend->volumeDown();
+		last_active.restart();
+	} else if(last_active.elapsed()/1000 > inactivity_timeout and !backend->isVibrating()) {
+		//not moved for a while
+		backend->volumeUp();
+	}
+
+	//TODO remove this
 	std::cout << max_diff;
 	if(backend->isVibrating())
 		std::cout << " (vib)";
 	std::cout << "\n";
+	
+	if(!backend->isVibrating()) //ignore huge spikes
+		lastx = x; lasty = y; lastz = z;
+}
 
-	//update UI
-	QString label_text;
-	label_text = tr("<center><h1>%1</h1>").arg(QTime::currentTime().toString(Qt::SystemLocaleShortDate));
+void AlarmMovement::updateScreen()
+{
+	QString label_text = tr("<center><h1>%1</h1>").arg(QTime::currentTime().toString(Qt::SystemLocaleShortDate));
 
-	if(!snoozing) {
-		int secs_remaining = alarm_timeout*60 - alarm_started.elapsed()/1000;
-		if(secs_remaining < 60) {
-			label_text += tr("%1 seconds remaining").arg(secs_remaining);
-		} else {
-			int mins_remaining = qRound(secs_remaining/60);
-			label_text += tr("%1 minutes remaining").arg(mins_remaining);
-		}
+	//display remaining alarm or snooze time
+	int secs_remaining;
+	if(snoozing) {
+		secs_remaining = QTime::currentTime().secsTo(snooze_till);
+		label_text += tr("Snooze: ");
 	} else {
-		QSettings settings;
-		const int snooze_time = settings.value("snooze_time", SNOOZE_TIME).toInt();
-		label_text += tr("Snoozing for %1 minutes").arg(snooze_time);
+		secs_remaining = alarm_timeout*60 - alarm_started.elapsed()/1000;
 	}
-	label_text += "</center>";
+
+	if(secs_remaining >= 60) {
+		label_text += tr("%1 minutes, ", "", secs_remaining/60).arg(secs_remaining/60);
+	}
+	label_text += tr("%1 seconds remaining</center>", "", secs_remaining%60).arg(secs_remaining%60);
 
 	label->setText(label_text);
 }
@@ -139,4 +148,8 @@ void AlarmMovement::snooze()
 	snooze_button->setEnabled(false);
 
 	Alarm::snooze();
+
+	//stop polling
+	delete accel;
+	accel = 0;
 }

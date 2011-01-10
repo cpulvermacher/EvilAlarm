@@ -84,6 +84,7 @@ void Alarm::snooze()
 	QSettings settings;
 	const int snooze_time = settings.value("snooze_time", SNOOZE_TIME).toInt();
 	const int snooze_time_msecs = snooze_time * 60 * 1000;
+	snooze_till = QTime::currentTime().addMSecs(snooze_time_msecs);
 
 	QTimer::singleShot(snooze_time_msecs, this, SLOT(restart()));
 }

@@ -31,6 +31,7 @@ public:
 	~AlarmMovement();
 protected slots:
 	void accelUpdate(int, int, int);
+	void updateScreen();
 	virtual void restart();
 	virtual void snooze();
 private:
