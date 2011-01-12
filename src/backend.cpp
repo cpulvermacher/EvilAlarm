@@ -40,21 +40,17 @@ Backend::Backend():
 {
 	QSettings settings;
 
-	Phonon::createPath(noise, audio_output);
 	int max_volume = settings.value("max_volume", MAX_VOLUME).toInt();
 	use_vibration = settings.value("use_vibration", USE_VIBRATION).toBool();
 	QString sound_filename = settings.value("sound_filename", SOUND_FILE).toString();
 
-	if(QFile::exists(sound_filename)) {
-		noise->setCurrentSource(Phonon::MediaSource(sound_filename));
-	} else {
-		//no sound file, enable vibration as fallback
-		std::cout << "no sound file, enable vibration as fallback\n";
-		use_vibration = true;
-	}
-
+	connect(noise, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
+		this, SLOT(handleAudioStateChange(Phonon::State)));
 	connect(noise, SIGNAL(aboutToFinish()),
 		this, SLOT(repeatSound()));
+
+	Phonon::createPath(noise, audio_output);
+	noise->setCurrentSource(Phonon::MediaSource(sound_filename));
 
 	//save old profile
 	QDBusInterface interface("com.nokia.profiled", "/com/nokia/profiled", "com.nokia.profiled");
@@ -178,4 +174,19 @@ void Backend::stopVibrator()
 
 	//phone doesn't stop vibrating right away...
 	QTimer::singleShot(200, this, SLOT(setVibratorStateOff()));
+}
+
+void Backend::handleAudioStateChange(Phonon::State newstate)
+{
+	if(newstate != Phonon::ErrorState)
+		return;
+
+	std::cout << "Error playing the audio file!\n";
+	if(!use_vibration) {
+		std::cout << "Enabling vibration as fallback.\n";
+
+		use_vibration = true;
+		if(alarm_playing)
+			startVibrator();
+	}
 }
