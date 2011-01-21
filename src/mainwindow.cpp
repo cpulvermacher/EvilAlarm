@@ -94,9 +94,17 @@ void MainWindow::showSettings()
 
 void MainWindow::testAlarm()
 {
+	//TODO: strange things happen here
+	//- crash while Phonon shuts down ??
+	//- hangs (after ~Backend() is finished????)
+	//maybe i should just use a --test parameter so it works exactly like --wakeup
+
 	Alarm* test_alarm = Alarm::getModuleInstance(this);
 	test_alarm->exec();
 	delete test_alarm;
+
+	//TODO: remove me
+	//QTimer::singleShot(1000, this, SLOT(testAlarm()));
 }
 
 void MainWindow::toggleAlarm()

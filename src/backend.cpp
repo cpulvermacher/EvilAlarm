@@ -69,14 +69,18 @@ Backend::Backend():
 
 Backend::~Backend()
 {
-	//TODO: hangs upon execution again :(
 	pause();
 	std::cout << "~Backend\n";
 
-	keepvolume.kill();
-	keepvolume.waitForFinished(2000); //don't destroy process before it's done
+	//workaround to avoid hangs when calling external programs
+	//seems to occur only while playing audio and shortly afterwards; results in 100% CPU usage, clone() syscall that it should be doing at this point never appears in strace output
+	//somehow looks similar to this: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=575534
+	sleep(1);
 
 	std::cout << ".\n";
+
+	keepvolume.kill();
+	keepvolume.waitForFinished(2000); //don't destroy process before it's done
 
 	//restore
 	QProcess pasr;
@@ -84,14 +88,12 @@ Backend::~Backend()
 	pasr.start("pasr --restore");
 	pasr.waitForFinished(2000); //don't destroy process before it's done
 
-	std::cout << ".\n";
 	//restore profile
 	QDBusInterface interface("com.nokia.profiled", "/com/nokia/profiled", "com.nokia.profiled");
 	interface.call("set_profile", old_profile);
 
-	std::cout << ".\n";
-	delete noise;
 	delete audio_output;
+	delete noise;
 	std::cout << "done\n";
 }
 

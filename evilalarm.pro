@@ -1,7 +1,7 @@
 TEMPLATE = app
 TARGET = evilalarm
 QT += maemo5 dbus phonon
-CONFIG += silent debug
+CONFIG += silent release
 
 OBJECTS_DIR = $${PWD}/tmp
 MOC_DIR = $${PWD}/tmp

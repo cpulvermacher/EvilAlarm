@@ -57,6 +57,9 @@ AlarmMovement::AlarmMovement(QWidget *parent):
 	connect(ui_timer, SIGNAL(timeout()),
 		this, SLOT(updateScreen()));
 	ui_timer->start(1000);
+
+	//TODO: remove
+//	QTimer::singleShot(1000, this, SLOT(close()));
 }
 
 //starts/restarts the alarm
@@ -112,12 +115,6 @@ void AlarmMovement::accelUpdate(int x, int y, int z)
 		backend->volumeUp();
 	}
 
-	//TODO remove this
-	std::cout << max_diff;
-	if(backend->isVibrating())
-		std::cout << " (vib)";
-	std::cout << "\n";
-	
 	if(!backend->isVibrating()) //ignore huge spikes
 		lastx = x; lasty = y; lastz = z;
 }
