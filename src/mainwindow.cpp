@@ -1,6 +1,6 @@
 /*
     EvilAlarm
-    Copyright (C) 2010 Christian Pulvermacher
+    Copyright (C) 2010-2011 Christian Pulvermacher
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -77,9 +77,9 @@ MainWindow::MainWindow(QWidget *parent) :
 void MainWindow::about()
 {
 	QMessageBox::about(this, tr("About EvilAlarm"),
-		tr("<center><h1>EvilAlarm 0.4</h1>\
+		tr("<center><h1>EvilAlarm 0.5</h1>\
 An alarm clock which cannot be turned off while asleep\
-<small><p>&copy;2010 Christian Pulvermacher &lt;pulvermacher@gmx.de&gt</p></small></center>\
+<small><p>&copy;2010, 2011 Christian Pulvermacher &lt;pulvermacher@gmx.de&gt;</p></small></center>\
 <p>This program is free software; License: <a href=\"http://www.gnu.org/licenses/gpl-2.0.html\">GNU GPL 2</a> or later.</p>"));
 }
 
