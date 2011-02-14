@@ -47,6 +47,7 @@ private slots:
 private:
 	void save();
 	QSettings settings;
+	QComboBox *module;
 	QMaemo5ValueButton *sound_filename;
 	QSlider *volume;
 	QSpinBox *alarm_timeout;

@@ -5,10 +5,13 @@ CONFIG += silent release
 
 OBJECTS_DIR = $${PWD}/tmp
 MOC_DIR = $${PWD}/tmp
-VPATH = $${PWD}/src
+VPATH = $${PWD}/src $${PWD}/src/modules
 INCLUDEPATH += $${PWD}/src
+INCLUDEPATH += $${PWD}/src/modules
 
 HEADERS += accelerometer.h backend.h settings.h alarm.h daemon.h mainwindow.h\
+	alarm_blubbels.h blubbels.h\
 	alarm_movement.h
 SOURCES += main.cpp accelerometer.cpp backend.cpp settings.cpp alarm.cpp daemon.cpp mainwindow.cpp\
+	alarm_blubbels.cpp blubbels.cpp\
 	alarm_movement.cpp

@@ -17,7 +17,8 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 #include "alarm.h"
-#include "alarm_movement.h"
+#include "modules/alarm_blubbels.h"
+#include "modules/alarm_movement.h"
 #include "backend.h"
 #include "settings.h"
 
@@ -93,6 +94,13 @@ void Alarm::snooze()
 //get the user-configured module
 Alarm* Alarm::getModuleInstance(QWidget *parent)
 {
-	//well, maybe later
-	return new AlarmMovement(parent);
+	QSettings settings;
+	QString modulename = settings.value("module").toString().toLower();
+
+	if(modulename == "movement")
+		return new AlarmMovement(parent);
+	else if(modulename == "blubbels")
+		return new AlarmBlubbels(parent);
+	else
+		return new AlarmMovement(parent);
 }

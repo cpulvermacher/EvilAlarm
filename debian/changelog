@@ -1,3 +1,9 @@
+evilalarm (0.5) unstable; urgency=low
+
+  * 
+
+ -- Christian Pulvermacher <pulvermacher@gmx.de>  Sat, 29 Jan 2011 18:52:46 +0100
+
 evilalarm (0.4) unstable; urgency=low
 
   * Revert to old playback mechanism, plus better volume control
