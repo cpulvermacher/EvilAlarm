@@ -72,6 +72,7 @@ void AlarmMovement::restart()
 
 	QSettings settings;
 	inactivity_timeout = settings.value("inactivity_timeout", INACTIVITY_TIMEOUT).toInt();
+	accel_threshold = settings.value("movement_threshold", ACCELEROMETER_THRESHOLD).toInt();
 	const int num_snooze_max = settings.value("num_snooze_max", NUM_SNOOZE_MAX).toInt();
 	if(num_snooze_max == 0) {
 		//snooze completely disabled
@@ -106,7 +107,7 @@ void AlarmMovement::accelUpdate(int x, int y, int z)
 	if(lastx == 0 and lasty == 0 and lastz == 0) {
 		//initialize
 		last_active.restart();
-	} else if(max_diff > ACCELEROMETER_THRESHOLD and !backend->isVibrating()) {
+	} else if(max_diff > accel_threshold and !backend->isVibrating()) {
 		//device moved
 		backend->volumeDown();
 		last_active.restart();

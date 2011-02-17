@@ -40,6 +40,7 @@ private:
 
 	Accelerometer *accel;
 	int inactivity_timeout;
+	int accel_threshold;
 	int lastx, lasty, lastz;
 	QTime last_active;
 };

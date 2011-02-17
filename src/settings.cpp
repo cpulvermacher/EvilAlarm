@@ -38,28 +38,9 @@ Settings::Settings(QWidget *parent):
 	layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
 	layout->setColumnStretch(0, 1);
 	int row = 0;
+	
+	//sound/vibration settings
 
-	QLabel *module_label = new QLabel(tr("Alarm module"));
-	module = new QComboBox(this);
-	module->addItems(ModuleList::availableModules());
-	int current_idx = module->findText(settings.value("module").toString(), Qt::MatchFixedString); //case insensitive search
-	if(current_idx == -1) //invalid module, use default
-		current_idx = module->findText("Movement");
-	module->setCurrentIndex(current_idx);
-	layout->addWidget(module_label, row, 0);
-	layout->addWidget(module, row, 1);
-
-	row++;
-	module_settings_layout = new QStackedLayout();
-	layout->addLayout(module_settings_layout, row, 0, 1, 2);
-	foreach(QString modulename, ModuleList::availableModules()) {
-		module_settings_layout->addWidget(ModuleList::getSettingsInstance(modulename, this));
-	}
-	connect(module, SIGNAL(activated(int)),
-		module_settings_layout, SLOT(setCurrentIndex(int)));
-	module_settings_layout->setCurrentIndex(current_idx);
-
-	row++;
 	sound_filename = new QMaemo5ValueButton("Sound File", this);
 	sound_filename->setValueText(settings.value("sound_filename", SOUND_FILE).toString());
 	volume = new QSlider(Qt::Horizontal, this);
@@ -70,13 +51,18 @@ Settings::Settings(QWidget *parent):
 	layout->addWidget(volume, row, 1);
 	connect(sound_filename, SIGNAL(clicked()),
 		this, SLOT(pickSoundFile()));
-
 	row++;
+
 	vibration = new QCheckBox(tr("Enable vibration"));
 	vibration->setChecked(settings.value("use_vibration", USE_VIBRATION).toBool());
 	layout->addWidget(vibration, row, 0, 1, 2);
-
 	row++;
+
+
+	layout->addWidget(new QLabel("<center>___________________________________________________</center>"), row, 0, 1, 2);
+	row++;
+	//timing/snooze settings
+
 	QLabel *alarm_timeout_label = new QLabel(tr("Completely shut down after"));
 	alarm_timeout = new QSpinBox();
 	alarm_timeout->setSuffix(" min");
@@ -84,16 +70,16 @@ Settings::Settings(QWidget *parent):
 	alarm_timeout->setValue(settings.value("alarm_timeout", ALARM_TIMEOUT).toInt());
 	layout->addWidget(alarm_timeout_label, row, 0);
 	layout->addWidget(alarm_timeout, row, 1);
-
 	row++;
+
 	QLabel *inactivity_timeout_label = new QLabel(tr("Restart alarm if phone not moved for"));
 	inactivity_timeout = new QSpinBox();
 	inactivity_timeout->setSuffix(" s");
 	inactivity_timeout->setValue(settings.value("inactivity_timeout", INACTIVITY_TIMEOUT).toInt());
 	layout->addWidget(inactivity_timeout_label, row, 0);
 	layout->addWidget(inactivity_timeout, row, 1);
-
 	row++;
+
 	QLabel *snooze_time_label = new QLabel(tr("Snooze time"));
 	snooze_time = new QSpinBox();
 	snooze_time->setSuffix(" min");
@@ -101,18 +87,45 @@ Settings::Settings(QWidget *parent):
 	snooze_time->setValue(settings.value("snooze_time", SNOOZE_TIME).toInt());
 	layout->addWidget(snooze_time_label, row, 0);
 	layout->addWidget(snooze_time, row, 1);
-
 	row++;
+
 	QLabel *num_snooze_max_label = new QLabel(tr("Max. number of snoozes (0 to disable snooze)"));
 	num_snooze_max = new QSpinBox();
 	num_snooze_max->setValue(settings.value("num_snooze_max", NUM_SNOOZE_MAX).toInt());
 	layout->addWidget(num_snooze_max_label, row, 0);
 	layout->addWidget(num_snooze_max, row, 1);
-
 	row++;
+
+
+	layout->addWidget(new QLabel("<center>___________________________________________________</center>"), row, 0, 1, 2);
+	row++;
+	//system/module settings
+
 	fullscreen = new QCheckBox(tr("Disable multi-tasking (including Phone app)"));
 	fullscreen->setChecked(settings.value("fullscreen", FULLSCREEN).toBool());
 	layout->addWidget(fullscreen, row, 0, 1, 2);
+	row++;
+
+	QLabel *module_label = new QLabel(tr("Alarm module"));
+	module = new QComboBox(this);
+	module->addItems(ModuleList::availableModules());
+	int current_idx = module->findText(settings.value("module").toString(), Qt::MatchFixedString); //case insensitive search
+	if(current_idx == -1) //invalid module, use default
+		current_idx = module->findText("Movement");
+	module->setCurrentIndex(current_idx);
+	layout->addWidget(module_label, row, 0);
+	layout->addWidget(module, row, 1);
+	row++;
+
+	module_settings_layout = new QStackedLayout();
+	layout->addLayout(module_settings_layout, row, 0, 1, 2);
+	foreach(QString modulename, ModuleList::availableModules()) {
+		module_settings_layout->addWidget(ModuleList::getSettingsInstance(modulename, this));
+	}
+	connect(module, SIGNAL(activated(int)),
+		module_settings_layout, SLOT(setCurrentIndex(int)));
+	module_settings_layout->setCurrentIndex(current_idx);
+	row++;
 
 	widget->setLayout(layout);
 }
