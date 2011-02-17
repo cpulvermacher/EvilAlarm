@@ -17,8 +17,6 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 #include "alarm.h"
-#include "modules/alarm_blubbels.h"
-#include "modules/alarm_movement.h"
 #include "backend.h"
 #include "settings.h"
 
@@ -32,11 +30,10 @@ Alarm::Alarm(QWidget *parent):
 	num_snooze(0)
 {
 	QSettings settings;
-	if(parent == 0)  { //top level window?
-		if(settings.value("fullscreen", FULLSCREEN).toBool())
-			setWindowState(windowState() | Qt::WindowFullScreen);
-		else
-			setWindowFlags(Qt::Window); //allow multitasking
+	if(parent == 0 and settings.value("fullscreen", FULLSCREEN).toBool()) {
+		setWindowState(windowState() | Qt::WindowFullScreen);
+	} else {
+		setWindowFlags(Qt::Window); //allow multitasking
 	}
 
 	alarm_timeout = settings.value("alarm_timeout", ALARM_TIMEOUT).toInt();
@@ -88,19 +85,4 @@ void Alarm::snooze()
 	snooze_till = QTime::currentTime().addMSecs(snooze_time_msecs);
 
 	QTimer::singleShot(snooze_time_msecs, this, SLOT(restart()));
-}
-
-
-//get the user-configured module
-Alarm* Alarm::getModuleInstance(QWidget *parent)
-{
-	QSettings settings;
-	QString modulename = settings.value("module").toString().toLower();
-
-	if(modulename == "movement")
-		return new AlarmMovement(parent);
-	else if(modulename == "blubbels")
-		return new AlarmBlubbels(parent);
-	else
-		return new AlarmMovement(parent);
 }

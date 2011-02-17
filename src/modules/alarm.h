@@ -29,7 +29,6 @@ class Alarm : public QDialog {
 public:
 	Alarm(QWidget *parent);
 	virtual ~Alarm() = 0;
-	static Alarm* getModuleInstance(QWidget *parent = 0);
 protected:
 	virtual void closeEvent(QCloseEvent*);
 protected slots:

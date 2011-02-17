@@ -36,7 +36,7 @@ const bool FULLSCREEN = false;
 const bool USE_VIBRATION = false;
 
 
-class Settings : public QWidget {
+class Settings : public QScrollArea {
 	Q_OBJECT
 public:
 	Settings(QWidget *parent);
@@ -47,6 +47,7 @@ private slots:
 private:
 	void save();
 	QSettings settings;
+	QStackedLayout *module_settings_layout;
 	QComboBox *module;
 	QMaemo5ValueButton *sound_filename;
 	QSlider *volume;
@@ -56,5 +57,6 @@ private:
 	QSpinBox *num_snooze_max;
 	QCheckBox *fullscreen;
 	QCheckBox *vibration;
+	QWidget *module_settings;
 };
 #endif

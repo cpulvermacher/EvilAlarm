@@ -31,6 +31,7 @@ public:
 	~AlarmBlubbels();
 protected slots:
 	void checkScore(int);
+	void onActivity();
 	void updateScreen();
 	virtual void restart();
 	virtual void snooze();

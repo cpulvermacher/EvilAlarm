@@ -127,18 +127,17 @@ void Backend::volumeDown() { setVolume(volume - VOLUME_STEP); }
 
 void Backend::setVolume(qreal v)
 {
-	if(v > 1.0)
-		v = 1.0;
-
 	if(v <= 0) {
 		v = 0;
 		pause();
 	} else if(v > volume and !alarm_playing) {
 		play();
 	}
-	volume = v;
 
-	//doesn't work?
+	if(v > 1.0)
+		v = 1.0;
+
+	volume = v;
 	audio_output->setVolume(volume);
 }
 

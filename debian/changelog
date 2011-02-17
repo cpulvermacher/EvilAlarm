@@ -1,6 +1,8 @@
 evilalarm (0.5) unstable; urgency=low
 
-  * 
+  * Add Blubbels module: win the game with more than X points to stop the
+    alarm
+  * Make accelerometer threshold configurable
 
  -- Christian Pulvermacher <pulvermacher@gmx.de>  Sat, 29 Jan 2011 18:52:46 +0100
 

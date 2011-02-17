@@ -20,8 +20,8 @@
 #include "backend.h"
 #include "settings.h"
 
-#include <QtDBus>
 #include <QtGui>
+
 
 AlarmBlubbels::AlarmBlubbels(QWidget *parent):
 	Alarm(parent),
@@ -52,6 +52,8 @@ AlarmBlubbels::AlarmBlubbels(QWidget *parent):
 
 	connect(&gamewidget, SIGNAL(newScore(int)),
 		this, SLOT(checkScore(int)));
+	connect(&gamewidget, SIGNAL(activity()),
+		this, SLOT(onActivity()));
 
 	//actually start alarm
 	restart();
@@ -77,29 +79,11 @@ void AlarmBlubbels::restart()
 		snooze_button->setText(tr("Snooze (%1/%2)").arg(num_snooze).arg(num_snooze_max));
 	}
 
+	last_active = QTime::currentTime();
 	Alarm::restart();
 }
 
-AlarmBlubbels::~AlarmBlubbels()
-{
-}
-
-/*
-void AlarmBlubbels::accelUpdate(int x, int y, int z)
-{
-	//TODO: put this where?
-	if(lastx == 0 and lasty == 0 and lastz == 0) {
-		//initialize
-		last_active.restart();
-	} else if(max_diff > ACCELEROMETER_THRESHOLD and !backend->isVibrating()) {
-		//device moved
-		backend->volumeDown();
-		last_active.restart();
-	} else if(last_active.elapsed()/1000 > inactivity_timeout and !backend->isVibrating()) {
-		//not moved for a while
-		backend->volumeUp();
-	}
-*/
+AlarmBlubbels::~AlarmBlubbels() { }
 
 void AlarmBlubbels::updateScreen()
 {
@@ -107,6 +91,11 @@ void AlarmBlubbels::updateScreen()
 	if(!snoozing and alarm_started.elapsed()/1000 > alarm_timeout*60) {
 		close();
 		return;
+	}
+	
+	//inactive for too long?
+	if(last_active.elapsed()/1000 > inactivity_timeout) {
+		backend->volumeUp();
 	}
 
 	QString label_text = tr("<center><h1>%1</h1>").arg(QTime::currentTime().toString(Qt::SystemLocaleShortDate));
@@ -139,7 +128,7 @@ void AlarmBlubbels::checkScore(int score)
 {
 	//game finished, check if score is high enough
 	QSettings settings;
-	const int score_needed = settings.value("blubbels_score_needed", 500).toInt();
+	const int score_needed = settings.value("blubbels_threshold", 500).toInt();
 
 	if(score >= score_needed) {
 		//yes, stop alarm
@@ -149,4 +138,11 @@ void AlarmBlubbels::checkScore(int score)
 	} else {
 		QMessageBox::information(this, tr("Game Over"), tr("Your Score: %1<br>You need %2 to turn off the alarm, try again!").arg(score).arg(score_needed));
 	}
+}
+
+//user activity in game widget
+void AlarmBlubbels::onActivity()
+{
+	backend->pause();
+	last_active.restart();
 }

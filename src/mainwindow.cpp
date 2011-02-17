@@ -19,6 +19,7 @@
 #include "alarm.h"
 #include "daemon.h"
 #include "mainwindow.h"
+#include "module_list.h"
 #include "settings.h"
 
 #include <QtMaemo5>
@@ -99,7 +100,7 @@ void MainWindow::testAlarm()
 	//- hangs (after ~Backend() is finished????)
 	//maybe i should just use a --test parameter so it works exactly like --wakeup
 
-	Alarm* test_alarm = Alarm::getModuleInstance(this);
+	Alarm* test_alarm = ModuleList::getModuleInstance(this);
 	test_alarm->exec();
 	delete test_alarm;
 

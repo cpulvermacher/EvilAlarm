@@ -24,7 +24,6 @@
 #include <QWidget>
 
 class QMouseEvent;
-class QSound;
 class QTimer;
 
 struct Box {
@@ -60,6 +59,7 @@ public slots:
 	void restart();
 	void undo();
 signals:
+	void activity();
 	void enableUndo(bool on);
 	void newScore(int score);
 protected: //overrides
@@ -87,7 +87,6 @@ private:
 	bool use_animations;
 	QPixmap bubblePixmap[num_colors+1][num_scale_steps]; // [color][scale], color 0 is empty, scale 0 is full size
 
-	QSound *pop;
 	QTimer *timer; //for animations
 };
 #endif

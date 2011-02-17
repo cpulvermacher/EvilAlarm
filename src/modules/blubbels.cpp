@@ -42,7 +42,6 @@ GameWidget::GameWidget(QWidget* parent) :
 	QWidget(parent),
 	bubblesize(1),
 	margin(1),
-	pop(0),
 	timer(new QTimer(this)),
 	use_animations(true)
 {
@@ -277,6 +276,7 @@ void GameWidget::mouseReleaseEvent(QMouseEvent *event)
 	selection.clear();
 
 	emit enableUndo(true);
+	emit activity();
 
 	compressBubbles();
 

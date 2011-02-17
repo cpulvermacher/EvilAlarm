@@ -1,4 +1,5 @@
 #include "alarm.h"
+#include "module_list.h"
 #include "daemon.h"
 #include "mainwindow.h"
 
@@ -17,7 +18,7 @@ int main(int argc, char* argv[])
 	if(QCoreApplication::arguments().contains(QString("--daemon"))) {
 		new Daemon;
 	} else if(QCoreApplication::arguments().contains(QString("--wakeup"))) {
-		widget_pointer.reset(Alarm::getModuleInstance());
+		widget_pointer.reset(ModuleList::getModuleInstance());
 		widget_pointer->show();
 	} else {
 		widget_pointer.reset(new MainWindow);
