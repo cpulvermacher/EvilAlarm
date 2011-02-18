@@ -10,9 +10,10 @@ Package: evilalarm
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, mce
 Description: An alarm clock which cannot be turned off while asleep
- Moving the phone will silence the alarm for a short time, but it will restart
- unless you get up and carry your phone around.
- The alarm will turn off after a (configurable) time span.
+ Movement: Moving the phone will silence the alarm for a short time,
+ but it will restart unless you get up and carry your phone around. The alarm
+ will turn off after a (configurable) time span.
+ Blubbels: Beat the game to turn off the alarm.
 XB-Maemo-Display-Name: EvilAlarm
 #XSBC-Bugtracker: 
 XB-Maemo-Icon-26: 
