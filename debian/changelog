@@ -4,7 +4,7 @@ evilalarm (0.5) unstable; urgency=low
     alarm
   * Make accelerometer threshold configurable
 
- -- Christian Pulvermacher <pulvermacher@gmx.de>  Sat, 29 Jan 2011 18:52:46 +0100
+ -- Christian Pulvermacher <pulvermacher@gmx.de>  Fri, 18 Feb 2011 01:17:04 +0100
 
 evilalarm (0.4) unstable; urgency=low
 
