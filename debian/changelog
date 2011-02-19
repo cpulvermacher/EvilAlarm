@@ -1,3 +1,9 @@
+evilalarm (0.6) unstable; urgency=low
+
+  * Fix race condition preventing alarm from being paused on activity
+
+ -- Christian Pulvermacher <pulvermacher@gmx.de>  Sat, 19 Feb 2011 15:58:48 +0100
+
 evilalarm (0.5) unstable; urgency=low
 
   * Add Blubbels module: win the game with more than X points to stop the
