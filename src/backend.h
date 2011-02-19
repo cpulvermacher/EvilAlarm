@@ -46,6 +46,7 @@ private:
 	Phonon::MediaObject* noise;
 	Phonon::AudioOutput* audio_output;
 	QTime alarm_started;
+	bool alarm_playing;
 	bool is_vibrating;
 	bool use_vibration;
 	bool snoozing;
@@ -53,6 +54,5 @@ private:
 	qreal volume;
 	QProcess keepvolume;
 	QString old_profile;
-	QMutex mutex;
 };
 #endif
