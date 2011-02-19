@@ -34,7 +34,6 @@ const qreal VOLUME_STEP = 0.1;
 Backend::Backend():
 	noise(new Phonon::MediaObject(this)),
 	audio_output(new Phonon::AudioOutput(Phonon::MusicCategory,  this)),
-	alarm_playing(false),
 	is_vibrating(false),
 	volume(1.0)
 {
@@ -99,11 +98,10 @@ Backend::~Backend()
 
 void Backend::play()
 {
-	if(alarm_playing)
+	if(isPlaying())
 		return;
 
 	std::cout << "Backend::play()\n";
-	alarm_playing = true;
 
 	noise->play();
 	if(use_vibration)
@@ -112,11 +110,10 @@ void Backend::play()
 
 void Backend::pause()
 {
-	if(!alarm_playing)
+	if(!isPlaying())
 		return;
 
 	std::cout << "Backend::pause()\n";
-	alarm_playing = false;
 
 	noise->pause();
 	stopVibrator();
@@ -130,7 +127,7 @@ void Backend::setVolume(qreal v)
 	if(v <= 0) {
 		v = 0;
 		pause();
-	} else if(v > volume and !alarm_playing) {
+	} else if(v > volume and !isPlaying()) {
 		play();
 	}
 
@@ -143,7 +140,7 @@ void Backend::setVolume(qreal v)
 
 void Backend::repeatSound() { noise->enqueue(noise->currentSource()); }
 
-bool Backend::isPlaying() { return alarm_playing; }
+bool Backend::isPlaying() { return noise->state() == Phonon::PlayingState; }
 
 bool Backend::isVibrating() { return is_vibrating; }
 
@@ -152,7 +149,7 @@ void Backend::setVibratorStateOff() { is_vibrating = false; }
 
 void Backend::startVibrator()
 {
-	if(!alarm_playing or is_vibrating)
+	if(!isPlaying() or is_vibrating)
 		return;
 
 	QDBusInterface interface("com.nokia.mce", "/com/nokia/mce/request", "com.nokia.mce.request", QDBusConnection::systemBus());
@@ -187,7 +184,7 @@ void Backend::handleAudioStateChange(Phonon::State newstate)
 		std::cout << "Enabling vibration as fallback.\n";
 
 		use_vibration = true;
-		if(alarm_playing)
+		if(isPlaying())
 			startVibrator();
 	}
 }
