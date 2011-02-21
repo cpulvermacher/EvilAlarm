@@ -1,3 +1,9 @@
+evilalarm (0.7) unstable; urgency=low
+
+  * minor UI improvements
+
+ -- Christian Pulvermacher <pulvermacher@gmx.de>  Mon, 21 Feb 2011 01:45:11 +0100
+
 evilalarm (0.6) unstable; urgency=low
 
   * Fix race condition preventing alarm from being paused on activity
