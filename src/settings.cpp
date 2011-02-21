@@ -72,7 +72,7 @@ Settings::Settings(QWidget *parent):
 	layout->addWidget(alarm_timeout, row, 1);
 	row++;
 
-	QLabel *inactivity_timeout_label = new QLabel(tr("Restart alarm if phone not moved for"));
+	QLabel *inactivity_timeout_label = new QLabel(tr("Restart alarm if inactive for"));
 	inactivity_timeout = new QSpinBox();
 	inactivity_timeout->setSuffix(" s");
 	inactivity_timeout->setValue(settings.value("inactivity_timeout", INACTIVITY_TIMEOUT).toInt());
