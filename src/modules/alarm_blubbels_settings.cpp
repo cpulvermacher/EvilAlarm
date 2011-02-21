@@ -12,6 +12,7 @@ AlarmBlubbelsSettings::AlarmBlubbelsSettings(QWidget *parent):
 	QLabel *threshold_label = new QLabel(tr("Score needed to turn off alarm"));
 	threshold = new QSpinBox();
 	threshold->setRange(10, 9999);
+	threshold->setSingleStep(10);
 	threshold->setValue(settings.value("blubbels_threshold", 500).toInt());
 	layout->addWidget(threshold_label, 0, 0);
 	layout->addWidget(threshold, 0, 1);
