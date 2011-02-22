@@ -32,6 +32,7 @@ public:
 protected:
 	virtual void closeEvent(QCloseEvent*);
 protected slots:
+	virtual void deviceLockChanged(QString mode);
 	virtual void restart();
 	virtual void snooze();
 protected:

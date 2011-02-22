@@ -1,5 +1,6 @@
 evilalarm (0.7) unstable; urgency=low
 
+  * add option to prevent device lock (no need to remember the lock code first thing in the morning)
   * minor UI improvements
 
  -- Christian Pulvermacher <pulvermacher@gmx.de>  Mon, 21 Feb 2011 01:45:11 +0100

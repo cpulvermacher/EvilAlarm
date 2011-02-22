@@ -56,6 +56,7 @@ private:
 	QSpinBox *snooze_time;
 	QSpinBox *num_snooze_max;
 	QCheckBox *fullscreen;
+	QCheckBox *prevent_device_lock;
 	QCheckBox *vibration;
 	QWidget *module_settings;
 };

@@ -106,6 +106,11 @@ Settings::Settings(QWidget *parent):
 	layout->addWidget(fullscreen, row, 0, 1, 2);
 	row++;
 
+	prevent_device_lock = new QCheckBox(tr("Prevent device lock (aka. \"Secure Device\")"));
+	prevent_device_lock->setChecked(settings.value("prevent_device_lock", false).toBool());
+	layout->addWidget(prevent_device_lock, row, 0, 1, 2);
+	row++;
+
 	QLabel *module_label = new QLabel(tr("Alarm module"));
 	module = new QComboBox(this);
 	module->addItems(ModuleList::availableModules());
@@ -155,5 +160,6 @@ void Settings::save()
 	settings.setValue("snooze_time", snooze_time->value());
 	settings.setValue("num_snooze_max", num_snooze_max->value());
 	settings.setValue("fullscreen", fullscreen->isChecked());
+	settings.setValue("prevent_device_lock", prevent_device_lock->isChecked());
 	settings.sync();
 }

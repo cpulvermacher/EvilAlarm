@@ -23,6 +23,9 @@
 #include <QtDBus>
 #include <QtGui>
 
+#include <mce/mode-names.h>
+#include <mce/dbus-names.h>
+
 
 Alarm::Alarm(QWidget *parent):
 	QDialog(parent),
@@ -37,6 +40,10 @@ Alarm::Alarm(QWidget *parent):
 	}
 
 	alarm_timeout = settings.value("alarm_timeout", ALARM_TIMEOUT).toInt();
+
+	if(settings.value("prevent_device_lock", false).toBool()) {
+		QDBusConnection::systemBus().connect("", MCE_SIGNAL_PATH, MCE_SIGNAL_IF, MCE_DEVLOCK_MODE_SIG, this, SLOT(deviceLockChanged(QString)));
+	}
 }
 
 Alarm::~Alarm()
@@ -56,6 +63,12 @@ void Alarm::restart()
 	//activate display
 	QDBusInterface interface("com.nokia.mce", "/com/nokia/mce/request", "com.nokia.mce.request", QDBusConnection::systemBus());
 	interface.call("req_tklock_mode_change", "unlocked");
+
+	//unlock device
+	QSettings settings;
+	if(settings.value("prevent_device_lock", false).toBool()) {
+		interface.asyncCall("devlock_callback", qint32(2));
+	}
 }
 
 
@@ -85,4 +98,13 @@ void Alarm::snooze()
 	snooze_till = QTime::currentTime().addMSecs(snooze_time_msecs);
 
 	QTimer::singleShot(snooze_time_msecs, this, SLOT(restart()));
+}
+
+void Alarm::deviceLockChanged(QString mode)
+{
+	if(mode == "locked") {
+		//unlock
+		QDBusInterface interface("com.nokia.mce", "/com/nokia/mce/request", "com.nokia.mce.request", QDBusConnection::systemBus());
+		interface.asyncCall("devlock_callback", qint32(2));
+	}
 }
