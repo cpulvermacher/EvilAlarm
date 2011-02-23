@@ -17,6 +17,7 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 #include "alarm.h"
+#include "alarmhistoryitem.h"
 #include "daemon.h"
 #include "mainwindow.h"
 #include "module_list.h"
@@ -49,6 +50,10 @@ MainWindow::MainWindow(QWidget *parent) :
 	layout1->addWidget(activate_alarm);
 	layout1->addWidget(time_button);
 
+	//show history items
+	history_layout = new QHBoxLayout();
+	reloadHistory();
+
 	QHBoxLayout *layout2 = new QHBoxLayout();
 	QPushButton *settings_button = new QPushButton(tr("Settings"), this);
 	QPushButton *test_button = new QPushButton(tr("Test Alarm"), this);
@@ -57,6 +62,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	QVBoxLayout *layout0 = new QVBoxLayout(centerwidget);
 	layout0->addLayout(layout1);
+	layout0->addLayout(history_layout);
 	layout0->addLayout(layout2);
 
 	setCentralWidget(centerwidget);
@@ -84,6 +90,10 @@ An alarm clock which cannot be turned off while asleep\
 <p>This program is free software; License: <a href=\"http://www.gnu.org/licenses/gpl-2.0.html\">GNU GPL 2</a> or later.</p>"));
 }
 
+void MainWindow::setAlarmTime(QTime time)
+{
+	time_picker->setCurrentTime(time);
+}
 
 void MainWindow::showSettings()
 {
@@ -127,10 +137,46 @@ void MainWindow::toggleAlarm()
 
 		Daemon::start();
 
+
 	} else {
 		timer.stop();
 		Daemon::stop();
+		reloadHistory();
 	}
 
 	time_button->setEnabled(!activate_alarm->isChecked());
+}
+
+
+void MainWindow::reloadHistory()
+{
+	//remove any old items
+	for(int i = 0; i < history.count(); i++) {
+		AlarmHistoryItem* item = history[i];
+		history_layout->removeWidget(item);
+		delete item;
+	}
+	history.clear();
+
+	//load history
+	QSettings settings;
+	settings.beginGroup("history");
+	QStringList times = settings.childGroups();
+	times.sort(); //times are in HH:MM:SS format, so they are sorted correctly
+	foreach(QString time, times) {
+		if(!settings.contains(time + "/used")) {
+			continue; //just to be safe
+		}
+
+		int num_used = settings.value(time + "/used").toInt();
+		history.append(new AlarmHistoryItem(QTime::fromString(time), num_used, this));
+	}
+	settings.endGroup();
+
+	foreach(AlarmHistoryItem* item, history) {
+		item->updateItem(); //make sure we're using the correct normalization
+		history_layout->addWidget(item);
+		connect(item, SIGNAL(selected(QTime)),
+			this, SLOT(setAlarmTime(QTime)));
+	}
 }

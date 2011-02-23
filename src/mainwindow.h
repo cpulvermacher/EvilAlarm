@@ -22,6 +22,8 @@
 #include <QtMaemo5>
 #include <QtGui>
 
+class AlarmHistoryItem;
+
 class MainWindow : public QMainWindow {
 	Q_OBJECT
 public:
@@ -31,10 +33,15 @@ private slots:
 	void showSettings();
 	void testAlarm();
 	void toggleAlarm();
+	void setAlarmTime(QTime time);
 private:
+	void reloadHistory();
+
 	QMaemo5ValueButton *time_button;
 	QMaemo5TimePickSelector *time_picker;
 	QCheckBox *activate_alarm;
+	QList<AlarmHistoryItem* > history;
+	QHBoxLayout* history_layout;
 	QTimer timer;
 };
 #endif
