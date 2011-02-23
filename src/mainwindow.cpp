@@ -92,7 +92,12 @@ An alarm clock which cannot be turned off while asleep\
 
 void MainWindow::setAlarmTime(QTime time)
 {
+	if(activate_alarm->isChecked()) //unset old alarm
+		activate_alarm->toggle();
+
+	//set & enable new one
 	time_picker->setCurrentTime(time);
+	activate_alarm->toggle();
 }
 
 void MainWindow::showSettings()
@@ -137,6 +142,9 @@ void MainWindow::toggleAlarm()
 
 		Daemon::start();
 
+		const int minutes = (msecs/1000/60)%60;
+		const int hours = (msecs/1000/60/60);
+		QMaemo5InformationBox::information(this, tr("Time left until alarm: %1:%2").arg(hours).arg(minutes));
 
 	} else {
 		timer.stop();
