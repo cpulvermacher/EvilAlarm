@@ -59,27 +59,6 @@ void Daemon::wake()
 	settings.beginGroup("history");
 	int num_used = settings.value(QString("%1/used").arg(wake_at.toString()), 0).toInt();
 	settings.setValue(QString("%1/used").arg(wake_at.toString()), num_used+1);
-
-	//truncate list?
-	QStringList times = settings.childGroups();
-	if(times.count() > 10) {
-		int lowest_num = 999999;
-		QTime time_to_discard = QTime(); 
-		foreach(QString time_str, times) {
-			QTime time = QTime::fromString(time_str);
-			if(time == wake_at)
-				continue; //don't remove new value!
-
-			int used = settings.value(QString("%1/used").arg(time_str), 0).toInt();
-			if(used < lowest_num) {
-				lowest_num = used;
-				time_to_discard = time;
-			}
-		}
-
-		settings.remove(QString("%1/used").arg(time_to_discard.toString()));
-		settings.remove(time_to_discard.toString());
-	}
 	settings.endGroup();
 
 	settings.sync();
