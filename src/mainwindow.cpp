@@ -33,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	setWindowTitle("EvilAlarm");
 	setAttribute(Qt::WA_Maemo5StackedWindow);
 
+	menuBar()->addAction(tr("Clear Alarm History"), this, SLOT(clearHistory()));
 	menuBar()->addAction(tr("About"), this, SLOT(about()));
 
 	QWidget *centerwidget = new QWidget(this);
@@ -95,9 +96,8 @@ void MainWindow::setAlarmTime(QTime time)
 	if(activate_alarm->isChecked()) //unset old alarm
 		activate_alarm->toggle();
 
-	//set & enable new one
+	//set new one
 	time_picker->setCurrentTime(time);
-	activate_alarm->toggle();
 }
 
 void MainWindow::showSettings()
@@ -144,7 +144,9 @@ void MainWindow::toggleAlarm()
 
 		const int minutes = (msecs/1000/60)%60;
 		const int hours = (msecs/1000/60/60);
-		QMaemo5InformationBox::information(this, tr("Time left until alarm: %1:%2").arg(hours).arg(minutes));
+		QMaemo5InformationBox::information(this, tr("Time left until alarm: %1:%2")
+			.arg(hours, 2, 10, QChar('0'))
+			.arg(minutes, 2, 10, QChar('0')));
 
 	} else {
 		timer.stop();
@@ -181,10 +183,41 @@ void MainWindow::reloadHistory()
 	}
 	settings.endGroup();
 
+	//too many items?
+	const int max_num_items = 10;
+	while(history.count() > max_num_items) {
+		//remove item with lowest numUsed()
+		int lowest_usage = history[0]->numUsed();
+		int lowest_idx = 0;
+		for(int i = 1; i<history.count(); i++) {
+			int usage = history[i]->numUsed();
+			if(usage < lowest_usage) {
+				lowest_usage = usage;
+				lowest_idx = i;
+			}
+		}
+
+		delete history.takeAt(lowest_idx);
+	}
+
 	foreach(AlarmHistoryItem* item, history) {
 		item->updateItem(); //make sure we're using the correct normalization
 		history_layout->addWidget(item);
 		connect(item, SIGNAL(selected(QTime)),
 			this, SLOT(setAlarmTime(QTime)));
+	}
+}
+
+void MainWindow::clearHistory()
+{
+	int ret = QMessageBox::question(this, tr("EvilAlarm"),
+		tr("Do you really want to remove all history entries?"),
+		QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+	if(ret == QMessageBox::Yes) {
+		QSettings settings;
+		settings.remove("history");
+		settings.sync();
+
+		reloadHistory();
 	}
 }

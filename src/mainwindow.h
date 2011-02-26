@@ -33,6 +33,7 @@ private slots:
 	void showSettings();
 	void testAlarm();
 	void toggleAlarm();
+	void clearHistory();
 	void setAlarmTime(QTime time);
 private:
 	void reloadHistory();
