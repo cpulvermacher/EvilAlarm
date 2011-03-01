@@ -87,15 +87,17 @@ AlarmBlubbels::~AlarmBlubbels() { }
 
 void AlarmBlubbels::updateScreen()
 {
-	//shutdown time reached?
-	if(!snoozing and alarm_started.elapsed()/1000 > alarm_timeout*60) {
-		close();
-		return;
-	}
-	
-	//inactive for too long?
-	if(last_active.elapsed()/1000 > inactivity_timeout) {
-		backend->volumeUp();
+	if(!snoozing) {
+		//shutdown time reached?
+		if(alarm_started.elapsed()/1000 > alarm_timeout*60) {
+			close();
+			return;
+		}
+		
+		//inactive for too long?
+		if(last_active.elapsed()/1000 > inactivity_timeout) {
+			backend->volumeUp();
+		}
 	}
 
 	QString label_text = tr("<center><h1>%1</h1>").arg(QTime::currentTime().toString(Qt::SystemLocaleShortDate));
