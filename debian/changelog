@@ -2,6 +2,8 @@ evilalarm (0.7) unstable; urgency=low
 
   * show previously used alarms
   * add option to prevent device lock (no need to remember the lock code first thing in the morning)
+  * fix snooze with blubbels module
+  * prevent creation of multiple settings windows
   * minor UI improvements
 
  -- Christian Pulvermacher <pulvermacher@gmx.de>  Mon, 21 Feb 2011 01:45:11 +0100

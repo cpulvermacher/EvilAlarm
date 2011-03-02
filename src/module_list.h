@@ -4,10 +4,11 @@
 #include <QtGui>
 
 class Alarm;
+class ModuleSettings;
 
 namespace ModuleList {
 	Alarm* getModuleInstance(QWidget *parent = 0);
-	QWidget* getSettingsInstance(QString name, QWidget *parent = 0);
+	ModuleSettings* getSettingsInstance(QString name, QWidget *parent = 0);
 	QStringList availableModules();
 };
 

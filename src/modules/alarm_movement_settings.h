@@ -3,13 +3,16 @@
 
 #include <QtGui>
 
+#include "module_settings.h"
+
 class Accelerometer;
 
-class AlarmMovementSettings : public QWidget {
+class AlarmMovementSettings : public ModuleSettings {
 	Q_OBJECT
 public:
 	AlarmMovementSettings(QWidget *parent);
 	~AlarmMovementSettings();
+	void save();
 private slots:
 	void accelUpdate(int, int, int);
 private:

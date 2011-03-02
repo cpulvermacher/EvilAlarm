@@ -16,15 +16,17 @@
     with this program; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
-#include "module_list.h"
 #include "settings.h"
+#include "module_list.h"
+#include "module_settings.h"
 
 #include <QtGui>
 
+#include <iostream>
+
 
 Settings::Settings(QWidget *parent):
-	QScrollArea(parent),
-	module_settings(0)
+	QScrollArea(parent)
 {
 	setWindowTitle(tr("Settings"));
 	setAttribute(Qt::WA_Maemo5StackedWindow);
@@ -135,12 +137,7 @@ Settings::Settings(QWidget *parent):
 	widget->setLayout(layout);
 }
 
-void Settings::closeEvent(QCloseEvent*)
-{
-	save();
-	delete module_settings; //save module settings
-	deleteLater();
-}
+void Settings::closeEvent(QCloseEvent*) { save(); }
 
 void Settings::pickSoundFile()
 {
@@ -151,6 +148,8 @@ void Settings::pickSoundFile()
 
 void Settings::save()
 {
+	std::cout << "saving\n";
+
 	settings.setValue("module", module->currentText());
 	settings.setValue("sound_filename", sound_filename->valueText());
 	settings.setValue("max_volume", volume->value());
@@ -162,4 +161,11 @@ void Settings::save()
 	settings.setValue("fullscreen", fullscreen->isChecked());
 	settings.setValue("prevent_device_lock", prevent_device_lock->isChecked());
 	settings.sync();
+
+	//save module settings
+	for(int i = 0; i < module_settings_layout->count(); i++) {
+		ModuleSettings *module_settings = qobject_cast<ModuleSettings *>(module_settings_layout->itemAt(i)->widget());
+		if(module_settings != 0)
+			module_settings->save();
+	}
 }

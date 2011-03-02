@@ -2,7 +2,7 @@
 #include <QtGui>
 
 AlarmBlubbelsSettings::AlarmBlubbelsSettings(QWidget *parent):
-	QWidget(parent)
+	ModuleSettings(parent)
 {
 	QGridLayout *layout = new QGridLayout(this);
 	layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
@@ -18,8 +18,7 @@ AlarmBlubbelsSettings::AlarmBlubbelsSettings(QWidget *parent):
 	layout->addWidget(threshold, 0, 1);
 }
 
-//save any changes
-AlarmBlubbelsSettings::~AlarmBlubbelsSettings()
+void AlarmBlubbelsSettings::save()
 {
 	QSettings settings;
 	settings.setValue("blubbels_threshold", threshold->value());

@@ -1,5 +1,6 @@
 
 #include "module_list.h"
+#include "module_settings.h"
 #include "modules/alarm_blubbels.h"
 #include "modules/alarm_blubbels_settings.h"
 #include "modules/alarm_movement.h"
@@ -21,7 +22,7 @@ Alarm* ModuleList::getModuleInstance(QWidget *parent)
 }
 
 //get a settings widget for the given module name
-QWidget* ModuleList::getSettingsInstance(QString name, QWidget *parent)
+ModuleSettings* ModuleList::getSettingsInstance(QString name, QWidget *parent)
 {
 	name = name.toLower();
 	if(name == "movement")
@@ -29,7 +30,7 @@ QWidget* ModuleList::getSettingsInstance(QString name, QWidget *parent)
 	else if(name == "blubbels")
 		return new AlarmBlubbelsSettings(parent);
 	else
-		return new QWidget();
+		return 0;
 }
 
 QStringList ModuleList::availableModules()

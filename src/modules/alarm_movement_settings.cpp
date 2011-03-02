@@ -5,7 +5,7 @@
 #include <QtGui>
 
 AlarmMovementSettings::AlarmMovementSettings(QWidget *parent):
-	QWidget(parent)
+	ModuleSettings(parent)
 {
 	accel = new Accelerometer(this, ACCELEROMETER_POLL_MSEC);
 	connect(accel, SIGNAL(orientationChanged(int, int, int)),
@@ -24,13 +24,8 @@ AlarmMovementSettings::AlarmMovementSettings(QWidget *parent):
 	layout->addWidget(threshold, 0, 1);
 }
 
-//save any changes
 AlarmMovementSettings::~AlarmMovementSettings()
 {
-	QSettings settings;
-	settings.setValue("movement_threshold", threshold->value());
-	settings.sync();
-
 	delete accel;
 }
 
@@ -55,5 +50,12 @@ void AlarmMovementSettings::accelUpdate(int x, int y, int z)
 	
 	threshold_label->setText(text);
 	lastx = x; lasty = y; lastz = z;
+}
+
+void AlarmMovementSettings::save()
+{
+	QSettings settings;
+	settings.setValue("movement_threshold", threshold->value());
+	settings.sync();
 }
 

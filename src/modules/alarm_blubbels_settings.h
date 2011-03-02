@@ -3,11 +3,13 @@
 
 #include <QtGui>
 
-class AlarmBlubbelsSettings : public QWidget {
+#include "module_settings.h"
+
+class AlarmBlubbelsSettings : public ModuleSettings {
 	Q_OBJECT
 public:
 	AlarmBlubbelsSettings(QWidget *parent);
-	~AlarmBlubbelsSettings();
+	void save();
 private:
 	QSpinBox *threshold;
 };

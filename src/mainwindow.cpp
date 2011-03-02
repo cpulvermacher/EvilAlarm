@@ -26,6 +26,8 @@
 #include <QtMaemo5>
 #include <QtGui>
 
+#include <iostream>
+
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent)
@@ -102,11 +104,9 @@ void MainWindow::setAlarmTime(QTime time)
 
 void MainWindow::showSettings()
 {
-	Settings *s = new Settings(this);
+	static Settings *s = new Settings(this);
 	s->show();
-	//Settings cleans up after itself
 }
-
 
 void MainWindow::testAlarm()
 {

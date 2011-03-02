@@ -40,12 +40,12 @@ class Settings : public QScrollArea {
 	Q_OBJECT
 public:
 	Settings(QWidget *parent);
+	void save();
 protected:
 	void closeEvent(QCloseEvent*);
 private slots:
 	void pickSoundFile();
 private:
-	void save();
 	QSettings settings;
 	QStackedLayout *module_settings_layout;
 	QComboBox *module;
@@ -58,6 +58,5 @@ private:
 	QCheckBox *fullscreen;
 	QCheckBox *prevent_device_lock;
 	QCheckBox *vibration;
-	QWidget *module_settings;
 };
 #endif
