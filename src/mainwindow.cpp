@@ -26,8 +26,6 @@
 #include <QtMaemo5>
 #include <QtGui>
 
-#include <iostream>
-
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent)
