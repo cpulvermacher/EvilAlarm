@@ -43,6 +43,7 @@ private:
 	QCheckBox *activate_alarm;
 	QList<AlarmHistoryItem* > history;
 	QHBoxLayout* history_layout;
+	QScrollArea* history_scrollarea;
 	QTimer timer;
 };
 #endif

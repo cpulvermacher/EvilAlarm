@@ -54,7 +54,13 @@ MainWindow::MainWindow(QWidget *parent) :
 	layout1->addWidget(time_button);
 
 	//show history items
+	history_scrollarea = new QScrollArea();
+	QWidget *history_widget = new QWidget();
 	history_layout = new QHBoxLayout();
+	history_layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
+	history_widget->setLayout(history_layout);
+	history_widget->setMinimumHeight(240);
+	history_scrollarea->setWidget(history_widget);
 	reloadHistory();
 
 	QHBoxLayout *layout2 = new QHBoxLayout();
@@ -65,7 +71,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	QVBoxLayout *layout0 = new QVBoxLayout(centerwidget);
 	layout0->addLayout(layout1);
-	layout0->addLayout(history_layout);
+	layout0->addWidget(history_scrollarea);
 	layout0->addLayout(layout2);
 
 	setCentralWidget(centerwidget);
@@ -100,6 +106,7 @@ void MainWindow::setAlarmTime(QTime time)
 
 	//set new one
 	time_picker->setCurrentTime(time);
+	activate_alarm->toggle();
 }
 
 void MainWindow::showSettings()
