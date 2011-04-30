@@ -190,25 +190,9 @@ void MainWindow::reloadHistory()
 	}
 	settings.endGroup();
 
-	//too many items?
-	const int max_num_items = 10;
-	while(history.count() > max_num_items) {
-		//remove item with lowest numUsed()
-		int lowest_usage = history[0]->numUsed();
-		int lowest_idx = 0;
-		for(int i = 1; i<history.count(); i++) {
-			int usage = history[i]->numUsed();
-			if(usage < lowest_usage) {
-				lowest_usage = usage;
-				lowest_idx = i;
-			}
-		}
-
-		delete history.takeAt(lowest_idx);
-	}
-
 	foreach(AlarmHistoryItem* item, history) {
 		item->updateItem(); //make sure we're using the correct normalization
+
 		history_layout->addWidget(item);
 		connect(item, SIGNAL(selected(QTime)),
 			this, SLOT(setAlarmTime(QTime)));
