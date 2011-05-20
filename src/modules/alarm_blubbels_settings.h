@@ -9,7 +9,8 @@ class AlarmBlubbelsSettings : public ModuleSettings {
 	Q_OBJECT
 public:
 	AlarmBlubbelsSettings(QWidget *parent);
-	void save();
+	virtual ~AlarmBlubbelsSettings();
+	virtual void save();
 private:
 	QSpinBox *threshold;
 };

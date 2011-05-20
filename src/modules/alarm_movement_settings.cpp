@@ -26,6 +26,8 @@ AlarmMovementSettings::AlarmMovementSettings(QWidget *parent):
 
 AlarmMovementSettings::~AlarmMovementSettings()
 {
+	delete threshold;
+	delete threshold_label;
 	delete accel;
 }
 
@@ -58,4 +60,3 @@ void AlarmMovementSettings::save()
 	settings.setValue("movement_threshold", threshold->value());
 	settings.sync();
 }
-

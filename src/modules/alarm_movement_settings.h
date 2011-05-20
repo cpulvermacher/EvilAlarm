@@ -11,8 +11,8 @@ class AlarmMovementSettings : public ModuleSettings {
 	Q_OBJECT
 public:
 	AlarmMovementSettings(QWidget *parent);
-	~AlarmMovementSettings();
-	void save();
+	virtual ~AlarmMovementSettings();
+	virtual void save();
 private slots:
 	void accelUpdate(int, int, int);
 private:

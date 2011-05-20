@@ -18,6 +18,11 @@ AlarmBlubbelsSettings::AlarmBlubbelsSettings(QWidget *parent):
 	layout->addWidget(threshold, 0, 1);
 }
 
+AlarmBlubbelsSettings::~AlarmBlubbelsSettings()
+{
+	delete threshold;
+}
+
 void AlarmBlubbelsSettings::save()
 {
 	QSettings settings;
