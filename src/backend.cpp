@@ -57,13 +57,11 @@ Backend::Backend():
 	QDBusReply<QString> profile = interface.call("get_profile");
 	old_profile = profile;
 
-	//save old volume
-	QProcess pasr;
-	pasr.setStandardOutputFile("/tmp/evilalarm_sinkstate.backup");
-	pasr.start("pasr --store");
-	pasr.waitForFinished(2000); //don't destroy process before it's done
+	//workaround to avoid hangs when calling external programs
+	//seems to occur only while playing audio and shortly afterwards; results in 100% CPU usage, clone() syscall that it should be doing at this point never appears in strace output
+	//somehow looks similar to this: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=575534
 
-	//reset volume and profile regularly
+	//reset volume and profile regularly, also saves current volume & restores on SIGTERM
 	keepvolume.start(QString("sh /usr/share/evilalarm/keepvolume.sh %1").arg(max_volume));
 }
 
@@ -72,21 +70,11 @@ Backend::~Backend()
 	pause();
 	std::cout << "~Backend\n";
 
-	//workaround to avoid hangs when calling external programs
-	//seems to occur only while playing audio and shortly afterwards; results in 100% CPU usage, clone() syscall that it should be doing at this point never appears in strace output
-	//somehow looks similar to this: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=575534
-	sleep(1);
-
-	std::cout << ".\n";
-
-	keepvolume.kill();
-	keepvolume.waitForFinished(2000); //don't destroy process before it's done
-
-	//restore
-	QProcess pasr;
-	pasr.setStandardInputFile("/tmp/evilalarm_sinkstate.backup");
-	pasr.start("pasr --restore");
-	pasr.waitForFinished(2000); //don't destroy process before it's done
+	std::cout << "\n";
+	//don't kill process while starting up
+	keepvolume.waitForStarted(2000);
+	keepvolume.terminate();
+	keepvolume.waitForFinished(2000); //don't free memory of QProcess before it's done
 
 	//restore profile
 	QDBusInterface interface("com.nokia.profiled", "/com/nokia/profiled", "com.nokia.profiled");
