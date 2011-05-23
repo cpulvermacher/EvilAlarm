@@ -16,7 +16,7 @@ Description: An alarm clock which cannot be turned off while asleep
  will turn off after a (configurable) time span.
  Blubbels: Beat the game to turn off the alarm.
 XB-Maemo-Display-Name: EvilAlarm
-XSBC-Bugtracker: pulvermacher@gmx.de
+XSBC-Bugtracker: mailto:pulvermacher@gmx.de
 XB-Maemo-Icon-26: 
  iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAKPWlDQ1BpY2MA
  AHjanVNnVFPpFj333vRCS4iAlEtvUhUIIFJCi4BUaaISkgChhBgSQOyIqMCI

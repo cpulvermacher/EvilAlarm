@@ -3,7 +3,7 @@ evilalarm (0.8) unstable; urgency=low
   * Fix module specific settings not being saved
   * Improve stability
 
- -- Christian Pulvermacher <pulvermacher@gmx.de>  Sun, 01 May 2011 19:18:13 +0200
+ -- Christian Pulvermacher <pulvermacher@gmx.de>  Mon, 23 May 2011 21:51:39 +0200
 
 evilalarm (0.7) unstable; urgency=low
 
