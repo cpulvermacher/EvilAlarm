@@ -63,6 +63,12 @@ Backend::Backend():
 
 	//reset volume and profile regularly, also saves current volume & restores on SIGTERM
 	keepvolume.start(QString("sh /usr/share/evilalarm/keepvolume.sh %1").arg(max_volume));
+
+	//pause media player as it interferes with audio playback
+	QDBusInterface("com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer",
+		"/com/nokia/mafw/renderer/gstrenderer",
+		"com.nokia.mafw.renderer").call("pause");
+
 }
 
 Backend::~Backend()
