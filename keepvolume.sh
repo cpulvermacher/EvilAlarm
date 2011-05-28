@@ -23,6 +23,10 @@ trap "cleanup" 0
 #no, directly running cleanup() in the first trap doesn't work. 0 needs to be trapped.
 
 
+#stop media player to stop it from interfering with audio playback (pause isn't enough)
+dbus-send --dest=com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer /com/nokia/mafw/renderer/gstrenderer com.nokia.mafw.renderer.stop
+
+
 #save current volume
 pasr --store > /tmp/evilalarm_sinkstate.backup
 

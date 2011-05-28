@@ -1,6 +1,6 @@
 evilalarm (0.9) unstable; urgency=low
 
-  * Pause media player when alarm starts
+  * Stop media player when alarm starts
 
  -- Christian Pulvermacher <pulvermacher@gmx.de>  Sat, 28 May 2011 00:12:07 +0200
 
