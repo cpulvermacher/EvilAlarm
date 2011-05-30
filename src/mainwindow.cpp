@@ -101,7 +101,7 @@ void MainWindow::about()
 	QMessageBox::about(this, tr("About EvilAlarm"),
 		tr("<center><h1>EvilAlarm 0.9</h1>\
 An alarm clock which cannot be turned off while asleep\
-<p><a href=\"https://garage.maemo.org/projects/evilalarm/\">garage.maemo.org/projects/evilalarm/</a></p>\
+<p><a href=\"http://garage.maemo.org/projects/evilalarm/\">garage.maemo.org/projects/evilalarm/</a></p>\
 <small><p>&copy;2010, 2011 Christian Pulvermacher &lt;pulvermacher@gmx.de&gt;</p></small></center>\
 <p>This program is free software; License: <a href=\"http://www.gnu.org/licenses/gpl-2.0.html\">GNU GPL 2</a> or later.</p>"));
 }
