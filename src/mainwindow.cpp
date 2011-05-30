@@ -85,6 +85,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	if(Daemon::isRunning())
 		activate_alarm->toggle();
+	
+	//check if we can save settings
+	if(!settings.isWritable()) {
+		QMaemo5InformationBox::information(this, tr("Can't write settings to /home/user/.config/EvilAlarm/EvilAlarm - You'll need to fix its file permissions to make EvilAlarm work."));
+		settings_button->setEnabled(false);
+		activate_alarm->setEnabled(false);
+		time_button->setEnabled(false);
+	}
 }
 
 
