@@ -148,7 +148,7 @@ void Settings::pickSoundFile()
 
 void Settings::save()
 {
-	std::cout << "saving\n";
+	std::cout << "Saving settings\n";
 
 	settings.setValue("module", module->currentText());
 	settings.setValue("sound_filename", sound_filename->valueText());

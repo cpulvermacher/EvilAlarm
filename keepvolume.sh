@@ -9,7 +9,7 @@ fi
 
 cleanup()
 {
-	echo "cleaning up"
+	echo "restoring volume"
 	#restore volume
 	pasr --restore < /tmp/evilalarm_sinkstate.backup
 	rm /tmp/evilalarm_sinkstate.backup
@@ -32,11 +32,11 @@ pasr --store > /tmp/evilalarm_sinkstate.backup
 
 while true;
 do
-	ps | grep -v keepvolume | grep evilalarm
+	#don't keep running when evilalarm dies/is killed
+	ps | grep evilalarm | egrep -v 'grep|keep' > /dev/null
 	if [ $? -ne 0 ]
 	then
-		#no evilalarm process found, abort
-		echo "no evilalarm found!"
+		echo "keepvolume.sh: no evilalarm process found!"
 		exit 0
 	fi
 

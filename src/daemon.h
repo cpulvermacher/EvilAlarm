@@ -33,7 +33,6 @@ private slots:
 	void wake();
 	void uiFinished(int, QProcess::ExitStatus);
 private:
-	QTimer timer;
 	QProcess *ui_process;
 };
 #endif
