@@ -31,6 +31,7 @@ const int VIBRATOR_OFF_MSECS = 1000;
 
 const qreal VOLUME_STEP = 0.1;
 
+
 Backend::Backend():
 	noise(new Phonon::MediaObject(this)),
 	audio_output(new Phonon::AudioOutput(Phonon::MusicCategory,  this)),
@@ -63,6 +64,13 @@ Backend::Backend():
 
 	//reset volume and profile regularly, also saves current volume & restores on SIGTERM
 	keepvolume.start(QString("sh /usr/share/evilalarm/keepvolume.sh %1").arg(max_volume));
+
+	//workaround Qt bug occuring when pause() is called shortly before the audio file is over, resulting in no sound but a Phonon::PlayingState
+	QTimer *hangcheck_timer = new QTimer(this);
+	hangcheck_timer->setInterval(500);
+	connect(hangcheck_timer, SIGNAL(timeout()),
+		this, SLOT(checkForHang()));
+	hangcheck_timer->start();
 }
 
 Backend::~Backend()
@@ -70,7 +78,6 @@ Backend::~Backend()
 	pause();
 	std::cout << "~Backend\n";
 
-	std::cout << "\n";
 	//don't kill process while starting up
 	keepvolume.waitForStarted(2000);
 	keepvolume.terminate();
@@ -124,7 +131,10 @@ void Backend::setVolume(qreal v)
 	audio_output->setVolume(volume);
 }
 
-void Backend::repeatSound() { noise->enqueue(noise->currentSource()); }
+void Backend::repeatSound() {
+	noise->enqueue(noise->currentSource());
+	std::cout << "repeating sound\n";
+}
 
 bool Backend::isPlaying() { return alarm_playing; }
 
@@ -162,15 +172,33 @@ void Backend::stopVibrator()
 
 void Backend::handleAudioStateChange(Phonon::State newstate)
 {
-	if(newstate != Phonon::ErrorState)
+	if(newstate == Phonon::ErrorState) {
+		std::cout << "Error playing the audio file!\n";
+		if(!use_vibration) {
+			std::cout << "Enabling vibration as fallback.\n";
+
+			use_vibration = true;
+			if(alarm_playing)
+				startVibrator();
+		}
+	}
+}
+
+void Backend::checkForHang()
+{
+	//only check if Phonon says it is playing
+	if(noise->state() != Phonon::PlayingState or noise->totalTime() == -1)
 		return;
 
-	std::cout << "Error playing the audio file!\n";
-	if(!use_vibration) {
-		std::cout << "Enabling vibration as fallback.\n";
-
-		use_vibration = true;
-		if(alarm_playing)
-			startVibrator();
+	static int last_pos = -1;
+	const int new_pos = noise->currentTime();
+	if(last_pos == new_pos) {
+		//hang detected, reset audio
+		noise->clear();
+		QSettings settings;
+		QString sound_filename = settings.value("sound_filename", SOUND_FILE).toString();
+		noise->setCurrentSource(Phonon::MediaSource(sound_filename));
+		noise->play();
 	}
+	last_pos = new_pos;
 }

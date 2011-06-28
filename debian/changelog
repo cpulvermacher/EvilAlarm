@@ -1,6 +1,7 @@
 evilalarm (0.9) unstable; urgency=low
 
-  * Stop media player when alarm starts
+  * Stop media player when alarm starts (no sound otherwise)
+  * Fix audio hang when playback is paused right before repeating
 
  -- Christian Pulvermacher <pulvermacher@gmx.de>  Sat, 28 May 2011 00:12:07 +0200
 

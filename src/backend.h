@@ -37,6 +37,7 @@ public slots:
 	void volumeDown();
 	void setVolume(qreal v);
 private slots:
+	void checkForHang();
 	void handleAudioStateChange(Phonon::State newstate);
 	void repeatSound();
 	void setVibratorStateOff();

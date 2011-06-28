@@ -26,6 +26,8 @@
 #include <QtMaemo5>
 #include <QtGui>
 
+#include <iostream>
+
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent)
@@ -158,6 +160,7 @@ void MainWindow::toggleAlarm()
 			.arg(minutes, 2, 10, QChar('0')));
 
 	} else {
+		std::cout << "MainWindow::toggleAlarm() - stopping daemon\n";
 		timer.stop();
 		Daemon::stop();
 		reloadHistory();
