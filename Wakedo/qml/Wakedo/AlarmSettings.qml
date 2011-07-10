@@ -111,7 +111,7 @@ Rectangle{
     AlarmSwitch{
         id: alarmSwitch
         x: 503
-        y: 18
+        y: 12
         onOnChanged: {
             updateUntilAlarm();
         }
@@ -131,7 +131,7 @@ Rectangle{
         Text{
             id: buttonLabel2
             x: 77
-            y: 18
+            y: 12
             color: "#aaaaaa"
             text: "Alarm time:"
             font.bold: false
@@ -149,15 +149,15 @@ Rectangle{
         }
 
         Column {
-            y: 83; x: 21; spacing: 40
+            y: 77; x: 21; spacing: 40
 
             Spinner {
                 id: spinnerHour
                 width: 220; height: 275
                 focus: true
                 model: 24
-                itemHeight: 45
-                delegate: Text { font.pixelSize: 40; text: index; height: parent.itemHeight+10 }
+                itemHeight: 65
+                delegate: Text { font.pixelSize: 60; text: index; height: 79 }
 
                 onCurrentIndexChanged: {
                     if(!alarmSwitch.on){
@@ -168,18 +168,18 @@ Rectangle{
 
         }
         Column {
-            y: 83; x: 251; spacing: 40
+            y: 77; x: 251; spacing: 40
             Spinner {
                 id: spinnerMinute
                 width: 220; height: 275
                 focus: true
                 model: 60
-                itemHeight: 45
+                itemHeight: 55
                 delegate: Text {
-                    font.pixelSize: 40;
+                    font.pixelSize: 45;
                     text: index;
                     //text: name;
-                    height: parent.itemHeight+10
+                    height: 50
                 }
                 //the following works well otherwise but the spinner breaks:
                 /*MouseArea {
