@@ -1,0 +1,21 @@
+Bare-essentials, blazing fast, graphically and usability tested
+alarm clock.
+
+Features:
+ * a photorealistic vintage alarm clock screen with moving clock hands
+ * a red clock hand indicator to show the alarm time when the alarm is on
+ * animated transitions to create an illusion of turning the app around to set
+   the alarm (somewhat like what you do with a real alarm clock)
+ * usability finesse: when user sets alarm time, alarm is automatically turned
+   on, too, and time until alarm is shown.
+
+The N900 alarm clock is slow. This is probably due to the fact that it
+stores a list of old alarm times, which is completely useless after a
+while when the list has grown huge and there is no way to clean it up.
+Also, an alarm clock needs no world clock, and need not have system
+clock settings like the N900 one does.
+
+(I have not seen the N9/N950/MeeGo alarm clock yet. :)
+
+Create a more iPhone style flippable clock with just the clock on the front
+side and on the backside configuration for alarm time

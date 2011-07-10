@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generator: Adobe Illustrator 13.0.2, SVG Export Plug-In  -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   x="0px"
+   y="0px"
+   width="246.6057"
+   height="128.74998"
+   viewBox="0 0 246.6057 128.74998"
+   enable-background="new 0 0 130 56"
+   xml:space="preserve"
+   id="svg2"
+   inkscape:version="0.47 r22583"
+   sodipodi:docname="background.svg"
+   inkscape:export-filename="/home/olli/Life/Projects/Wake-do/qml/Wakedo/background.png"
+   inkscape:export-xdpi="90.143906"
+   inkscape:export-ydpi="90.143906"><metadata
+   id="metadata22"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1263"
+   inkscape:window-height="741"
+   id="namedview20"
+   showgrid="false"
+   inkscape:zoom="2"
+   inkscape:cx="124.20299"
+   inkscape:cy="76.979782"
+   inkscape:window-x="26"
+   inkscape:window-y="1"
+   inkscape:window-maximized="0"
+   inkscape:current-layer="svg2"
+   inkscape:object-paths="false" />
+<defs
+   id="defs4"><inkscape:perspective
+   sodipodi:type="inkscape:persp3d"
+   inkscape:vp_x="0 : 28 : 1"
+   inkscape:vp_y="0 : 1000 : 0"
+   inkscape:vp_z="130 : 28 : 1"
+   inkscape:persp3d-origin="65 : 18.666667 : 1"
+   id="perspective24" />
+<inkscape:perspective
+   id="perspective2842"
+   inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+   inkscape:vp_z="1 : 0.5 : 1"
+   inkscape:vp_y="0 : 1000 : 0"
+   inkscape:vp_x="0 : 0.5 : 1"
+   sodipodi:type="inkscape:persp3d" /></defs>
+<linearGradient
+   id="SVGID_1_"
+   gradientUnits="userSpaceOnUse"
+   x1="-37.5005"
+   y1="-66"
+   x2="-37.5005"
+   y2="-121.9985"
+   gradientTransform="matrix(2.2991889,0,0,-2.2991889,235.66686,-151.74647)">
+	<stop
+   offset="0.0056"
+   style="stop-color:#000000"
+   id="stop7" />
+	<stop
+   offset="1"
+   style="stop-color:#EAECEF"
+   id="stop9" />
+</linearGradient>
+<path
+   d="m 182.22841,128.74998 -117.85112,0 C 28.880112,128.74998 0,99.867569 0,64.372691 0,28.877813 28.880112,0 64.37729,0 l 117.85112,0 c 35.49718,0 64.37729,28.875514 64.37729,64.372691 0,35.499479 -28.87781,64.377289 -64.37729,64.377289 l 0,0 z"
+   id="path11"
+   style="fill:url(#SVGID_1_)"
+   sodipodi:nodetypes="ccsccscc" />
+<linearGradient
+   id="SVGID_2_"
+   gradientUnits="userSpaceOnUse"
+   x1="-5.5"
+   y1="-132.1338"
+   x2="-69.500198"
+   y2="-55.861301"
+   gradientTransform="matrix(2.2991889,0,0,-2.2991889,235.66686,-151.74647)">
+	<stop
+   offset="0.0056"
+   style="stop-color:#000000"
+   id="stop14" />
+	<stop
+   offset="1"
+   style="stop-color:#2f2f30;stop-opacity:1;"
+   id="stop16" />
+</linearGradient>
+<path
+   d="m 242.00961,64.372691 c -0.0993,33.984769 -26.76715,59.778919 -59.7789,59.778919 l -117.85572,0 c -33.014053,0 -59.7789114,-26.764868 -59.7789114,-59.778919 l 0,0 c 0,-33.014053 26.7648584,-59.7789116 59.7789114,-59.7789116 l 117.85572,0 c 33.01175,0 59.7789,26.7648586 59.7789,59.7789116 l 0,0 z"
+   id="path18"
+   style="fill:url(#SVGID_2_)"
+   sodipodi:nodetypes="ccccccccz" />
+
+
+
+
+
+
+<text
+   xml:space="preserve"
+   style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+   x="46"
+   y="66.749985"
+   id="text2859"
+   transform="translate(0,-2.988801e-6)"><tspan
+     sodipodi:role="line"
+     id="tspan2861" /></text>
+
+
+
+</svg>
