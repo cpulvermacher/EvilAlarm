@@ -19,6 +19,8 @@ public:
 
 public slots:
     void showSelector();
+    void setEvilAlarm(int hours, int minutes);
+    void unsetEvilAlarm();
 private slots:
     void on_actionSettings_triggered();
 

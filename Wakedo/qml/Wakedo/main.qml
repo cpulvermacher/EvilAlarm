@@ -4,6 +4,8 @@ Rectangle{
     color: "#141518"
     id: window
     signal selectAlarmType()
+		signal setAlarm(int hours, int minutes)
+		signal unsetAlarm()
 
     Row {
         anchors.centerIn: parent; spacing: 0

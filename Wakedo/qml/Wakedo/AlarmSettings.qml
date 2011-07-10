@@ -84,9 +84,13 @@ Rectangle{
             //dateText.text = date.toDateString();
 
             untilAlarm.text = "Until alarm:\n"+hoursLeft+" hours "+minutesLeft+" minutes"
+
+						window.setAlarm(hour, minute)
         }
         else{
             untilAlarm.text="";
+
+						window.unsetAlarm()
         }
 
 

@@ -3,6 +3,8 @@ TARGET = evilalarm
 QT += maemo5 dbus phonon declarative
 CONFIG += silent release
 
+DEFINES += EVILALARM
+
 OBJECTS_DIR = $${PWD}/tmp
 MOC_DIR = $${PWD}/tmp
 UI_DIR = $${PWD}/tmp

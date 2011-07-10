@@ -1,6 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+
+#ifdef EVILALARM
 #include "daemon.h"
+#endif
 
 #include <QDeclarativeContext>
 #include <QPushButton>
@@ -23,12 +26,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 		QDeclarativeContext *context = ui->view->rootContext();
 
+#ifdef EVILALARM
 		//load alarm
 		QSettings settings;
 		QTime alarm_time = settings.value("wake_at", QTime::currentTime()).toTime();
 		context->setContextProperty("evilalarm_hours", alarm_time.hour());
 		context->setContextProperty("evilalarm_minutes", alarm_time.minute());
 		context->setContextProperty("evilalarm_active", Daemon::isRunning());
+#endif
 
 
 		//now load UI
@@ -39,6 +44,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QObject::connect(item, SIGNAL(selectAlarmType()),
                      this, SLOT(showSelector()));
+    QObject::connect(item, SIGNAL(unsetAlarm()),
+                     this, SLOT(unsetEvilAlarm()));
+    QObject::connect(item, SIGNAL(setAlarm(int, int)),
+                     this, SLOT(setEvilAlarm(int, int)));
+		/*
+		 * this doesn't work?
+		QObject::connect(item. SIGNAL(setAlarm(int, int)),
+			this, SLOT(setEvilAlarm(int, int)));
+		*/
 		
 
     /*
@@ -76,6 +90,28 @@ void MainWindow::showSelector() {
     selectAlarmType.show();
 }
 
+void MainWindow::setEvilAlarm(int hours,int minutes) {
+#ifdef EVILALARM
+		QSettings settings;
+
+		const QTime wake_at(hours, minutes);
+		settings.setValue("wake_at", wake_at);
+		settings.sync();
+
+		int msecs = QTime::currentTime().msecsTo(wake_at);
+		if(msecs < 0) //alarm tomorrow?
+			msecs += 24*60*60*1000; //+24h
+		
+
+		Daemon::start();
+#endif
+}
+
+void MainWindow::unsetEvilAlarm() {
+#ifdef EVILALARM
+		Daemon::stop();
+#endif
+}
 
 /*void MainWindow::setAlarm(int hours,int minutes){
     // from http://www.tardigrada.hr/blog/2010/10/using-maemos-alarm-framework-with-qt-the-basics/
