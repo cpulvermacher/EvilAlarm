@@ -14,7 +14,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    QString path=QApplication::applicationDirPath()+"/qml/Wakedo/main.qml";
+    QString path=QApplication::applicationDirPath()+"/../qml/Wakedo/main.qml";
+    //QString path=QApplication::applicationDirPath()+"/qml/Wakedo/main.qml";
+#if defined(Q_WS_MAEMO)
+#else
+#endif
+
     //bool r = QDesktopServices::openUrl(QUrl::fromLocalFile(path));
     ui->view->setSource(QUrl::fromLocalFile(path));
     QGraphicsObject *item = ui->view->rootObject();
