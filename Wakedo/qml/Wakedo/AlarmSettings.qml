@@ -166,8 +166,8 @@ Rectangle{
                 width: 220; height: 275
                 focus: true
                 model: 24
-                itemHeight: 60
-                delegate: Text { font.pixelSize: 45;  text: index; height: 60 }
+                itemHeight: 45
+                delegate: Text { font.pixelSize: 40; text: index; height: parent.itemHeight+10 }
 
                 onCurrentIndexChanged: {
                     if(!alarmSwitch.on && initialized){
@@ -184,12 +184,12 @@ Rectangle{
                 width: 220; height: 275
                 focus: true
                 model: 60
-                itemHeight: 60
+                itemHeight: 45
                 delegate: Text {
-                    font.pixelSize: 45;
+                    font.pixelSize: 40;
                     text: index;
                     //text: name;
-                    height: 60
+                    height: parent.itemHeight+10
                 }
                 //the following works well otherwise but the spinner breaks:
                 /*MouseArea {
