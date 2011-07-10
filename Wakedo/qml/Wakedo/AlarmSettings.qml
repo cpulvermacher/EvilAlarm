@@ -18,6 +18,16 @@ Rectangle{
     // time zone shift; not in use
     property real shift: 0
 
+		property bool initialized: false
+
+		//initialize
+		Component.onCompleted: {
+			hour = evilalarm_hours
+			minute = evilalarm_minutes
+			alarmOn = evilalarm_active
+			initialized = true
+		}
+
 // an attempt to have minutes padded with zeroes in minute spinner
 /*    property int i;
 
@@ -160,7 +170,7 @@ Rectangle{
                 delegate: Text { font.pixelSize: 45;  text: index; height: 60 }
 
                 onCurrentIndexChanged: {
-                    if(!alarmSwitch.on){
+                    if(!alarmSwitch.on && initialized){
                         alarmSwitch.aswitch.toggle();
                     }
                 }
@@ -191,7 +201,7 @@ Rectangle{
                 }*/
 
                 onCurrentIndexChanged: {
-                    if(!alarmSwitch.on){
+                    if(!alarmSwitch.on && initialized){
                         alarmSwitch.aswitch.toggle();
                     }
                 }

@@ -1,19 +1,37 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "daemon.h"
+
+#include <QDeclarativeContext>
 #include <QPushButton>
 #include <QLabel>
 #include <QDebug>
+#include <QSettings>
 #include <QGraphicsObject>
+
 #if defined(Q_WS_MAEMO)
 #include <alarmd/alarm_event.h>
 #endif
+
 
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+		setWindowTitle("EvilAlarm");
     ui->setupUi(this);
+		QDeclarativeContext *context = ui->view->rootContext();
+
+		//load alarm
+		QSettings settings;
+		QTime alarm_time = settings.value("wake_at", QTime::currentTime()).toTime();
+		context->setContextProperty("evilalarm_hours", alarm_time.hour());
+		context->setContextProperty("evilalarm_minutes", alarm_time.minute());
+		context->setContextProperty("evilalarm_active", Daemon::isRunning());
+
+
+		//now load UI
     QString path=QApplication::applicationDirPath()+"/qml/Wakedo/main.qml";
     //bool r = QDesktopServices::openUrl(QUrl::fromLocalFile(path));
     ui->view->setSource(QUrl::fromLocalFile(path));
@@ -21,6 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QObject::connect(item, SIGNAL(selectAlarmType()),
                      this, SLOT(showSelector()));
+		
 
     /*
     // trying http://doc.qt.nokia.com/qt-maemo-4.6/maemo5-stackedwindows.html
