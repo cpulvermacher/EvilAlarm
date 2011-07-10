@@ -90,19 +90,6 @@ Rectangle{
         onTriggered: updateUntilAlarm();
     }
 
-    onAlarmOnChanged: {
-        updateUntilAlarm();
-    }
-    onHourChanged: {
-        if(!alarmSwitch.on){
-            alarmSwitch.aswitch.toggle();
-        }
-    }
-    onMinuteChanged: {
-        if(!alarmSwitch.on){
-            alarmSwitch.aswitch.toggle();
-        }
-    }
 
     width: 800; height: 430
     gradient: Gradient {
@@ -125,6 +112,9 @@ Rectangle{
         id: alarmSwitch
         x: 503
         y: 18
+        onOnChanged: {
+            updateUntilAlarm();
+        }
     }
 
     AlarmSettingsCorner{
@@ -168,6 +158,12 @@ Rectangle{
                 model: 24
                 itemHeight: 60
                 delegate: Text { font.pixelSize: 45;  text: index; height: 60 }
+
+                onCurrentIndexChanged: {
+                    if(!alarmSwitch.on){
+                        alarmSwitch.aswitch.toggle();
+                    }
+                }
             }
 
         }
@@ -194,6 +190,11 @@ Rectangle{
                     }
                 }*/
 
+                onCurrentIndexChanged: {
+                    if(!alarmSwitch.on){
+                        alarmSwitch.aswitch.toggle();
+                    }
+                }
             }
         }
 
