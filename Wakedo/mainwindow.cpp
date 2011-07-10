@@ -53,11 +53,6 @@ MainWindow::MainWindow(QWidget *parent) :
                      this, SLOT(unsetEvilAlarm()));
     QObject::connect(item, SIGNAL(setAlarm(int, int)),
                      this, SLOT(setEvilAlarm(int, int)));
-		/*
-		 * this doesn't work?
-		QObject::connect(item. SIGNAL(setAlarm(int, int)),
-			this, SLOT(setEvilAlarm(int, int)));
-		*/
 		
 
     /*
