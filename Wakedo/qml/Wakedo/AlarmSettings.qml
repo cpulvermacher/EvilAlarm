@@ -124,8 +124,10 @@ Rectangle{
 
     AlarmSwitch{
         id: alarmSwitch
-        x: 503
+        x: 534
         y: 12
+        width: 248
+        height: 223
         onOnChanged: {
             updateUntilAlarm();
         }
@@ -144,7 +146,7 @@ Rectangle{
         width: 0; height: 0
         Text{
             id: buttonLabel2
-            x: 77
+            x: 70
             y: 18
             color: "#aaaaaa"
             text: "Alarm time:"
@@ -167,7 +169,7 @@ Rectangle{
 
             Spinner {
                 id: spinnerHour
-                width: 220; height: 275
+                width: 240; height: 275
                 focus: true
                 model: 24
                 itemHeight: 52
@@ -182,10 +184,10 @@ Rectangle{
 
         }
         Column {
-            y: 83; x: 251; spacing: 40
+            y: 83; x: 278; spacing: 40
             Spinner {
                 id: spinnerMinute
-                width: 220; height: 275
+                width: 240; height: 275
                 focus: true
                 model: 60
                 itemHeight: 52
@@ -262,7 +264,7 @@ Rectangle{
         MouseArea {
             id: mouse_area1
             onClicked: window.selectAlarmType()
-            x: 0
+            x: 7
             y: 0
             width: 244
             height: 54
@@ -270,21 +272,21 @@ Rectangle{
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 0
             anchors.right: parent.right
-            anchors.rightMargin: 469
+            anchors.rightMargin: 462
             anchors.left: parent.left
-            anchors.leftMargin: 0
+            anchors.leftMargin: 7
             anchors.top: parent.top
             anchors.topMargin: 0
 
             Text {
                 id: text1
-                x: 9
-                y: 8
+                x: 1
+                y: 12
                 width: 239
                 height: 44
                 color: "#626262"
                 text: "Normal alarm >"
-                anchors.horizontalCenterOffset: 7
+                anchors.horizontalCenterOffset: -1
                 font.italic: false
                 style: Text.Raised
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -298,7 +300,7 @@ Rectangle{
 
         MouseArea {
             id: mouse_area2
-            x: 244
+            x: 254
             y: 0
             width: 283
             height: 62

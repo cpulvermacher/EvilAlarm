@@ -10,6 +10,8 @@ Rectangle {
     property alias aswitch: aswitch
     Text{
         id: buttonLabel
+        x: 6
+        y: 0
         color: "#aaaaaa"
         text: "Alarm:"
         font.bold: false
