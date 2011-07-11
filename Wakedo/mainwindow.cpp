@@ -23,7 +23,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    setWindowTitle("EvilAlarm");
+    //setting title in mainwindow.ui instead, this wasn't working
+    //setWindowTitle("EvilAlarm");
     ui->setupUi(this);
     QDeclarativeContext *context = ui->view->rootContext();
 
