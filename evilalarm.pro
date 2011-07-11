@@ -30,3 +30,35 @@ HEADERS += \
 FORMS += \
     Wakedo/mainwindow.ui \
     Wakedo/selectalarmtype.ui
+
+maemo5 {
+    target.path = /opt/evilalarm/bin
+    INSTALLS += target
+}
+
+OTHER_FILES += \
+    Wakedo/qml/Wakedo/main.qml \
+    Wakedo/qml/Wakedo/AlarmSwitch.qml \
+    Wakedo/qml/Wakedo/TimeDisplayCorner.qml \
+    Wakedo/qml/Wakedo/AlarmSettingsCorner.qml \
+    Wakedo/qml/Wakedo/TimeText.qml \
+    Wakedo/qml/Wakedo/TimeDisplay.qml \
+    Wakedo/qml/Wakedo/Spinner.qml \
+    Wakedo/qml/Wakedo/Wakedo.qml \
+    Wakedo/qml/Wakedo/Switch.qml \
+    Wakedo/qml/Wakedo/Clock.qml \
+    Wakedo/qml/Wakedo/Clock2.qml \
+    Wakedo/qml/Wakedo/AlarmSettings.qml
+
+# Add more folders to ship with the application, here
+folder_01.source = Wakedo/qml/Wakedo
+folder_01.target = Wakedo/qml
+DEPLOYMENTFOLDERS = folder_01 folder_02
+
+include(Wakedo/qmlapplicationviewer/qmlapplicationviewer.pri)
+qtcAddDeployment()
+
+
+# Additional import path used to resolve QML modules in Creator's code model
+QML_IMPORT_PATH =
+
