@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>473</width>
-    <height>166</height>
+    <height>253</height>
    </rect>
   </property>
   <property name="font">
@@ -16,11 +16,11 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Select alarm type</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background:qlineargradient(spread:pad, x1:1, y1:0, x2:1, y2:1, stop:0 #4b4f59, stop:0.35 #232323, stop:1 #232323);
-color:#aaa; font-size:40pt;</string>
+   <string notr="true">/*background:qlineargradient(spread:pad, x1:1, y1:0, x2:1, y2:1, stop:0 #4b4f59, stop:0.35 #232323, stop:1 #232323);
+color:#aaa; font-size:40pt;*/</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -32,10 +32,10 @@ color:#aaa; font-size:40pt;</string>
    <item>
     <widget class="QListWidget" name="listWidget">
      <property name="styleSheet">
-      <string notr="true">::item{
+      <string notr="true">/*::item{
 padding-top:0.5em;
 padding-bottom:0.5em;
-}</string>
+}*/</string>
      </property>
      <property name="alternatingRowColors">
       <bool>false</bool>
@@ -66,7 +66,7 @@ padding-bottom:0.5em;
  <connections>
   <connection>
    <sender>listWidget</sender>
-   <signal>clicked(QModelIndex)</signal>
+   <signal>activated(QModelIndex)</signal>
    <receiver>SelectAlarmType</receiver>
    <slot>accept()</slot>
    <hints>
