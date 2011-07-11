@@ -1,5 +1,5 @@
 import QtQuick 1.0
-import "../colibri"
+
 Rectangle{
     id: alarmSettings
 
@@ -125,7 +125,7 @@ Rectangle{
     AlarmSwitch{
         id: alarmSwitch
         x: 503
-        y: 18
+        y: 12
         onOnChanged: {
             updateUntilAlarm();
         }
@@ -140,7 +140,7 @@ Rectangle{
 
     Rectangle {
         x: -1
-        y: -1
+        y: -7
         width: 0; height: 0
         Text{
             id: buttonLabel2
@@ -170,7 +170,7 @@ Rectangle{
                 width: 220; height: 275
                 focus: true
                 model: 24
-                itemHeight: 45
+                itemHeight: 52
                 delegate: Text { font.pixelSize: 40; text: index; height: parent.itemHeight+10 }
 
                 onCurrentIndexChanged: {
@@ -188,7 +188,7 @@ Rectangle{
                 width: 220; height: 275
                 focus: true
                 model: 60
-                itemHeight: 45
+                itemHeight: 52
                 delegate: Text {
                     font.pixelSize: 40;
                     text: index;
