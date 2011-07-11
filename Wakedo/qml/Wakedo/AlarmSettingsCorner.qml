@@ -9,12 +9,12 @@ Rectangle {
         color: "#aaaaaa"
         text: "Ok!"
         z: 5
-        anchors.rightMargin: 11
+        anchors.rightMargin: 18
         anchors.bottomMargin: 14
         font.bold: false
         font.pixelSize: 36
         id: text1
-        x: 166
+        x: 92
         y: 93
         anchors.bottom: parent.bottom;
         anchors.right: parent.right;
