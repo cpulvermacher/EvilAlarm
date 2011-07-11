@@ -11,6 +11,7 @@
 #include <QDebug>
 #include <QSettings>
 #include <QGraphicsObject>
+#include <QFile>
 
 #if defined(Q_WS_MAEMO)
 #include <alarmd/alarm_event.h>
@@ -22,26 +23,29 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-		setWindowTitle("EvilAlarm");
+    setWindowTitle("EvilAlarm");
     ui->setupUi(this);
-		QDeclarativeContext *context = ui->view->rootContext();
+    QDeclarativeContext *context = ui->view->rootContext();
 
+    //load alarm
+    QSettings settings;
+    QTime alarm_time = settings.value("wake_at", QTime::currentTime()).toTime();
+    context->setContextProperty("evilalarm_hours", alarm_time.hour());
+    context->setContextProperty("evilalarm_minutes", alarm_time.minute());
 #ifdef EVILALARM
-		//load alarm
-		QSettings settings;
-		QTime alarm_time = settings.value("wake_at", QTime::currentTime()).toTime();
-		context->setContextProperty("evilalarm_hours", alarm_time.hour());
-		context->setContextProperty("evilalarm_minutes", alarm_time.minute());
-		context->setContextProperty("evilalarm_active", Daemon::isRunning());
+    context->setContextProperty("evilalarm_active", Daemon::isRunning());
 #endif
 
+    QString path;
+    //now load UI
+    QString realMaemo=QApplication::applicationDirPath()+"/../Wakedo/qml/Wakedo/main.qml";
+    if(QFile::exists(realMaemo)){
+        path=realMaemo;
+    }else{
+        //simulator
+        path=QApplication::applicationDirPath()+"/qml/Wakedo/main.qml";
 
-		//now load UI
-    QString path=QApplication::applicationDirPath()+"/../qml/Wakedo/main.qml";
-    //QString path=QApplication::applicationDirPath()+"/qml/Wakedo/main.qml";
-#if defined(Q_WS_MAEMO)
-#else
-#endif
+    }
 
     //bool r = QDesktopServices::openUrl(QUrl::fromLocalFile(path));
     ui->view->setSource(QUrl::fromLocalFile(path));
