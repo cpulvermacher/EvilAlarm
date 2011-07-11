@@ -231,7 +231,7 @@ Rectangle{
 
     Text {
         id: untilAlarm
-        x: 508
+        x: 534
         y: 218
         color: "#555555"
         text: ""
