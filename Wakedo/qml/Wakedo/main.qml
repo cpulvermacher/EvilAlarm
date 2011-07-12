@@ -4,7 +4,8 @@ Rectangle{
     color: "#141518"
     id: window
     signal selectAlarmType()
-		signal setAlarm(int hours, int minutes)
+    signal alarmHistory()
+                signal setAlarm(int hours, int minutes)
 		signal unsetAlarm()
 
     Row {
