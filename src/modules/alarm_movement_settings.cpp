@@ -16,7 +16,7 @@ AlarmMovementSettings::AlarmMovementSettings(QWidget *parent):
 	layout->setColumnStretch(0, 1);
 
 	QSettings settings;
-	threshold_label = new QLabel(tr("Accelerometer threshold"));
+        threshold_label = new QLabel(tr("Required intensity of movement<br />(Accelerometer threshold)"));
 	threshold = new QSpinBox();
 	threshold->setRange(1, 3000);
 	threshold->setValue(settings.value("movement_threshold", ACCELEROMETER_THRESHOLD).toInt());
@@ -40,7 +40,7 @@ void AlarmMovementSettings::accelUpdate(int x, int y, int z)
 	int max_diff = qMax(qAbs(lastx - x), qMax(qAbs(lasty - y), qAbs(lastz - z)));
 	bool over_threshold = max_diff>threshold->value();
 
-	QString text = QString("Accelerometer threshold (");
+        QString text = QString("Required intensity of movement<br />(Accelerometer threshold; ");
 	if(over_threshold)
 		text += "<font color='#ff8000'>";
 
