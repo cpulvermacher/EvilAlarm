@@ -302,6 +302,7 @@ Rectangle{
             id: mouse_area2
             x: 254
             y: 0
+            onClicked: window.alarmHistory()
             width: 283
             height: 62
             anchors.verticalCenterOffset: 0
