@@ -3,6 +3,7 @@
 #include <QPushButton>
 #include <QMainWindow>
 #include "selectalarmtype.h"
+#include "alarmhistory.h"
 
 namespace Ui {
     class MainWindow;
@@ -19,6 +20,7 @@ public:
 
 public slots:
     void showSelector();
+    void showAlarmHistory();
     void setEvilAlarm(int hours, int minutes);
     void unsetEvilAlarm();
 private slots:
@@ -28,6 +30,7 @@ private slots:
 
 private:
     SelectAlarmType selectAlarmType;
+    AlarmHistory alarmHistory;
     Ui::MainWindow *ui;
     QPushButton button1;
 };

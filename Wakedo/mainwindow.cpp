@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+
 #ifdef EVILALARM
 #include "daemon.h"
 #endif
@@ -12,6 +13,8 @@
 #include <QSettings>
 #include <QGraphicsObject>
 #include <QFile>
+#include "../src/settings2.h"
+#include "about.h"
 
 #if defined(Q_WS_MAEMO)
 #include <alarmd/alarm_event.h>
@@ -54,6 +57,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QObject::connect(item, SIGNAL(selectAlarmType()),
                      this, SLOT(showSelector()));
+    QObject::connect(item, SIGNAL(alarmHistory()),
+                     this, SLOT(showAlarmHistory()));
     QObject::connect(item, SIGNAL(unsetAlarm()),
                      this, SLOT(unsetEvilAlarm()));
     QObject::connect(item, SIGNAL(setAlarm(int, int)),
@@ -91,8 +96,12 @@ MainWindow::~MainWindow()
     delete ui;
 }
 void MainWindow::showSelector() {
-    qDebug() << "Called the C++ slot.";
+    qDebug() << "Alarm type selection";
     selectAlarmType.show();
+}
+void MainWindow::showAlarmHistory() {
+    qDebug() << "Alarm history";
+    alarmHistory.show();
 }
 
 void MainWindow::setEvilAlarm(int hours,int minutes) {
@@ -158,10 +167,19 @@ void MainWindow::unsetEvilAlarm() {
 */
 void MainWindow::on_actionSettings_triggered()
 {
+    qDebug() << "Alarm type selection";
+    static Settings2 *settingsWindow = new Settings2(this);
+    settingsWindow->setAttribute(Qt::WA_Maemo5StackedWindow);
+    settingsWindow->setWindowFlags(windowFlags() | Qt::Window);
+    settingsWindow->show();
 
 }
 
 void MainWindow::on_actionAbout_triggered()
 {
-    button1.click();
+    qDebug() << "About window";
+    static About *about = new About(this);
+    about->setAttribute(Qt::WA_Maemo5StackedWindow);
+    about->setWindowFlags(windowFlags() | Qt::Window);
+    about->show();
 }

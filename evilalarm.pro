@@ -15,11 +15,17 @@ INCLUDEPATH += $${PWD}/src/modules
 HEADERS += backend.h settings.h alarm.h daemon.h alarmhistoryitem.h\
 	module_list.h module_settings.h\
 	alarm_blubbels.h blubbels.h alarm_blubbels_settings.h\
-	alarm_movement.h alarm_movement_settings.h accelerometer.h
+	alarm_movement.h alarm_movement_settings.h accelerometer.h \
+    settings2.h \
+    Wakedo/about.h \
+    Wakedo/alarmhistory.h
 SOURCES += main.cpp backend.cpp settings.cpp alarm.cpp daemon.cpp alarmhistoryitem.cpp\
 	module_list.cpp\
 	alarm_blubbels.cpp blubbels.cpp alarm_blubbels_settings.cpp\
-	alarm_movement.cpp alarm_movement_settings.cpp accelerometer.cpp
+	alarm_movement.cpp alarm_movement_settings.cpp accelerometer.cpp \
+    settings2.cpp \
+    Wakedo/about.cpp \
+    Wakedo/alarmhistory.cpp
 SOURCES += \
     Wakedo/mainwindow.cpp \
     Wakedo/selectalarmtype.cpp
@@ -29,7 +35,10 @@ HEADERS += \
 
 FORMS += \
     Wakedo/mainwindow.ui \
-    Wakedo/selectalarmtype.ui
+    Wakedo/selectalarmtype.ui \
+    settings2.ui \
+    Wakedo/about.ui \
+    Wakedo/alarmhistory.ui
 
 maemo5 {
     target.path = /opt/evilalarm/bin
@@ -61,4 +70,3 @@ qtcAddDeployment()
 
 # Additional import path used to resolve QML modules in Creator's code model
 QML_IMPORT_PATH =
-
