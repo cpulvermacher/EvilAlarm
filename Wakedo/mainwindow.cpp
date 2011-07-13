@@ -16,9 +16,9 @@
 #include "settings.h"
 #include "about.h"
 
-#if defined(Q_WS_MAEMO)
-#include <alarmd/alarm_event.h>
-#endif
+//#if defined(Q_WS_MAEMO)
+//#include <alarmd/alarm_event.h>
+//#endif
 
 
 
@@ -26,8 +26,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    //setting title in mainwindow.ui instead, this wasn't working
-    //setWindowTitle("EvilAlarm");
     ui->setupUi(this);
     setAttribute(Qt::WA_Maemo5StackedWindow);
     QDeclarativeContext *context = ui->view->rootContext();
@@ -65,30 +63,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(item, SIGNAL(setAlarm(int, int)),
                      this, SLOT(setEvilAlarm(int, int)));
 		
-
-    /*
-    // trying http://doc.qt.nokia.com/qt-maemo-4.6/maemo5-stackedwindows.html
-    button1.setText("About");
-    //ui->layout->addWidget(&button1);
-    ("Click here to open a new stacked window");
-    QPushButton button1("Click here to open a new stacked window");
-    //not compatible with harmattan
-    button1.setAttribute(Qt::WA_Maemo5StackedWindow);
-
-    QPushButton button2("Click here to open another stacked window", &button1);
-    button2.setAttribute(Qt::WA_Maemo5StackedWindow);
-    button2.setWindowFlags(button2.windowFlags() | Qt::Window);
-
-    QLabel label("<p align=\"center\">This is the last stacked window. "
-                 "Press the back arrow on the top-right corner to go back.",
-                 &button2, Qt::Window);
-    label.setAttribute(Qt::WA_Maemo5StackedWindow);
-    label.setWordWrap(true);
-
-    QObject::connect(&button1, SIGNAL(clicked()), &button2, SLOT(show()));
-    QObject::connect(&button2, SIGNAL(clicked()), &label, SLOT(show()));
-*/
-    //button1.show();
     //setAttribute(Qt::WA_Maemo5LandscapeOrientation, true);
 }
 

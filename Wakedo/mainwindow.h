@@ -32,7 +32,6 @@ private:
     SelectAlarmType selectAlarmType;
     AlarmHistory alarmHistory;
     Ui::MainWindow *ui;
-    QPushButton button1;
 };
 
 #endif // MAINWINDOW_H
