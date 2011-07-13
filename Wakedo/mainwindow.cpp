@@ -1,6 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include "selectalarmtype.h"
+#include "alarmhistory.h"
+#include "settings.h"
+#include "about.h"
 
 #ifdef EVILALARM
 #include "daemon.h"
@@ -13,8 +16,6 @@
 #include <QSettings>
 #include <QGraphicsObject>
 #include <QFile>
-#include "settings.h"
-#include "about.h"
 
 //#if defined(Q_WS_MAEMO)
 //#include <alarmd/alarm_event.h>
@@ -72,11 +73,13 @@ MainWindow::~MainWindow()
 }
 void MainWindow::showSelector() {
     qDebug() << "Alarm type selection";
-    selectAlarmType.show();
+		static SelectAlarmType* selectAlarmType = new SelectAlarmType(this);
+    selectAlarmType->show();
 }
 void MainWindow::showAlarmHistory() {
     qDebug() << "Alarm history";
-    alarmHistory.show();
+		static AlarmHistory* alarmHistory = new AlarmHistory(this);
+    alarmHistory->show();
 }
 
 void MainWindow::setEvilAlarm(int hours,int minutes) {
