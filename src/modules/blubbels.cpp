@@ -42,8 +42,8 @@ GameWidget::GameWidget(QWidget* parent) :
 	QWidget(parent),
 	bubblesize(1),
 	margin(1),
-	timer(new QTimer(this)),
-	use_animations(true)
+	use_animations(true),
+	timer(new QTimer(this))
 {
 	setMouseTracking(true);
 
