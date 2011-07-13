@@ -9,8 +9,6 @@ Settings::Settings(QWidget *parent) :
     ui(new Ui::Settings)
 {
     ui->setupUi(this);
-    setAttribute(Qt::WA_Maemo5StackedWindow);
-    setWindowFlags(windowFlags() | Qt::Window); //create top-level window even though parent is set
 
     int row = 0;
 

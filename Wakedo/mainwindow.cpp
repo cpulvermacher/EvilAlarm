@@ -170,6 +170,8 @@ void MainWindow::on_actionSettings_triggered()
 {
     qDebug() << "Alarm type selection";
     static Settings *settingsWindow = new Settings(this);
+    settingsWindow->setAttribute(Qt::WA_Maemo5StackedWindow);
+    settingsWindow->setWindowFlags(windowFlags() | Qt::Window);
     settingsWindow->show();
 
 }
