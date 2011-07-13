@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //setting title in mainwindow.ui instead, this wasn't working
     //setWindowTitle("EvilAlarm");
     ui->setupUi(this);
+    setAttribute(Qt::WA_Maemo5StackedWindow);
     QDeclarativeContext *context = ui->view->rootContext();
 
     //load alarm
