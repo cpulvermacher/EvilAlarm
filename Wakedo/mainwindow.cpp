@@ -13,7 +13,7 @@
 #include <QSettings>
 #include <QGraphicsObject>
 #include <QFile>
-#include "../src/settings2.h"
+#include "settings.h"
 #include "about.h"
 
 #if defined(Q_WS_MAEMO)
@@ -169,9 +169,7 @@ void MainWindow::unsetEvilAlarm() {
 void MainWindow::on_actionSettings_triggered()
 {
     qDebug() << "Alarm type selection";
-    static Settings2 *settingsWindow = new Settings2(this);
-    settingsWindow->setAttribute(Qt::WA_Maemo5StackedWindow);
-    settingsWindow->setWindowFlags(windowFlags() | Qt::Window);
+    static Settings *settingsWindow = new Settings(this);
     settingsWindow->show();
 
 }
