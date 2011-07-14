@@ -1,9 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-#include <QPushButton>
 #include <QMainWindow>
-#include "selectalarmtype.h"
-#include "alarmhistory.h"
 
 namespace Ui {
     class MainWindow;
@@ -29,10 +26,7 @@ private slots:
     void on_actionAbout_triggered();
 
 private:
-    SelectAlarmType selectAlarmType;
-    AlarmHistory alarmHistory;
     Ui::MainWindow *ui;
-    QPushButton button1;
 };
 
 #endif // MAINWINDOW_H

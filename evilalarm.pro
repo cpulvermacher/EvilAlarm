@@ -16,29 +16,25 @@ HEADERS += backend.h settings.h alarm.h daemon.h alarmhistoryitem.h\
 	module_list.h module_settings.h\
 	alarm_blubbels.h blubbels.h alarm_blubbels_settings.h\
 	alarm_movement.h alarm_movement_settings.h accelerometer.h \
-    settings2.h \
+    Wakedo/mainwindow.h \
+    Wakedo/selectalarmtype.h \
     Wakedo/about.h \
     Wakedo/alarmhistory.h
 SOURCES += main.cpp backend.cpp settings.cpp alarm.cpp daemon.cpp alarmhistoryitem.cpp\
 	module_list.cpp\
 	alarm_blubbels.cpp blubbels.cpp alarm_blubbels_settings.cpp\
 	alarm_movement.cpp alarm_movement_settings.cpp accelerometer.cpp \
-    settings2.cpp \
-    Wakedo/about.cpp \
-    Wakedo/alarmhistory.cpp
-SOURCES += \
     Wakedo/mainwindow.cpp \
-    Wakedo/selectalarmtype.cpp
-HEADERS += \
-    Wakedo/mainwindow.h \
-    Wakedo/selectalarmtype.h
+    Wakedo/selectalarmtype.cpp \
+    Wakedo/about.cpp \
+    Wakedo/alarmhistory.cpp \
 
 FORMS += \
     Wakedo/mainwindow.ui \
     Wakedo/selectalarmtype.ui \
-    settings2.ui \
     Wakedo/about.ui \
-    Wakedo/alarmhistory.ui
+    Wakedo/alarmhistory.ui \
+    settings.ui
 
 maemo5 {
     target.path = /opt/evilalarm/bin
