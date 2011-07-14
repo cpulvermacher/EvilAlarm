@@ -43,8 +43,9 @@
      <string>main</string>
     </property>
     <addaction name="actionSettings"/>
-    <addaction name="separator"/>
     <addaction name="actionAbout"/>
+    <addaction name="actionTest_Alarm"/>
+    <addaction name="separator"/>
    </widget>
    <addaction name="menuMain"/>
   </widget>
@@ -56,6 +57,17 @@
   <action name="actionSettings">
    <property name="text">
     <string>Settings</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionTest_Alarm">
+   <property name="text">
+    <string>Test 'shake' alarm</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
    </property>
   </action>
  </widget>
