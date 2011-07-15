@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>495</width>
-    <height>450</height>
+    <height>381</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,7 +16,9 @@
   <property name="styleSheet">
    <string notr="true">QPushButton{
 height:2em !important;
-}</string>
+}QDialog{
+background-color:#111;
+color:#aaa; }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>

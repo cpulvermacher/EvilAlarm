@@ -13,6 +13,11 @@
   <property name="windowTitle">
    <string>About EvilAlarm</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget#About,QTabWidget,
+QScrollArea,QScrollArea&gt;QWidget{background:qlineargradient(spread:pad, x1:1, y1:0, x2:1, y2:1, stop:0 #4b4f59, stop:0.35 #232323, stop:1 #232323);
+color:#aaa; }#tab{background-color:#111;}#tab_2{background-color:#111;}#scrollAreaWidgetContents_3{background-color:#111;}#scrollAreaWidgetContents_2{background-color:#111;}</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="margin">
     <number>0</number>
@@ -46,8 +51,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>684</width>
-            <height>267</height>
+            <width>699</width>
+            <height>255</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -98,7 +103,7 @@ p, li { white-space: pre-wrap; }
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>-294</y>
+            <y>0</y>
             <width>698</width>
             <height>570</height>
            </rect>

@@ -19,8 +19,10 @@
    <string>Select alarm type</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">/*background:qlineargradient(spread:pad, x1:1, y1:0, x2:1, y2:1, stop:0 #4b4f59, stop:0.35 #232323, stop:1 #232323);
-color:#aaa; font-size:40pt;*/</string>
+   <string notr="true">QListWidget,QDialog{
+background-color:#111;
+color:#aaa;
+ }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
