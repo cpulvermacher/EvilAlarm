@@ -1,11 +1,23 @@
 This package was debianized by Christian Pulvermacher <pulvermacher@gmx.de> on
 Mon, 21 Jun 2010 22:34:37 +0200
 
-Author: Christian Pulvermacher
+Authors: Christian Pulvermacher, Olli Savolainen
 
-Copyright (c) 2010 Christian Pulvermacher
+Copyright of included graphics:
+Alarm clock photo: "Vintage Oversized Alarm Clock": permission granted to place under GPL from Julia at Winter's Moon
+http://www.wintersmoon.bigcartel.com/
 
-Icon derived from Crystal Project Icons, Copyright (c) 2006-2007 Everaldo Coelho, LGPL
+The metal ball in the alarm configuration dialog is licensed under Attribution-ShareAlike 2.0 Generic (CC BY-SA 2.0) by Alexandre Duret-Lutz
+http://www.flickr.com/photos/gadl/253525215/
+
+The bell photo is licensed under Attribution-NonCommercial 2.0 Generic (CC BY-NC 2.0) by Douglas Sprott 
+http://www.flickr.com/photos/dugspr/5207065253/
+
+The paper corner is placed under public domain by Benjamin Bois
+http://www.openclipart.org/detail/7660/paper-corner-by-benbois
+
+The program icon was derived from Crystal Project Icons, Copyright (c) 2006-2007 Everaldo Coelho, licensed under LGPL
+http://www.everaldo.com/crystal/
 
 
 License:
