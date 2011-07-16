@@ -13,11 +13,6 @@
   <property name="windowTitle">
    <string>Settings</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true">QWidget#Settings,QTabWidget,
-QScrollArea,QScrollArea&gt;QWidget{background:qlineargradient(spread:pad, x1:1, y1:0, x2:1, y2:1, stop:0 #4b4f59, stop:0.35 #232323, stop:1 #232323);
-color:#aaa; }#widget_2{background-color:#111;}#widget_3{background-color:#111;}#widget_4{background-color:#111;}</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="margin">
     <number>0</number>
