@@ -10,8 +10,6 @@
 #endif
 
 #include <QDeclarativeContext>
-#include <QPushButton>
-#include <QLabel>
 #include <QDebug>
 #include <QSettings>
 #include <QGraphicsObject>
@@ -41,8 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
 #endif
 
     QString path;
-    //now load UI
-    QString realMaemo=QApplication::applicationDirPath()+"/../Wakedo/qml/Wakedo/main.qml";
+    QString realMaemo("/opt/evilalarm/qml/Wakedo/main.qml");
     if(QFile::exists(realMaemo)){
         path=realMaemo;
     }else{
@@ -51,6 +48,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     }
 
+    //now load UI
     //bool r = QDesktopServices::openUrl(QUrl::fromLocalFile(path));
     ui->view->setSource(QUrl::fromLocalFile(path));
     QGraphicsObject *item = ui->view->rootObject();
@@ -72,12 +70,10 @@ MainWindow::~MainWindow()
     delete ui;
 }
 void MainWindow::showSelector() {
-    qDebug() << "Alarm type selection";
 		static SelectAlarmType* selectAlarmType = new SelectAlarmType(this);
     selectAlarmType->show();
 }
 void MainWindow::showAlarmHistory() {
-    qDebug() << "Alarm history";
 		static AlarmHistory* alarmHistory = new AlarmHistory(this);
     alarmHistory->show();
 }
@@ -145,7 +141,6 @@ void MainWindow::unsetEvilAlarm() {
 */
 void MainWindow::on_actionSettings_triggered()
 {
-    qDebug() << "Alarm type selection";
     static Settings *settingsWindow = new Settings(this);
     settingsWindow->setAttribute(Qt::WA_Maemo5StackedWindow);
     settingsWindow->setWindowFlags(windowFlags() | Qt::Window);
@@ -155,7 +150,6 @@ void MainWindow::on_actionSettings_triggered()
 
 void MainWindow::on_actionAbout_triggered()
 {
-    qDebug() << "About window";
     static About *about = new About(this);
     about->setAttribute(Qt::WA_Maemo5StackedWindow);
     about->setWindowFlags(windowFlags() | Qt::Window);

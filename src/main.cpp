@@ -1,7 +1,7 @@
 #include "alarm.h"
 #include "module_list.h"
 #include "daemon.h"
-#include "Wakedo/mainwindow.h"
+#include "mainwindow.h"
 
 #include <QApplication>
 

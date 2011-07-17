@@ -8,7 +8,7 @@ DEFINES += EVILALARM
 OBJECTS_DIR = $${PWD}/tmp
 MOC_DIR = $${PWD}/tmp
 UI_DIR = $${PWD}/tmp
-VPATH = $${PWD}/src $${PWD}/src/modules
+VPATH = $${PWD}/src $${PWD}/src/modules $${PWD}/forms
 INCLUDEPATH += $${PWD}/src
 INCLUDEPATH += $${PWD}/src/modules
 
@@ -16,24 +16,24 @@ HEADERS += backend.h settings.h alarm.h daemon.h alarmhistoryitem.h\
 	module_list.h module_settings.h\
 	alarm_blubbels.h blubbels.h alarm_blubbels_settings.h\
 	alarm_movement.h alarm_movement_settings.h accelerometer.h \
-    Wakedo/mainwindow.h \
-    Wakedo/selectalarmtype.h \
-    Wakedo/about.h \
-    Wakedo/alarmhistory.h
+    mainwindow.h \
+    selectalarmtype.h \
+    about.h \
+    alarmhistory.h
 SOURCES += main.cpp backend.cpp settings.cpp alarm.cpp daemon.cpp alarmhistoryitem.cpp\
 	module_list.cpp\
 	alarm_blubbels.cpp blubbels.cpp alarm_blubbels_settings.cpp\
 	alarm_movement.cpp alarm_movement_settings.cpp accelerometer.cpp \
-    Wakedo/mainwindow.cpp \
-    Wakedo/selectalarmtype.cpp \
-    Wakedo/about.cpp \
-    Wakedo/alarmhistory.cpp \
+    mainwindow.cpp \
+    selectalarmtype.cpp \
+    about.cpp \
+    alarmhistory.cpp \
 
 FORMS += \
-    Wakedo/mainwindow.ui \
-    Wakedo/selectalarmtype.ui \
-    Wakedo/about.ui \
-    Wakedo/alarmhistory.ui \
+    mainwindow.ui \
+    selectalarmtype.ui \
+    about.ui \
+    alarmhistory.ui \
     settings.ui
 
 maemo5 {
@@ -42,22 +42,22 @@ maemo5 {
 }
 
 OTHER_FILES += \
-    Wakedo/qml/Wakedo/main.qml \
-    Wakedo/qml/Wakedo/AlarmSwitch.qml \
-    Wakedo/qml/Wakedo/TimeDisplayCorner.qml \
-    Wakedo/qml/Wakedo/AlarmSettingsCorner.qml \
-    Wakedo/qml/Wakedo/TimeText.qml \
-    Wakedo/qml/Wakedo/TimeDisplay.qml \
-    Wakedo/qml/Wakedo/Spinner.qml \
-    Wakedo/qml/Wakedo/Wakedo.qml \
-    Wakedo/qml/Wakedo/Switch.qml \
-    Wakedo/qml/Wakedo/Clock.qml \
-    Wakedo/qml/Wakedo/Clock2.qml \
-    Wakedo/qml/Wakedo/AlarmSettings.qml
+    qml/Wakedo/main.qml \
+    qml/Wakedo/AlarmSwitch.qml \
+    qml/Wakedo/TimeDisplayCorner.qml \
+    qml/Wakedo/AlarmSettingsCorner.qml \
+    qml/Wakedo/TimeText.qml \
+    qml/Wakedo/TimeDisplay.qml \
+    qml/Wakedo/Spinner.qml \
+    qml/Wakedo/Wakedo.qml \
+    qml/Wakedo/Switch.qml \
+    qml/Wakedo/Clock.qml \
+    qml/Wakedo/Clock2.qml \
+    qml/Wakedo/AlarmSettings.qml
 
 # Add more folders to ship with the application, here
-folder_01.source = Wakedo/qml/Wakedo
-folder_01.target = Wakedo/qml
+folder_01.source = qml/Wakedo
+folder_01.target = qml
 DEPLOYMENTFOLDERS = folder_01 folder_02
 
 include(Wakedo/qmlapplicationviewer/qmlapplicationviewer.pri)
