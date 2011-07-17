@@ -12,21 +12,19 @@ Rectangle{
     property string minutesPadded
     property string hoursPadded
 
-    property int hours
-    property int minutes
-    property int seconds
     // time zone shift; not in use
     property real shift: 0
 
-		property bool initialized: false
+    property bool initialized: false;
 
-		//initialize
-		Component.onCompleted: {
-			hour = evilalarm_hours
-			minute = evilalarm_minutes
-			alarmOn = evilalarm_active
-			initialized = true
-		}
+    //initialize
+    Component.onCompleted: {
+        hour = evilalarm_hours;
+        minute = evilalarm_minutes;
+        alarmOn = evilalarm_active;
+        initialized = true;
+    }
+
 
 // an attempt to have minutes padded with zeroes in minute spinner
 /*    property int i;
@@ -47,9 +45,9 @@ Rectangle{
     function updateUntilAlarm() {
         if(alarmOn){
             var date = new Date;
-            hours = shift ? date.getUTCHours() + Math.floor(clock.shift) : date.getHours()
-            minutes = shift ? date.getUTCMinutes() + ((clock.shift % 1) * 60) : date.getMinutes()
-            seconds = date.getUTCSeconds();
+            var hours = shift ? date.getUTCHours() + Math.floor(clock.shift) : date.getHours()
+            var minutes = shift ? date.getUTCMinutes() + ((clock.shift % 1) * 60) : date.getMinutes()
+            var seconds = date.getUTCSeconds();
 
             var totalMinutes = hours*60+minutes;
             var totalAlarmMinutes = hour*60+minute;
@@ -85,23 +83,39 @@ Rectangle{
 
             untilAlarm.text = "Until alarm:\n"+hoursLeft+" hours "+minutesLeft+" minutes"
 
-						window.setAlarm(hour, minute)
+            window.setAlarm(hour, minute);
+
+            //set timer to turn alarm off again
+            var milisecondsUntilAlarm = 1000*60*(hoursLeft*60 + minutesLeft);
+            alarmExpiredTimer.interval = milisecondsUntilAlarm;
+            alarmExpiredTimer.start();
         }
         else{
             untilAlarm.text="";
 
-						window.unsetAlarm()
+            window.unsetAlarm()
+
+            alarmExpiredTimer.stop();
         }
+    }
 
-
-
+    //turn alarm state off again
+    function alarmExpired() {
+        alarmOn = false;
+        updateUntilAlarm();
     }
 
 
 
     Timer {
-        interval: 1000; running: true; repeat: true;
+        id: updateUntilAlarmTimer;
+        interval: 1000; running: false; repeat: false;
         onTriggered: updateUntilAlarm();
+    }
+    Timer {
+        id: alarmExpiredTimer;
+        running: false; repeat: false;
+        onTriggered: alarmExpired();
     }
 
 
@@ -176,6 +190,7 @@ Rectangle{
                 delegate: Text { font.pixelSize: 40; text: index; height: parent.itemHeight+10; width: (index>9)?40:20; }
 
                 onCurrentIndexChanged: {
+                    updateUntilAlarmTimer.start();
                     if(!alarmSwitch.on && initialized){
                         alarmSwitch.aswitch.toggle();
                     }
@@ -208,6 +223,7 @@ Rectangle{
                 }*/
 
                 onCurrentIndexChanged: {
+                    updateUntilAlarmTimer.start();
                     if(!alarmSwitch.on && initialized){
                         alarmSwitch.aswitch.toggle();
                     }
@@ -326,6 +342,4 @@ Rectangle{
             transformOrigin: Item.TopLeft
         }
     }
-
-
 }

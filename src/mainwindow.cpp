@@ -10,15 +10,15 @@
 #endif
 
 #include <QDeclarativeContext>
-#include <QDebug>
 #include <QSettings>
 #include <QGraphicsObject>
 #include <QFile>
 
+#include <iostream>
+
 //#if defined(Q_WS_MAEMO)
 //#include <alarmd/alarm_event.h>
 //#endif
-
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -27,11 +27,11 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     setAttribute(Qt::WA_Maemo5StackedWindow);
-    QDeclarativeContext *context = ui->view->rootContext();
 
     //load alarm
     QSettings settings;
-    QTime alarm_time = settings.value("wake_at", QTime::currentTime()).toTime();
+    const QTime alarm_time = settings.value("wake_at", QTime::currentTime()).toTime();
+    QDeclarativeContext *context = ui->view->rootContext();
     context->setContextProperty("evilalarm_hours", alarm_time.hour());
     context->setContextProperty("evilalarm_minutes", alarm_time.minute());
 #ifdef EVILALARM
@@ -39,30 +39,28 @@ MainWindow::MainWindow(QWidget *parent) :
 #endif
 
     QString path;
-    QString realMaemo("/opt/evilalarm/qml/Wakedo/main.qml");
+    const QString realMaemo("/opt/evilalarm/qml/Wakedo/main.qml");
     if(QFile::exists(realMaemo)){
         path=realMaemo;
     }else{
         //simulator
         path=QApplication::applicationDirPath()+"/qml/Wakedo/main.qml";
-
     }
 
     //now load UI
     //bool r = QDesktopServices::openUrl(QUrl::fromLocalFile(path));
     ui->view->setSource(QUrl::fromLocalFile(path));
-    QGraphicsObject *item = ui->view->rootObject();
 
-    QObject::connect(item, SIGNAL(selectAlarmType()),
+
+    QGraphicsObject *root_object = ui->view->rootObject();
+    QObject::connect(root_object, SIGNAL(selectAlarmType()),
                      this, SLOT(showSelector()));
-    QObject::connect(item, SIGNAL(alarmHistory()),
+    QObject::connect(root_object, SIGNAL(alarmHistory()),
                      this, SLOT(showAlarmHistory()));
-    QObject::connect(item, SIGNAL(unsetAlarm()),
+    QObject::connect(root_object, SIGNAL(unsetAlarm()),
                      this, SLOT(unsetEvilAlarm()));
-    QObject::connect(item, SIGNAL(setAlarm(int, int)),
+    QObject::connect(root_object, SIGNAL(setAlarm(int, int)),
                      this, SLOT(setEvilAlarm(int, int)));
-		
-    //setAttribute(Qt::WA_Maemo5LandscapeOrientation, true);
 }
 
 MainWindow::~MainWindow()
@@ -70,34 +68,44 @@ MainWindow::~MainWindow()
     delete ui;
 }
 void MainWindow::showSelector() {
-		static SelectAlarmType* selectAlarmType = new SelectAlarmType(this);
+    static SelectAlarmType* selectAlarmType = new SelectAlarmType(this);
     selectAlarmType->show();
 }
 void MainWindow::showAlarmHistory() {
-		static AlarmHistory* alarmHistory = new AlarmHistory(this);
+    static AlarmHistory* alarmHistory = new AlarmHistory(this);
     alarmHistory->show();
 }
 
-void MainWindow::setEvilAlarm(int hours,int minutes) {
+void MainWindow::setEvilAlarm(int hours, int minutes) {
 #ifdef EVILALARM
-		QSettings settings;
+    std::cout << "setEvilAlarm()\n";
+    QSettings settings;
 
-		const QTime wake_at(hours, minutes);
-		settings.setValue("wake_at", wake_at);
-		settings.sync();
+    const QTime wake_at(hours, minutes);
 
-		int msecs = QTime::currentTime().msecsTo(wake_at);
-		if(msecs < 0) //alarm tomorrow?
-			msecs += 24*60*60*1000; //+24h
-		
+    if(Daemon::isRunning()) {
+        if(settings.value("wake_at").toTime() == wake_at)
+            return; //time didn't change, nothing to do
 
-		Daemon::start();
+        //new alarm time, discard old one
+        unsetEvilAlarm();
+    }
+
+    settings.setValue("wake_at", wake_at);
+    settings.sync();
+
+    int msecs = QTime::currentTime().msecsTo(wake_at);
+    if(msecs < 0) //alarm tomorrow?
+        msecs += 24*60*60*1000; //+24h
+
+    Daemon::start();
 #endif
 }
 
 void MainWindow::unsetEvilAlarm() {
 #ifdef EVILALARM
-		Daemon::stop();
+    std::cout << "unsetEvilAlarm()\n";
+    Daemon::stop();
 #endif
 }
 

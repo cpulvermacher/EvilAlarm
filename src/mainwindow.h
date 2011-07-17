@@ -22,7 +22,6 @@ public slots:
     void unsetEvilAlarm();
 private slots:
     void on_actionSettings_triggered();
-
     void on_actionAbout_triggered();
 
 private:

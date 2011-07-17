@@ -25,9 +25,6 @@ Flipable {
     height: baseHeight
 */
 
-
-
-
     //property alias image: frontImage.source
     property int xAxis: 0
     property int yAxis: 0
