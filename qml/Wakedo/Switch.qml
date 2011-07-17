@@ -38,7 +38,6 @@
 **
 ****************************************************************************/
 
-//![0]
 import QtQuick 1.0
 
 Item {
@@ -46,20 +45,12 @@ Item {
     width: background.width; height: background.height
     property alias knob: knob
 
-//![1]
     property bool on: false
-//![1]
+    onOnChanged: { state = on?"on":"off"; }
 
-//![2]
-    function toggle() {
-        if (toggleswitch.state == "on")
-            toggleswitch.state = "off";
-        else
-            toggleswitch.state = "on";
-    }
-//![2]
 
-//![3]
+    function toggle() { on = !on; }
+
     function releaseSwitch() {
         if (knob.x == 118) {
             if (toggleswitch.state == "off") return;
@@ -69,49 +60,45 @@ Item {
         }
         toggle();
     }
-//![3]
 
-//![4]
     Image {
         id: background
         source: "background.svg"
 
-        MouseArea { anchors.fill: parent; onClicked: toggle()
+        MouseArea {
+            anchors.fill: parent; onClicked: toggle()
 
-        Text {
-            id: text1
-            x: 26
-            y: 40
-            color: "#3e3d3d"
-            text: "OFF"
-            font.pixelSize: 41
+            Text {
+                id: text1
+                x: 26
+                y: 40
+                color: "#3e3d3d"
+                text: "OFF"
+                font.pixelSize: 41
+            }
+
+            Image {
+                id: image1
+                x: 147
+                y: 9
+                fillMode: Image.PreserveAspectFit
+                z: 92
+                source: "Wakedo.png"
+
+            }
+
+            Text {
+                id: text2
+                x: 152
+                y: 60
+                color: "#b5b5b5"
+                text: "ON"
+                visible: true
+                font.pixelSize: 41
+            }
         }
-
-        Image {
-            id: image1
-            x: 147
-            y: 9
-            fillMode: Image.PreserveAspectFit
-            z: 92
-            source: "Wakedo.png"
-
-        }
-
-        Text {
-            id: text2
-            x: 152
-            y: 60
-            color: "#b5b5b5"
-            text: "ON"
-            visible: true
-            font.pixelSize: 41
-        }
-
-}
     }
-//![4]
 
-//![5]
     Image {
         id: knob
         x: 118; y: 2
@@ -128,9 +115,7 @@ Item {
             onReleased: releaseSwitch()
         }
     }
-//![5]
 
-//![6]
     states: [
         State {
             name: "on"
@@ -143,12 +128,8 @@ Item {
             PropertyChanges { target: toggleswitch; on: false }
         }
     ]
-//![6]
 
-//![7]
     transitions: Transition {
         NumberAnimation { properties: "x"; easing.type: Easing.InOutQuad; duration: 200 }
     }
-//![7]
 }
-//![0]
