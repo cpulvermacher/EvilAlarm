@@ -1,5 +1,5 @@
 import QtQuick 1.0
-import "screenorientation.js" as ScreenOrientation
+//import "screenorientation.js" as ScreenOrientation
 
 Flipable {
     id: wakedo

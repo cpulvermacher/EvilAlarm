@@ -2,8 +2,8 @@ Source: evilalarm
 Section: user/utilities
 Priority: optional
 Maintainer: Christian Pulvermacher <pulvermacher@gmx.de>
-Build-Depends: libqt4-dev, debhelper (>= 5.0.0), mce-dev
-#Homepage: 
+Build-Depends: libqt4-dev, debhelper (>= 5.0.0), mce-dev, qtquickcompat
+Homepage: https://github.com/cpulvermacher/EvilAlarm
 Standards-Version: 3.7.3
 
 Package: evilalarm
@@ -16,7 +16,7 @@ Description: An alarm clock which cannot be turned off while asleep
  will turn off after a (configurable) time span.
  Blubbels: Beat the game to turn off the alarm.
 XB-Maemo-Display-Name: EvilAlarm
-XSBC-Bugtracker: https://garage.maemo.org/tracker/?group_id=2169
+XSBC-Bugtracker: https://github.com/cpulvermacher/EvilAlarm/issues
 XB-Maemo-Icon-26: 
  iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAKPWlDQ1BpY2MA
  AHjanVNnVFPpFj333vRCS4iAlEtvUhUIIFJCi4BUaaISkgChhBgSQOyIqMCI
