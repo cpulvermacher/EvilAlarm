@@ -101,17 +101,11 @@ Flipable {
             }]
     transform: Rotation {
         id: rotation1; origin.x: wakedo.width / 2; origin.y: wakedo.height / 2
-        axis.x: wakedo.xAxis; axis.y: wakedo.yAxis;axis.z: 0;
+        axis.x: wakedo.xAxis; axis.y: wakedo.yAxis; axis.z: 0;
     }
 
     transitions: Transition {
-        ParallelAnimation {
-            NumberAnimation { target: rotation1; properties: "angle"; duration: 600 }
-            /*SequentialAnimation {
-                NumberAnimation { target: wakedo; property: "scale"; to: 1.0; duration: 300 }
-                NumberAnimation { target: wakedo; property: "scale"; to: 1.00; duration: 300 }
-            }*/
-        }
+        NumberAnimation { target: rotation1; properties: "angle"; duration: 250; easing.type: Easing.OutInExpo; }
     }
 
 }
