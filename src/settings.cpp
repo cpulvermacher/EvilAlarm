@@ -4,14 +4,16 @@
 
 #include "ui_settings.h"
 
+#include <iostream>
+
 Settings::Settings(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Settings)
 {
     ui->setupUi(this);
 
+    //basic settings 
     int row = 0;
-
     QLabel *snooze_time_label = new QLabel(tr("Snooze time"));
     snooze_time = new QSpinBox();
     snooze_time->setSuffix(" min");
@@ -28,7 +30,6 @@ Settings::Settings(QWidget *parent) :
     ui->basic->addWidget(num_snooze_max, row, 1);
     row++;
 
-    //sound/vibration settings
     ui->basic->addWidget(new QLabel("<center>___________________________________________________</center>"), row, 0, 1, 2);
     row++;
 
@@ -49,8 +50,9 @@ Settings::Settings(QWidget *parent) :
     ui->basic->addWidget(vibration, row, 0, 1, 2);
     row++;
 
-    row=0;
 
+    //alarm type settings
+    row=0;
     QLabel *module_label = new QLabel(tr("Alarm type"));
     module = new QComboBox(this);
     module->addItems(ModuleList::availableModules());
@@ -90,10 +92,9 @@ Settings::Settings(QWidget *parent) :
     ui->alarmtype->addWidget(inactivity_timeout, row, 1);
     row++;
 
+
+    //advanced settings
     row=0;
-
-    //system/module settings
-
     fullscreen = new QCheckBox(tr("Disable multi-tasking (including Phone app)"));
     fullscreen->setChecked(settings.value("fullscreen", FULLSCREEN).toBool());
     ui->advanced->addWidget(fullscreen);//, row, 0, 1, 2);
@@ -103,9 +104,6 @@ Settings::Settings(QWidget *parent) :
     prevent_device_lock->setChecked(settings.value("prevent_device_lock", false).toBool());
     ui->advanced->addWidget(prevent_device_lock);//, row, 0, 1, 2);
     row++;
-
-
-
 }
 
 Settings::~Settings()
@@ -116,31 +114,30 @@ void Settings::closeEvent(QCloseEvent*) { save(); }
 
 void Settings::pickSoundFile()
 {
-/*        QString name = QFileDialog::getOpenFileName(this, tr("Choose Sound File"), sound_filename->valueText(), "Sound Files(*.wav *.mp3 *.ogg *.aac)");
-        if(!name.isEmpty())
-                sound_filename->setValueText(name);*/
+    QString name = QFileDialog::getOpenFileName(this, tr("Choose Sound File"), sound_filename->valueText(), "Sound Files(*.wav *.mp3 *.ogg *.aac)");
+    if(!name.isEmpty())
+        sound_filename->setValueText(name);
 }
 
 void Settings::save()
 {
-        //std::cout << "Saving settings\n";
-/*
-        settings.setValue("module", module->currentText());
-        settings.setValue("sound_filename", sound_filename->valueText());
-        settings.setValue("max_volume", volume->value());
-        settings.setValue("use_vibration", vibration->isChecked());
-        settings.setValue("alarm_timeout", alarm_timeout->value());
-        settings.setValue("inactivity_timeout", inactivity_timeout->value());
-        settings.setValue("snooze_time", snooze_time->value());
-        settings.setValue("num_snooze_max", num_snooze_max->value());
-        settings.setValue("fullscreen", fullscreen->isChecked());
-        settings.setValue("prevent_device_lock", prevent_device_lock->isChecked());
-        settings.sync();
+    std::cout << "Saving settings\n";
+    settings.setValue("module", module->currentText());
+    settings.setValue("sound_filename", sound_filename->valueText());
+    settings.setValue("max_volume", volume->value());
+    settings.setValue("use_vibration", vibration->isChecked());
+    settings.setValue("alarm_timeout", alarm_timeout->value());
+    settings.setValue("inactivity_timeout", inactivity_timeout->value());
+    settings.setValue("snooze_time", snooze_time->value());
+    settings.setValue("num_snooze_max", num_snooze_max->value());
+    settings.setValue("fullscreen", fullscreen->isChecked());
+    settings.setValue("prevent_device_lock", prevent_device_lock->isChecked());
+    settings.sync();
 
-        //save module settings
-        for(int i = 0; i < module_settings_layout->count(); i++) {
-                ModuleSettings *module_settings = qobject_cast<ModuleSettings *>(module_settings_layout->itemAt(i)->widget());
-                if(module_settings != 0)
-                        module_settings->save();
-        }*/
+    //save module settings
+    for(int i = 0; i < module_settings_layout->count(); i++) {
+        ModuleSettings *module_settings = qobject_cast<ModuleSettings *>(module_settings_layout->itemAt(i)->widget());
+        if(module_settings != 0)
+            module_settings->save();
+    }
 }
