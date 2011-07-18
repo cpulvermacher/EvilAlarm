@@ -36,23 +36,18 @@ Rectangle{
             var totalAlarmMinutes = alarmHour*60+alarmMinute;
             var hoursLeft;
             var minutesLeft;
-            if(totalMinutes > totalAlarmMinutes){
-                // the alarm is tomorrow
-                var minutesLeftToday = 60*24-totalMinutes
-                hoursLeft=Math.floor((minutesLeftToday + totalAlarmMinutes)/60)
-                minutesLeft=Math.floor((minutesLeftToday + totalAlarmMinutes)%60)
-            }else{
-                // the alarm is today
-                hoursLeft=Math.floor((totalAlarmMinutes-totalMinutes)/60);
-                minutesLeft=Math.floor((totalAlarmMinutes-totalMinutes)%60);
-            }
+
+            if(totalMinutes >= totalAlarmMinutes) //alarm tomorrow
+                totalAlarmMinutes += 24*60;
+            hoursLeft=Math.floor((totalAlarmMinutes-totalMinutes)/60);
+            minutesLeft=Math.floor((totalAlarmMinutes-totalMinutes)%60);
 
             var minutesPadded = (minutesLeft<10)?'0':''+minutesLeft;
             var hoursPadded = (hoursLeft<10)?'0':''+hoursLeft;
             untilAlarm.text = "Until alarm:\n"+hoursLeft+" hours "+minutesLeft+" minutes"
 
             if(!spinnerHour.moving && !spinnerMinute.moving //spinners have stopped
-            && totalAlarmMinutesSet != totalAlarmMinutes) { //and alarm isn't set yet
+            && totalAlarmMinutesSet != totalAlarmMinutes%(24*60)) { //and alarm isn't set yet
                 window.setAlarm(alarmHour, alarmMinute);
                 totalAlarmMinutesSet = totalAlarmMinutes;
 
@@ -61,8 +56,7 @@ Rectangle{
                 alarmExpiredTimer.interval = milisecondsUntilAlarm;
                 alarmExpiredTimer.start();
             }
-        }
-        else{
+        } else {
             untilAlarm.text="";
 
             //only stop alarm if we know it's running

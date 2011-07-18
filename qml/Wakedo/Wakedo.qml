@@ -34,20 +34,20 @@ Flipable {
     property bool flipped: false
 
     function showAlarmTime() {
-        timeDisplay.clock.alarmHours=alarmSettings.hour;
-        timeDisplay.clock.alarmMinutes=alarmSettings.minute;
+        timeDisplay.clock.alarmHours=alarmSettings.alarmHour;
+        timeDisplay.clock.alarmMinutes=alarmSettings.alarmMinute;
 
         timeDisplay.clock.alarmOn=alarmSettings.alarmOn;
 
-        if(alarmSettings.hour>0 && alarmSettings.hour<10){
-            alarmHoursPadded="0"+alarmSettings.hour
+        if(alarmSettings.alarmHour>0 && alarmSettings.alarmHour<10){
+            alarmHoursPadded="0"+alarmSettings.alarmHour
         }else{
-            alarmHoursPadded=alarmSettings.hour
+            alarmHoursPadded=alarmSettings.alarmHour
         }
-        if(alarmSettings.minute<10){
-            alarmMinutesPadded="0"+alarmSettings.minute
+        if(alarmSettings.alarmMinute<10){
+            alarmMinutesPadded="0"+alarmSettings.alarmMinute
         }else{
-            alarmMinutesPadded=alarmSettings.minute
+            alarmMinutesPadded=alarmSettings.alarmMinute
         }
         timeDisplay.alarmTimeText="Alarm at "+alarmHoursPadded+":"+alarmMinutesPadded
 
@@ -92,7 +92,7 @@ Flipable {
                 PropertyChanges {
                     target: timeDisplay.noAlarm;
                     // this is negative to make rotation go reverse, i.e. to have paper fold approach user
-                    text: "No alarm" //alarmSettings.hour+":"+alarmSettings.minute
+                    text: "No alarm" //alarmSettings.alarmHour+":"+alarmSettings.alarmMinute
                     visible:true
                 }
             }]
