@@ -4,10 +4,9 @@
 #include "alarmhistory.h"
 #include "settings.h"
 #include "about.h"
-
-#ifdef EVILALARM
 #include "daemon.h"
-#endif
+#include "alarm.h"
+#include "module_list.h"
 
 #include <QDeclarativeContext>
 #include <QSettings>
@@ -162,4 +161,11 @@ void MainWindow::on_actionAbout_triggered()
     about->setAttribute(Qt::WA_Maemo5StackedWindow);
     about->setWindowFlags(windowFlags() | Qt::Window);
     about->show();
+}
+
+void MainWindow::on_actionTest_Alarm_triggered()
+{
+    Alarm* test_alarm = ModuleList::getModuleInstance(this);
+    test_alarm->exec();
+    delete test_alarm;
 }

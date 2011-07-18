@@ -23,6 +23,7 @@ public slots:
 private slots:
     void on_actionSettings_triggered();
     void on_actionAbout_triggered();
+    void on_actionTest_Alarm_triggered();
 
 private:
     Ui::MainWindow *ui;
