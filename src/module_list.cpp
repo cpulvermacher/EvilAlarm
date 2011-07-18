@@ -1,4 +1,4 @@
-
+#include "alarm.h"
 #include "module_list.h"
 #include "module_settings.h"
 #include "modules/alarm_blubbels.h"
@@ -7,7 +7,6 @@
 #include "modules/alarm_movement_settings.h"
 
 
-//get the user-configured module
 Alarm* ModuleList::getModuleInstance(QWidget *parent)
 {
 	QSettings settings;
@@ -21,7 +20,6 @@ Alarm* ModuleList::getModuleInstance(QWidget *parent)
 		return new AlarmMovement(parent);
 }
 
-//get a settings widget for the given module name
 ModuleSettings* ModuleList::getSettingsInstance(QString name, QWidget *parent)
 {
 	name = name.toLower();

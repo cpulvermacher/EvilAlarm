@@ -93,7 +93,6 @@ AlarmMovement::~AlarmMovement()
 void AlarmMovement::accelUpdate(int x, int y, int z)
 {
 	if(snoozing) {
-		std::cout << "this shouldnt hpapen\n";
 		return;
 	}
 
@@ -122,7 +121,7 @@ void AlarmMovement::accelUpdate(int x, int y, int z)
 
 void AlarmMovement::updateScreen()
 {
-	QString label_text = tr("<center><h1>%1</h1>").arg(QTime::currentTime().toString(Qt::SystemLocaleShortDate));
+	QString label_text = tr("<center><span style='font-size:100px;'>%1</span><br />").arg(QTime::currentTime().toString(Qt::SystemLocaleShortDate));
 
 	//display remaining alarm or snooze time
 	int secs_remaining;
