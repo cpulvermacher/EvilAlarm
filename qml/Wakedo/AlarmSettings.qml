@@ -3,21 +3,25 @@ import QtQuick 1.0
 Rectangle{
     id: alarmSettings
 
-    property alias hour: spinnerHour.currentIndex
-    property alias minute: spinnerMinute.currentIndex
+    property alias alarmHour: spinnerHour.currentIndex
+    property alias alarmMinute: spinnerMinute.currentIndex
 
     property alias alarmOn: alarmSwitch.on
 
-		// time zone shift; not in use
-		property real shift: 0
+    // time zone shift; not in use
+    property real shift: 0
+
+    property int totalAlarmMinutesSet: -1; //hold current alarm time as 60*h+m, or -1 if none is set
 
     //initialize
     property bool initialized: false;
     Component.onCompleted: {
-        hour = evilalarm_hours;
-        minute = evilalarm_minutes;
+        alarmHour = evilalarm_hours;
+        alarmMinute = evilalarm_minutes;
         alarmOn = evilalarm_active;
         initialized = true;
+
+        updateUntilAlarm();
     }
 
 
@@ -29,7 +33,7 @@ Rectangle{
             var seconds = date.getUTCSeconds();
 
             var totalMinutes = hours*60+minutes;
-            var totalAlarmMinutes = hour*60+minute;
+            var totalAlarmMinutes = alarmHour*60+alarmMinute;
             var hoursLeft;
             var minutesLeft;
             if(totalMinutes > totalAlarmMinutes){
@@ -47,33 +51,42 @@ Rectangle{
             var hoursPadded = (hoursLeft<10)?'0':''+hoursLeft;
             untilAlarm.text = "Until alarm:\n"+hoursLeft+" hours "+minutesLeft+" minutes"
 
-            window.setAlarm(hour, minute);
+            if(!spinnerHour.moving && !spinnerMinute.moving //spinners have stopped
+            && totalAlarmMinutesSet != totalAlarmMinutes) { //and alarm isn't set yet
+                window.setAlarm(alarmHour, alarmMinute);
+                totalAlarmMinutesSet = totalAlarmMinutes;
 
-            //set timer to turn alarm off again (note: secondsLeft = 0 - seconds)
-            var milisecondsUntilAlarm = 1000*(3600*hoursLeft + 60*minutesLeft - seconds);
-            alarmExpiredTimer.interval = milisecondsUntilAlarm;
-            alarmExpiredTimer.start();
+                //set timer to turn alarm off again (note: secondsLeft = 0 - seconds)
+                var milisecondsUntilAlarm = 1000*(3600*hoursLeft + 60*minutesLeft - seconds);
+                alarmExpiredTimer.interval = milisecondsUntilAlarm;
+                alarmExpiredTimer.start();
+            }
         }
         else{
             untilAlarm.text="";
 
-            window.unsetAlarm()
+            //only stop alarm if we know it's running
+            if(totalAlarmMinutesSet != -1) {
+                totalAlarmMinutesSet = -1;
+                window.unsetAlarm()
+            }
 
             alarmExpiredTimer.stop();
+            updateUntilAlarmTimer.stop();
         }
     }
 
     //turn alarm state off again
     function alarmExpired() {
+        totalAlarmMinutesSet = -1;
         alarmOn = false;
         updateUntilAlarm();
     }
 
 
-
     Timer {
         id: updateUntilAlarmTimer;
-        interval: 1000; running: false; repeat: false;
+        interval: 1000; running: false; repeat: true;
         onTriggered: updateUntilAlarm();
     }
     Timer {

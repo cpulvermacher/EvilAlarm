@@ -44,6 +44,7 @@ Image {
     property alias model: view.model
     property alias delegate: view.delegate
     property alias currentIndex: view.currentIndex
+    property alias moving: view.moving
     property real itemHeight: 30
     opacity: 1
 
