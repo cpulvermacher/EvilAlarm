@@ -8,38 +8,17 @@ Rectangle{
 
     property alias alarmOn: alarmSwitch.on
 
-    property string secondsPadded
-    property string minutesPadded
-    property string hoursPadded
-
-    // time zone shift; not in use
-    property real shift: 0
-
-    property bool initialized: false;
+		// time zone shift; not in use
+		property real shift: 0
 
     //initialize
+    property bool initialized: false;
     Component.onCompleted: {
         hour = evilalarm_hours;
         minute = evilalarm_minutes;
         alarmOn = evilalarm_active;
         initialized = true;
     }
-
-
-// an attempt to have minutes padded with zeroes in minute spinner
-/*    property int i;
-
-
-    function initSpinner(){
-        for(i=0;i<60;i++){
-            if(i<10){
-                i="0"+i
-            }
-            minutemodel.append(""+i)
-        }
-        return minutemodel
-    }
-*/
 
 
     function updateUntilAlarm() {
@@ -64,29 +43,14 @@ Rectangle{
                 minutesLeft=Math.floor((totalAlarmMinutes-totalMinutes)%60);
             }
 
-            if(hoursLeft<10){
-                hoursPadded="0"+hoursLeft
-            }else{
-                hoursPadded=hoursLeft
-            }
-            if(minutesLeft<10){
-                minutesPadded="0"+minutesLeft
-            }else{
-                minutesPadded=minutesLeft
-            }
-
-            //timeText.text = hoursPadded +":"+ minutesPadded // SECONDS ARE DISTRACTING? +":"+ secondsPadded
-            // the date was too much
-            //dateText.text = date.getDate() +"."+  date.getMonth() +"."+  date.getFullYear();
-            /// @todo get local date format
-            //dateText.text = date.toDateString();
-
+            var minutesPadded = (minutesLeft<10)?'0':''+minutesLeft;
+            var hoursPadded = (hoursLeft<10)?'0':''+hoursLeft;
             untilAlarm.text = "Until alarm:\n"+hoursLeft+" hours "+minutesLeft+" minutes"
 
             window.setAlarm(hour, minute);
 
-            //set timer to turn alarm off again
-            var milisecondsUntilAlarm = 1000*60*(hoursLeft*60 + minutesLeft);
+            //set timer to turn alarm off again (note: secondsLeft = 0 - seconds)
+            var milisecondsUntilAlarm = 1000*(3600*hoursLeft + 60*minutesLeft - seconds);
             alarmExpiredTimer.interval = milisecondsUntilAlarm;
             alarmExpiredTimer.start();
         }
@@ -209,7 +173,6 @@ Rectangle{
                 delegate: Text {
                     font.pixelSize: 40;
                     text: index;
-                    //text: name;
                     height: parent.itemHeight+10;
                     width: (index>9)?40:20;
                 }
@@ -233,18 +196,6 @@ Rectangle{
 
 
     }
-    ListModel { id: minuteModel
-/*        function(){
-                                    for(i=0;i<=60;i++){
-                                        var name=""+i
-                                        if(i<10){
-                                            name="0"+name;
-                                        }
-                                        model.append({'name': name})
-
-                                    }
-                                    return model;
-                                }*/}
 
     Text {
         id: untilAlarm
