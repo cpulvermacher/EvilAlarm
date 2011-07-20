@@ -24,8 +24,6 @@ Rectangle {
         y: 66
         width: 0
         height: 0
-                on: false;
-                z: 0
-        }
-
+        on: false;
+    }
 }

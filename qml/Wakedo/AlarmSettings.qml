@@ -42,8 +42,6 @@ Rectangle{
             hoursLeft=Math.floor((totalAlarmMinutes-totalMinutes)/60);
             minutesLeft=Math.floor((totalAlarmMinutes-totalMinutes)%60);
 
-            var minutesPadded = (minutesLeft<10)?'0':''+minutesLeft;
-            var hoursPadded = (hoursLeft<10)?'0':''+hoursLeft;
             untilAlarm.text = "Until alarm:\n"+hoursLeft+" hours "+minutesLeft+" minutes"
 
             if(!spinnerHour.moving && !spinnerMinute.moving //spinners have stopped
@@ -183,14 +181,6 @@ Rectangle{
                     height: parent.itemHeight+10;
                     width: (index>9)?40:20;
                 }
-                //the following works well otherwise but the spinner breaks:
-                /*MouseArea {
-                    anchors.fill: parent
-                    onFocusChanged: {
-                        alarm.knob.x=1
-                        alarm.on=true
-                    }
-                }*/
 
                 onCurrentIndexChanged: {
                     updateUntilAlarmTimer.start();
@@ -200,8 +190,6 @@ Rectangle{
                 }
             }
         }
-
-
     }
 
     Text {

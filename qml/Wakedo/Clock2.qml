@@ -44,13 +44,9 @@ Item {
     id: clock
     width: 320; height: 430
 
-    //property alias city: cityLabel.text
     property int hours
     property int minutes
     property int seconds
-    property string secondsPadded
-    property string minutesPadded
-    property string hoursPadded
     // time zone shift; not in use
     property real shift: 0
     property bool night: false
@@ -59,13 +55,7 @@ Item {
     property int alarmHours
     property int alarmMinutes
 
-    onAlarmOnChanged: {
-        if(alarmOn){
-            alarmHand.visible=true
-        }else{
-            alarmHand.visible=false
-        }
-    }
+    onAlarmOnChanged: { alarmHand.visible = alarmOn; }
 
     function timeChanged() {
         var date = new Date;
@@ -73,31 +63,14 @@ Item {
         night = ( hours < 7 || hours > 19 )
         minutes = shift ? date.getUTCMinutes() + ((clock.shift % 1) * 60) : date.getMinutes()
         seconds = date.getUTCSeconds();
-        if(hours<10){
-            hoursPadded="0"+hours
-        }else{
-            hoursPadded=hours
-        }
-        if(minutes<10){
-            minutesPadded="0"+minutes
-        }else{
-            minutesPadded=minutes
-        }
-        if(seconds<10){
-            secondsPadded="0"+seconds
-        }else{
-            secondsPadded=seconds
-        }
 
-        currentTime.text = hoursPadded +":"+ minutesPadded // SECONDS ARE DISTRACTING? +":"+ secondsPadded
-        // the date was too much
-        //dateText.text = date.getDate() +"."+  date.getMonth() +"."+  date.getFullYear();
-        /// @todo get local date format
-        //dateText.text = date.toDateString();
+        var hoursPadded = ((hours<10)?"0":"")+hours;
+        var minutesPadded = ((minutes<10)?"0":"")+minutes;
+        currentTime.text = hoursPadded +":"+ minutesPadded;
     }
 
     Timer {
-        interval: 100; running: true; repeat: true;
+        interval: 200; running: true; repeat: true;
         onTriggered: clock.timeChanged()
     }
 
@@ -111,7 +84,6 @@ Item {
             source: "clockscreen.svg"
         }
     }
-
 
 
     Image {
@@ -174,6 +146,4 @@ Item {
             }
         }
     }
-
-
 }

@@ -59,7 +59,5 @@ Rectangle {
             font.pixelSize: 30
             font.family: "Nokia Sans"
         }
-
     }
-
 }

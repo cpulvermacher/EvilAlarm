@@ -62,7 +62,7 @@ Rectangle{
     }
     */
 
-    TimeText{
+    TimeText {
         id:timeText
         x: 379
         y: 97

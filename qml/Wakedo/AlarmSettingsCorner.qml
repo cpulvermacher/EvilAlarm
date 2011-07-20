@@ -49,5 +49,4 @@ Rectangle {
         anchors.right: parent.right
         anchors.rightMargin: -5
     }
-
 }

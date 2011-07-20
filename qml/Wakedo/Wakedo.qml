@@ -25,12 +25,9 @@ Flipable {
     height: baseHeight
 */
 
-    //property alias image: frontImage.source
     property int xAxis: 0
     property int yAxis: 0
     property int angle: 0
-    property string alarmMinutesPadded
-    property string alarmHoursPadded
     property bool flipped: false
 
     function showAlarmTime() {
@@ -39,16 +36,8 @@ Flipable {
 
         timeDisplay.clock.alarmOn=alarmSettings.alarmOn;
 
-        if(alarmSettings.alarmHour>0 && alarmSettings.alarmHour<10){
-            alarmHoursPadded="0"+alarmSettings.alarmHour
-        }else{
-            alarmHoursPadded=alarmSettings.alarmHour
-        }
-        if(alarmSettings.alarmMinute<10){
-            alarmMinutesPadded="0"+alarmSettings.alarmMinute
-        }else{
-            alarmMinutesPadded=alarmSettings.alarmMinute
-        }
+        var alarmMinutesPadded = ((alarmSettings.alarmMinute<10)?"0":"")+alarmSettings.alarmMinute;
+        var alarmHoursPadded = ((alarmSettings.alarmHour<10)?"0":"")+alarmSettings.alarmHour;
         timeDisplay.alarmTimeText="Alarm at "+alarmHoursPadded+":"+alarmMinutesPadded
 
     }
@@ -57,9 +46,6 @@ Flipable {
     front: TimeDisplay{id:timeDisplay}
     back: AlarmSettings{id:alarmSettings}
 
-
-
-//    state: "front"
 
     states: [State {
         name: "backstate"; when: wakedo.flipped
@@ -92,7 +78,7 @@ Flipable {
                 PropertyChanges {
                     target: timeDisplay.noAlarm;
                     // this is negative to make rotation go reverse, i.e. to have paper fold approach user
-                    text: "No alarm" //alarmSettings.alarmHour+":"+alarmSettings.alarmMinute
+                    text: "No alarm"
                     visible:true
                 }
             }]
@@ -104,5 +90,4 @@ Flipable {
     transitions: Transition {
         NumberAnimation { target: rotation1; properties: "angle"; duration: 250; easing.type: Easing.OutInExpo; }
     }
-
 }
