@@ -32,7 +32,8 @@ const int VIBRATOR_OFF_MSECS = 1000;
 const qreal VOLUME_STEP = 0.1;
 
 
-Backend::Backend():
+Backend::Backend(QObject *parent):
+	QObject(parent),
 	noise(new Phonon::MediaObject(this)),
 	audio_output(new Phonon::AudioOutput(Phonon::MusicCategory,  this)),
 	alarm_playing(false),
@@ -131,10 +132,7 @@ void Backend::setVolume(qreal v)
 	audio_output->setVolume(volume);
 }
 
-void Backend::repeatSound() {
-	noise->enqueue(noise->currentSource());
-	std::cout << "repeating sound\n";
-}
+void Backend::repeatSound() { noise->enqueue(noise->currentSource()); }
 
 bool Backend::isPlaying() { return alarm_playing; }
 
@@ -157,7 +155,6 @@ void Backend::startVibrator()
 
 void Backend::stopVibrator()
 {
-	std::cout << "stopVibrator()\n";
 	if(!is_vibrating)
 		return;
 

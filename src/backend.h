@@ -26,7 +26,7 @@
 class Backend : public QObject {
 	Q_OBJECT
 public:
-	Backend();
+	Backend(QObject *parent);
 	~Backend();
 	bool isPlaying(); //audio is playing
 	bool isVibrating(); //is vibrator on right _now_ ?
@@ -36,6 +36,7 @@ public slots:
 	void volumeUp();
 	void volumeDown();
 	void setVolume(qreal v);
+
 private slots:
 	void checkForHang();
 	void handleAudioStateChange(Phonon::State newstate);

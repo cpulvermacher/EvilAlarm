@@ -29,7 +29,7 @@
 
 Alarm::Alarm(QWidget *parent):
 	QDialog(parent),
-	backend(new Backend()),
+	backend(new Backend(this)),
 	num_snooze(0)
 {
 	QSettings settings;
@@ -84,7 +84,7 @@ void Alarm::closeEvent(QCloseEvent* ev)
 	backend->pause();
 }
 
-//turns of alarm for snooze_time minutes, then restarts alarm
+//turns off alarm for snooze_time minutes, then restarts alarm
 void Alarm::snooze()
 {
 	snoozing = true;
