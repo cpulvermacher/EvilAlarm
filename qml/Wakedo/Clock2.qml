@@ -64,9 +64,7 @@ Item {
         minutes = shift ? date.getUTCMinutes() + ((clock.shift % 1) * 60) : date.getMinutes()
         seconds = date.getUTCSeconds();
 
-        var hoursPadded = ((hours<10)?"0":"")+hours;
-        var minutesPadded = ((minutes<10)?"0":"")+minutes;
-        currentTime.text = hoursPadded +":"+ minutesPadded;
+        currentTime.text = Qt.formatTime(date, Qt.SystemLocaleShortDate);
     }
 
     Timer {
