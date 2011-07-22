@@ -16,20 +16,17 @@
     with this program; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
-#include "alarm_movement.h"
-#include "backend.h"
+#include "alarm_normal.h"
 #include "settings.h"
 
-#include <QtDBus>
 #include <QtGui>
 
-#include <iostream>
 
-AlarmMovement::AlarmMovement(QWidget *parent):
+AlarmNormal::AlarmNormal(QWidget *parent):
 	Alarm(parent),
 	label(new QLabel(this)),
 	snooze_button(new QPushButton(this)),
-	accel(0)
+	stop_button(new QPushButton(this))
 {
 	setWindowTitle("EvilAlarm");
 
@@ -42,12 +39,19 @@ AlarmMovement::AlarmMovement(QWidget *parent):
 	layout1->addWidget(icon_label);
 	layout1->addWidget(label);
 
+	QHBoxLayout* layout2 = new QHBoxLayout();
+	layout2->addWidget(snooze_button);
+	stop_button->setText(tr("Stop Alarm"));
+	layout2->addWidget(stop_button);
+
 	layout0->addLayout(layout1);
-	layout0->addWidget(snooze_button);
+	layout0->addLayout(layout2);
 	setLayout(layout0);
 
 	connect(snooze_button, SIGNAL(clicked()),
 		this, SLOT(snooze()));
+	connect(stop_button, SIGNAL(clicked()),
+		this, SLOT(close()));
 
 	//actually start alarm
 	restart();
@@ -57,22 +61,12 @@ AlarmMovement::AlarmMovement(QWidget *parent):
 	connect(ui_timer, SIGNAL(timeout()),
 		this, SLOT(updateScreen()));
 	ui_timer->start(1000);
-
-	//TODO: remove
-//	QTimer::singleShot(1000, this, SLOT(close()));
 }
 
 //starts/restarts the alarm
-void AlarmMovement::restart()
+void AlarmNormal::restart()
 {
-	accel = new Accelerometer(this, ACCELEROMETER_POLL_MSEC);
-	connect(accel, SIGNAL(orientationChanged(int, int, int)),
-		this, SLOT(accelUpdate(int, int, int)));
-	lastx = lasty = lastz = 0;
-
 	QSettings settings;
-	inactivity_timeout = settings.value("inactivity_timeout", INACTIVITY_TIMEOUT).toInt();
-	accel_threshold = settings.value("movement_threshold", ACCELEROMETER_THRESHOLD).toInt();
 	const int num_snooze_max = settings.value("num_snooze_max", NUM_SNOOZE_MAX).toInt();
 	if(num_snooze_max == 0) {
 		//snooze completely disabled
@@ -85,41 +79,8 @@ void AlarmMovement::restart()
 	Alarm::restart();
 }
 
-AlarmMovement::~AlarmMovement()
-{
-	delete accel;
-}
 
-void AlarmMovement::accelUpdate(int x, int y, int z)
-{
-	if(snoozing) {
-		return;
-	}
-
-	//shutdown time reached?
-	if(alarm_started.elapsed()/1000 > alarm_timeout*60) {
-		close();
-		return;
-	}
-
-	int max_diff = qMax(qAbs(lastx - x), qMax(qAbs(lasty - y), qAbs(lastz - z)));
-	if(lastx == 0 and lasty == 0 and lastz == 0) {
-		//initialize
-		last_active.restart();
-	} else if(max_diff > accel_threshold and !backend->isVibrating()) {
-		//device moved
-		backend->volumeDown();
-		last_active.restart();
-	} else if(last_active.elapsed()/1000 > inactivity_timeout and !backend->isVibrating()) {
-		//not moved for a while
-		backend->volumeUp();
-	}
-
-	if(!backend->isVibrating()) //ignore huge spikes
-		lastx = x; lasty = y; lastz = z;
-}
-
-void AlarmMovement::updateScreen()
+void AlarmNormal::updateScreen()
 {
 	QString label_text = tr("<center><span style='font-size:100px;'>%1</span><br />").arg(QTime::currentTime().toString(Qt::SystemLocaleShortDate));
 
@@ -140,13 +101,8 @@ void AlarmMovement::updateScreen()
 	label->setText(label_text);
 }
 
-void AlarmMovement::snooze()
+void AlarmNormal::snooze()
 {
 	snooze_button->setEnabled(false);
-
 	Alarm::snooze();
-
-	//stop polling
-	delete accel;
-	accel = 0;
 }
