@@ -73,8 +73,11 @@ Settings::Settings(QWidget *parent) :
 			module_settings_layout->addWidget(widget);
     }
     connect(module, SIGNAL(activated(int)),
-				module_settings_layout, SLOT(setCurrentIndex(int)));
+            module_settings_layout, SLOT(setCurrentIndex(int)));
+    connect(module, SIGNAL(activated(int)),
+            this, SLOT(moduleChanged()));
     module_settings_layout->setCurrentIndex(current_idx);
+    moduleChanged(); //manually update after loading settings
     row++;
 
 
@@ -143,4 +146,11 @@ void Settings::save()
         if(module_settings != 0)
             module_settings->save();
     }
+}
+
+void Settings::moduleChanged()
+{
+    //deactivate options not used by the "Normal" module
+    bool normal_module = module->currentText().toLower() == "normal";
+    inactivity_timeout->setEnabled(!normal_module);
 }

@@ -25,27 +25,28 @@ class Settings : public QDialog
     Q_OBJECT
 
 public:
-        explicit Settings(QWidget *parent = 0);
-        ~Settings();
-        void save();
+    explicit Settings(QWidget *parent = 0);
+    ~Settings();
+    void save();
 protected:
-        void closeEvent(QCloseEvent*);
+    void closeEvent(QCloseEvent*);
 private slots:
-        void pickSoundFile();
+    void pickSoundFile();
+    void moduleChanged();
 private:
-        QSettings settings;
-        QStackedLayout *module_settings_layout;
-        QComboBox *module;
-        QMaemo5ValueButton *sound_filename;
-        QSlider *volume;
-        QSpinBox *alarm_timeout;
-        QSpinBox *inactivity_timeout;
-        QSpinBox *snooze_time;
-        QSpinBox *num_snooze_max;
-        QCheckBox *fullscreen;
-        QCheckBox *prevent_device_lock;
-        QCheckBox *vibration;
-        Ui::Settings *ui;
+    QSettings settings;
+    QStackedLayout *module_settings_layout;
+    QComboBox *module;
+    QMaemo5ValueButton *sound_filename;
+    QSlider *volume;
+    QSpinBox *alarm_timeout;
+    QSpinBox *inactivity_timeout;
+    QSpinBox *snooze_time;
+    QSpinBox *num_snooze_max;
+    QCheckBox *fullscreen;
+    QCheckBox *prevent_device_lock;
+    QCheckBox *vibration;
+    Ui::Settings *ui;
 };
 
 #endif // SETTINGS_H
