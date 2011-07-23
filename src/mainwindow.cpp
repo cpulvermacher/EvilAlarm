@@ -9,11 +9,16 @@
 #include "module_list.h"
 
 #include <QDeclarativeContext>
+#include <QDBusConnection>
 #include <QSettings>
 #include <QGraphicsObject>
 #include <QFile>
 
+#include <mce/mode-names.h>
+#include <mce/dbus-names.h>
+
 #include <iostream>
+
 
 //#if defined(Q_WS_MAEMO)
 //#include <alarmd/alarm_event.h>
@@ -53,13 +58,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QGraphicsObject *root_object = ui->view->rootObject();
     QObject::connect(root_object, SIGNAL(selectAlarmType()),
-                     this, SLOT(showSelector()));
+            this, SLOT(showSelector()));
     QObject::connect(root_object, SIGNAL(alarmHistory()),
-                     this, SLOT(showAlarmHistory()));
+            this, SLOT(showAlarmHistory()));
     QObject::connect(root_object, SIGNAL(unsetAlarm()),
-                     this, SLOT(unsetEvilAlarm()));
+            this, SLOT(unsetEvilAlarm()));
     QObject::connect(root_object, SIGNAL(setAlarm(int, int)),
-                     this, SLOT(setEvilAlarm(int, int)));
+            this, SLOT(setEvilAlarm(int, int)));
+    QDBusConnection::systemBus().connect("", MCE_SIGNAL_PATH, MCE_SIGNAL_IF, MCE_DISPLAY_SIG,
+            this, SLOT(displayStateChanged(QString)));
 }
 
 MainWindow::~MainWindow()
@@ -190,4 +197,12 @@ void MainWindow::on_actionTest_Alarm_triggered()
     Alarm* test_alarm = ModuleList::getModuleInstance(this);
     test_alarm->exec();
     delete test_alarm;
+}
+
+void MainWindow::displayStateChanged(QString state)
+{
+    //if display is off, stop all animations
+    const bool display_on = (state != "off");
+    QGraphicsObject *root_object = ui->view->rootObject();
+    root_object->setProperty("displayOn", display_on);
 }

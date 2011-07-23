@@ -68,7 +68,9 @@ Item {
     }
 
     Timer {
-        interval: 200; running: true; repeat: true;
+        interval: 1000;
+        running: displayOn; //defined in main.qml
+        repeat: true;
         onTriggered: clock.timeChanged()
     }
 

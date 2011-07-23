@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 #include <QMainWindow>
+#include <QString>
 
 namespace Ui {
     class MainWindow;
@@ -24,6 +25,7 @@ private slots:
     void on_actionSettings_triggered();
     void on_actionAbout_triggered();
     void on_actionTest_Alarm_triggered();
+    void displayStateChanged(QString state);
 
 private:
     Ui::MainWindow *ui;

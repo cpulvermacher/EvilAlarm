@@ -8,6 +8,8 @@ Rectangle{
     signal setAlarm(int hours, int minutes)
     signal unsetAlarm()
 
+    property bool displayOn: false
+
     Row {
         anchors.centerIn: parent; spacing: 0
         Wakedo { angle: 180; yAxis: 1 }
