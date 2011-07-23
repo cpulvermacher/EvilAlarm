@@ -77,7 +77,6 @@ Settings::Settings(QWidget *parent) :
     connect(module, SIGNAL(activated(int)),
             this, SLOT(moduleChanged()));
     module_settings_layout->setCurrentIndex(current_idx);
-    moduleChanged(); //manually update after loading settings
     row++;
 
 
@@ -110,6 +109,8 @@ Settings::Settings(QWidget *parent) :
     prevent_device_lock->setChecked(settings.value("prevent_device_lock", false).toBool());
     ui->advanced->addWidget(prevent_device_lock);//, row, 0, 1, 2);
     row++;
+
+    moduleChanged(); //manually update after loading settings so unrelated options can be disabled
 }
 
 Settings::~Settings()
