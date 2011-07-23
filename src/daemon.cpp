@@ -26,7 +26,7 @@
 Daemon::Daemon()
 {
 	QSettings settings;
-	QTime wake_at = settings.value("wake_at").toTime();
+	const QTime wake_at = settings.value("wake_at").toTime();
 	if(!wake_at.isValid()) {
 		std::cerr << "Invalid alarm time, aborting!\n";
 		exit(1);
@@ -49,18 +49,6 @@ void Daemon::wake()
 	connect(ui_process, SIGNAL(finished(int, QProcess::ExitStatus)),
 		this, SLOT(uiFinished(int, QProcess::ExitStatus)));
 	ui_process->start(QCoreApplication::applicationFilePath(), QStringList("--wakeup"));
-
-	//save to history
-	QSettings settings;
-	QTime wake_at = settings.value("wake_at").toTime();
-
-	settings.beginGroup("history");
-	const int num_used = settings.value(QString("%1/used").arg(wake_at.toString()), 0).toInt();
-	settings.setValue(QString("%1/used").arg(wake_at.toString()), num_used+1);
-	settings.endGroup();
-
-	settings.sync();
-
 	std::cout << "evilalarm --wakeup started\n";
 }
 

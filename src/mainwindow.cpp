@@ -83,6 +83,7 @@ void MainWindow::setEvilAlarm(int hours, int minutes) {
     const QTime wake_at(hours, minutes);
 
     if(Daemon::isRunning()) {
+        std::cout << "reset needed\n";
         if(settings.value("wake_at").toTime() == wake_at)
             return; //time didn't change, nothing to do
 
@@ -91,11 +92,19 @@ void MainWindow::setEvilAlarm(int hours, int minutes) {
     }
 
     settings.setValue("wake_at", wake_at);
-    settings.sync();
 
     int msecs = QTime::currentTime().msecsTo(wake_at);
     if(msecs < 0) //alarm tomorrow?
         msecs += 24*60*60*1000; //+24h
+
+    //save to history
+    settings.beginGroup("history");
+    const int num_used = settings.value(QString("%1/used").arg(wake_at.toString()), 0).toInt();
+    settings.setValue(QString("%1/used").arg(wake_at.toString()), num_used+1);
+    settings.endGroup();
+
+    settings.sync();
+    std::cout << "saved to history\n";
 
     Daemon::start();
 #endif
@@ -105,6 +114,19 @@ void MainWindow::unsetEvilAlarm() {
 #ifdef EVILALARM
     std::cout << "unsetEvilAlarm()\n";
     Daemon::stop();
+
+    //since unsetEvilAlarm() is only called when the user deactivates a set alarm, remove the most recent alarm from history
+    QSettings settings;
+    settings.beginGroup("history");
+    const QTime wake_at = settings.value("wake_at").toTime();
+    const int num_used = settings.value(QString("%1/used").arg(wake_at.toString()), 0).toInt();
+    if(num_used == 0) {
+        std::cerr << "trying to remove nonexistant alarm from history\n";
+        return;
+    }
+    settings.setValue(QString("%1/used").arg(wake_at.toString()), num_used-1);
+    settings.endGroup();
+    settings.sync();
 #endif
 }
 
