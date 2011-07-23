@@ -177,11 +177,11 @@ void MainWindow::unsetEvilAlarm() {
 */
 void MainWindow::on_actionSettings_triggered()
 {
-    static Settings *settingsWindow = new Settings(this);
+    Settings *settingsWindow = new Settings(this);
     settingsWindow->setAttribute(Qt::WA_Maemo5StackedWindow);
     settingsWindow->setWindowFlags(windowFlags() | Qt::Window);
-    settingsWindow->show();
-
+    settingsWindow->exec();
+    delete settingsWindow;
 }
 
 void MainWindow::on_actionAbout_triggered()
