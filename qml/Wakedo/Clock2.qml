@@ -56,6 +56,7 @@ Item {
     property int alarmMinutes
 
     onAlarmOnChanged: { alarmHand.visible = alarmOn; }
+    Component.onCompleted: { timeChanged(); }
 
     function timeChanged() {
         var date = new Date;
