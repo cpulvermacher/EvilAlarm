@@ -8,7 +8,7 @@ Rectangle{
     signal setAlarm(int hours, int minutes)
     signal unsetAlarm()
 
-    property bool displayOn: false
+    property bool displayOn: true
 
     Row {
         anchors.centerIn: parent; spacing: 0
