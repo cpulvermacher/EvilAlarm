@@ -36,10 +36,8 @@ Flipable {
 
         timeDisplay.clock.alarmOn=alarmSettings.alarmOn;
 
-        var alarmMinutesPadded = ((alarmSettings.alarmMinute<10)?"0":"")+alarmSettings.alarmMinute;
-        var alarmHoursPadded = ((alarmSettings.alarmHour<10)?"0":"")+alarmSettings.alarmHour;
-        timeDisplay.alarmTimeText="Alarm at "+alarmHoursPadded+":"+alarmMinutesPadded
-
+        var date = new Date(0, 0, 0, alarmSettings.alarmHour, alarmSettings.alarmMinute); 
+        timeDisplay.alarmTimeText="Alarm at "+Qt.formatTime(date, Qt.SystemLocaleShortDate);
     }
 
 
