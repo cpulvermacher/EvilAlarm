@@ -16,7 +16,7 @@ HEADERS += backend.h settings.h alarm.h daemon.h alarmhistoryitem.h\
     module_list.h module_settings.h\
     alarm_blubbels.h blubbels.h alarm_blubbels_settings.h\
     alarm_movement.h alarm_movement_settings.h accelerometer.h \
-		alarm_normal.h\
+    alarm_normal.h\
     mainwindow.h \
     selectalarmtype.h \
     about.h \
@@ -25,17 +25,16 @@ SOURCES += main.cpp backend.cpp settings.cpp alarm.cpp daemon.cpp alarmhistoryit
     module_list.cpp\
     alarm_blubbels.cpp blubbels.cpp alarm_blubbels_settings.cpp\
     alarm_movement.cpp alarm_movement_settings.cpp accelerometer.cpp \
-		alarm_normal.cpp \
+    alarm_normal.cpp \
     mainwindow.cpp \
     selectalarmtype.cpp \
     about.cpp \
-    alarmhistory.cpp \
+    alarmhistory.cpp
 
 FORMS += \
     mainwindow.ui \
     selectalarmtype.ui \
     about.ui \
-    alarmhistory.ui \
     settings.ui
 
 maemo5 {
@@ -53,7 +52,6 @@ OTHER_FILES += \
     qml/Wakedo/Spinner.qml \
     qml/Wakedo/Wakedo.qml \
     qml/Wakedo/Switch.qml \
-    qml/Wakedo/Clock.qml \
     qml/Wakedo/Clock2.qml \
     qml/Wakedo/AlarmSettings.qml
 

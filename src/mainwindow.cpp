@@ -52,15 +52,14 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
     //now load UI
-    //bool r = QDesktopServices::openUrl(QUrl::fromLocalFile(path));
     ui->view->setSource(QUrl::fromLocalFile(path));
 
 
     QGraphicsObject *root_object = ui->view->rootObject();
     QObject::connect(root_object, SIGNAL(selectAlarmType()),
-            this, SLOT(showSelector()));
-    QObject::connect(root_object, SIGNAL(alarmHistory()),
-            this, SLOT(showAlarmHistory()));
+            this, SLOT(showAlarmTypeSelector()));
+    QObject::connect(root_object, SIGNAL(showAlarmHistory(int, int)),
+            this, SLOT(showAlarmHistory(int, int)));
     QObject::connect(root_object, SIGNAL(unsetAlarm()),
             this, SLOT(unsetEvilAlarm()));
     QObject::connect(root_object, SIGNAL(setAlarm(int, int)),
@@ -73,14 +72,12 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-void MainWindow::showSelector() {
+
+void MainWindow::showAlarmTypeSelector() {
     static SelectAlarmType* selectAlarmType = new SelectAlarmType(this);
     selectAlarmType->show();
 }
-void MainWindow::showAlarmHistory() {
-    static AlarmHistory* alarmHistory = new AlarmHistory(this);
-    alarmHistory->show();
-}
+
 
 void MainWindow::setEvilAlarm(int hours, int minutes) {
 #ifdef EVILALARM
@@ -199,8 +196,23 @@ void MainWindow::on_actionTest_Alarm_triggered()
 
 void MainWindow::displayStateChanged(QString state)
 {
-    //if display is off, stop all animations
     const bool display_on = (state != "off");
     QGraphicsObject *root_object = ui->view->rootObject();
     root_object->setProperty("displayOn", display_on);
+}
+
+void MainWindow::showAlarmHistory(int hours, int minutes)
+{
+    AlarmHistory* alarmHistory = new AlarmHistory(this, hours, minutes);
+    connect(alarmHistory, SIGNAL(setAlarm(int, int)),
+        this, SLOT(setUIAlarm(int, int)));
+    alarmHistory->exec();
+    delete alarmHistory;
+}
+
+void MainWindow::setUIAlarm(int hours, int minutes)
+{
+    QGraphicsObject *root_object = ui->view->rootObject();
+    root_object->setProperty("ui_alarm_hours", hours);
+    root_object->setProperty("ui_alarm_minutes", minutes);
 }

@@ -11,9 +11,9 @@ public:
 	~AlarmHistoryItem();
 
 	void setNumUsed(int n) { total -= num_used; num_used = n; total += n; }
-	int numUsed() { return num_used; }
+	int numUsed() const { return num_used; }
 	void setTime(QTime t) { alarm_time = t; }
-	QTime time() { return alarm_time; }
+	QTime time() const { return alarm_time; }
 public slots:
 	void updateItem();
 	void emitSelected();

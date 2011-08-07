@@ -152,6 +152,7 @@ Rectangle{
 
             Spinner {
                 id: spinnerHour
+                currentIndex: ui_alarm_hours;
                 width: 240; height: 275
                 focus: true
                 model: 24
@@ -171,6 +172,7 @@ Rectangle{
             y: 83; x: 278; spacing: 40
             Spinner {
                 id: spinnerMinute
+                currentIndex: ui_alarm_minutes;
                 width: 240; height: 275
                 focus: true
                 model: 60
@@ -265,7 +267,7 @@ Rectangle{
             id: mouse_area2
             x: 254
             y: 0
-            onClicked: window.alarmHistory()
+            onClicked: window.showAlarmHistory(alarmHour, alarmMinute);
             width: 283
             height: 62
             anchors.verticalCenterOffset: 0
