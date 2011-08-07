@@ -33,7 +33,7 @@ Settings::Settings(QWidget *parent) :
     ui->basic->addWidget(new QLabel("<center>___________________________________________________</center>"), row, 0, 1, 2);
     row++;
 
-    sound_filename = new QMaemo5ValueButton("Alarm sound", this);
+    sound_filename = new QMaemo5ValueButton(tr("Alarm sound"), this);
     sound_filename->setValueText(settings.value("sound_filename", SOUND_FILE).toString());
     volume = new QSlider(Qt::Horizontal, this);
     volume->setRange(10, 100);
@@ -102,13 +102,20 @@ Settings::Settings(QWidget *parent) :
     row=0;
     fullscreen = new QCheckBox(tr("Disable multi-tasking (including Phone app)"));
     fullscreen->setChecked(settings.value("fullscreen", FULLSCREEN).toBool());
-    ui->advanced->addWidget(fullscreen);//, row, 0, 1, 2);
+    ui->advanced->addWidget(fullscreen);
     row++;
 
     prevent_device_lock = new QCheckBox(tr("Prevent device lock (aka. \"Secure Device\")"));
     prevent_device_lock->setChecked(settings.value("prevent_device_lock", false).toBool());
-    ui->advanced->addWidget(prevent_device_lock);//, row, 0, 1, 2);
+    clear_history = new QPushButton(tr("Clear alarm history"));
+    clear_history->setEnabled(settings.childGroups().contains("history"));
+    ui->advanced->addWidget(prevent_device_lock);
+    ui->advanced->addWidget(clear_history);
     row++;
+
+
+    connect(clear_history, SIGNAL(clicked()),
+        this, SLOT(clearHistory()));
 
     moduleChanged(); //manually update after loading settings so unrelated options can be disabled
 }
@@ -117,6 +124,7 @@ Settings::~Settings()
 {
     delete ui;
 }
+
 void Settings::closeEvent(QCloseEvent*) { save(); }
 
 void Settings::pickSoundFile()
@@ -154,4 +162,18 @@ void Settings::moduleChanged()
     //deactivate options not used by the "Normal" module
     bool normal_module = module->currentText().toLower() == "normal";
     inactivity_timeout->setEnabled(!normal_module);
+}
+
+void Settings::clearHistory()
+{
+    const int ret = QMessageBox::question(this, tr("EvilAlarm"),
+            tr("Do you really want to remove all history entries?"),
+            QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+    if(ret == QMessageBox::Yes) {
+        QSettings settings;
+        settings.remove("history");
+        settings.sync();
+    }
+
+		clear_history->setEnabled(false);
 }

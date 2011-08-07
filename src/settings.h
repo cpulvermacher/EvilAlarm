@@ -31,6 +31,7 @@ public:
 protected:
     void closeEvent(QCloseEvent*);
 private slots:
+    void clearHistory();
     void pickSoundFile();
     void moduleChanged();
 private:
@@ -46,6 +47,7 @@ private:
     QCheckBox *fullscreen;
     QCheckBox *prevent_device_lock;
     QCheckBox *vibration;
+		QPushButton *clear_history;
     Ui::Settings *ui;
 };
 
