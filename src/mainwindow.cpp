@@ -125,8 +125,11 @@ void MainWindow::unsetEvilAlarm() {
     if(num_used == 0) {
         std::cerr << "trying to remove nonexistant alarm from history\n";
         return;
+    } else if(num_used == 1) {
+        settings.remove(wake_at_string);
+    } else {
+        settings.setValue(wake_at_string, num_used-1);
     }
-    settings.setValue(wake_at_string, num_used-1);
     settings.endGroup();
     settings.sync();
 #endif
