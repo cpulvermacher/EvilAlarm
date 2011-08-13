@@ -27,33 +27,30 @@ AlarmHistory::AlarmHistory(QWidget *parent, int hours, int minutes) :
 
     QHBoxLayout *header_layout = new QHBoxLayout();
     QLabel *help_text = new QLabel(tr("Tap time to set alarm!"));
-    QPushButton *add_favorite_button = new QPushButton(tr("Add %1 to favorites").arg(current_alarm_time.toString(Qt::SystemLocaleShortDate)));
+    add_to_favorites_button = new QPushButton(tr("Add %1 to favorites").arg(current_alarm_time.toString(Qt::SystemLocaleShortDate)));
 
     header_layout->addWidget(help_text);
     header_layout->addStretch();
-    if(!settings.contains(QString("favorites/%1/used").arg(current_alarm_time.toString()))) {
-        //only show button when not already in favorites
-        header_layout->addWidget(add_favorite_button);
-    }
+    header_layout->addWidget(add_to_favorites_button);
 
     QGroupBox *favorites_box = new QGroupBox(tr("Favorites"));
     favorites_layout = new QHBoxLayout();
-    //populate list
-    loadAlarmList("favorites", favorites_layout);
     favorites_box->setLayout(favorites_layout);
 
     QGroupBox *history_box = new QGroupBox(tr("Frequently used"));
     history_layout = new QHBoxLayout();
-    //populate list
-    loadAlarmList("history", history_layout, NUM_HISTORY_ITEMS);
     history_box->setLayout(history_layout);
 
     layout->addLayout(header_layout);
     layout->addWidget(favorites_box);
     layout->addWidget(history_box);
 
-    connect(add_favorite_button, SIGNAL(clicked()),
+    connect(add_to_favorites_button, SIGNAL(clicked()),
         this, SLOT(addCurrentAlarmToFavorites()));
+
+    //populate lists
+    loadAlarmList("favorites", favorites_layout);
+    loadAlarmList("history", history_layout, NUM_HISTORY_ITEMS);
 }
 
 AlarmHistory::~AlarmHistory()
@@ -73,6 +70,32 @@ void AlarmHistory::addCurrentAlarmToFavorites()
 
     //reload list
     loadAlarmList("favorites", favorites_layout);
+}
+
+void AlarmHistory::removeAlarm(QTime time)
+{
+	QWidget *sender_wdgt = dynamic_cast<QWidget*>(sender());
+	Q_ASSERT(sender_wdgt);
+
+	//did the selected item come from history or favorites?
+	QString listname;
+	if(history_layout->indexOf(sender_wdgt) != -1)
+		listname = "history";
+	else
+		listname = "favorites";
+
+	//remove item
+	QSettings settings;
+	settings.beginGroup(listname);
+	settings.remove(time.toString());
+	settings.endGroup();
+	settings.sync();
+
+	//reload list
+	if(listname == "favorites")	
+		loadAlarmList("favorites", favorites_layout);
+	else
+		loadAlarmList("history", history_layout, NUM_HISTORY_ITEMS);
 }
 
 void AlarmHistory::setAlarmTime(QTime time)
@@ -104,6 +127,10 @@ void AlarmHistory::loadAlarmList(QString listname, QHBoxLayout *list_layout, int
             alarm_list.append(new AlarmHistoryItem(QTime::fromString(time), num_used, this));
     }
 
+    //don't show "Add to Favorites" button when already in list
+    if(listname == "favorites")
+        add_to_favorites_button->setVisible(!times.contains(current_alarm_time.toString()));
+
 
     //get iterator that cuts off after 'max_items' items
     QList<AlarmHistoryItem*>::iterator cutoff = alarm_list.begin();
@@ -129,6 +156,9 @@ void AlarmHistory::loadAlarmList(QString listname, QHBoxLayout *list_layout, int
         list_layout->addWidget(item);
         connect(item, SIGNAL(selected(QTime)),
                 this, SLOT(setAlarmTime(QTime)));
+				//without QueuedConnection, execution would continue in the destoyed object!
+        connect(item, SIGNAL(remove(QTime)),
+                this, SLOT(removeAlarm(QTime)), Qt::QueuedConnection);
         num_used_total += item->numUsed();
     }
     //normalize

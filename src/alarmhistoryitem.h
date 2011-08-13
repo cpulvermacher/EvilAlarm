@@ -9,23 +9,27 @@ const int NUM_HISTORY_ITEMS = 6;
 class AlarmHistoryItem : public QPushButton {
 	Q_OBJECT
 public:
-	AlarmHistoryItem(QTime t, int used, QWidget *parent);
-	~AlarmHistoryItem();
+    AlarmHistoryItem(QTime t, int used, QWidget *parent);
+    ~AlarmHistoryItem();
 
-	void setNumUsed(int n) { num_used = n; }
-	int numUsed() const { return num_used; }
-	void setTime(QTime t) { alarm_time = t; }
-	QTime time() const { return alarm_time; }
+    void setNumUsed(int n) { num_used = n; }
+    int numUsed() const { return num_used; }
+    void setTime(QTime t) { alarm_time = t; }
+    QTime time() const { return alarm_time; }
     void setTotalUsed(int t) { total = t; }
 
 public slots:
 	void updateItem();
+	void longPress();
+	void emitRemove();
 	void emitSelected();
 
 signals:
+	void remove(QTime);
 	void selected(QTime);
 
 private:
+    QTimer button_held_timer;
 	QTime alarm_time;
 	int num_used;
     int total; //num_used of all history items
