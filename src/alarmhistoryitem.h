@@ -4,16 +4,20 @@
 
 #include <QtGui>
 
+const int NUM_HISTORY_ITEMS = 6;
+
 class AlarmHistoryItem : public QPushButton {
 	Q_OBJECT
 public:
 	AlarmHistoryItem(QTime t, int used, QWidget *parent);
 	~AlarmHistoryItem();
 
-	void setNumUsed(int n) { total -= num_used; num_used = n; total += n; }
+	void setNumUsed(int n) { num_used = n; }
 	int numUsed() const { return num_used; }
 	void setTime(QTime t) { alarm_time = t; }
 	QTime time() const { return alarm_time; }
+    void setTotalUsed(int t) { total = t; }
+
 public slots:
 	void updateItem();
 	void emitSelected();
@@ -24,6 +28,6 @@ signals:
 private:
 	QTime alarm_time;
 	int num_used;
-	static int total;
+    int total; //num_used of all history items
 };
 #endif

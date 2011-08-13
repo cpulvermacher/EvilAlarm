@@ -15,7 +15,11 @@ private slots:
     void setAlarmTime(QTime time);
     void addCurrentAlarmToFavorites();
 private:
-    void loadHistory(QHBoxLayout *layout);
+    //load up to 'max_items' alarms in group 'listname' into 'list_layout'
+    void loadAlarmList(QString listname, QHBoxLayout *list_layout, int max_items = 0);
+
+    QHBoxLayout *favorites_layout;
+    QHBoxLayout *history_layout;
     QTime current_alarm_time; //currently selected alarm time, can be added to favorites
 };
 
