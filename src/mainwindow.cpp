@@ -38,15 +38,13 @@ MainWindow::MainWindow(QWidget *parent) :
     QDeclarativeContext *context = ui->view->rootContext();
     context->setContextProperty("evilalarm_hours", alarm_time.hour());
     context->setContextProperty("evilalarm_minutes", alarm_time.minute());
-#ifdef EVILALARM
     context->setContextProperty("evilalarm_active", Daemon::isRunning());
-#endif
 
     QString path;
     const QString realMaemo("/opt/evilalarm/qml/Wakedo/main.qml");
-    if(QFile::exists(realMaemo)){
+    if(QFile::exists(realMaemo)) {
         path=realMaemo;
-    }else{
+    } else {
         //simulator
         path=QApplication::applicationDirPath()+"/qml/Wakedo/main.qml";
     }
@@ -218,4 +216,5 @@ void MainWindow::setUIAlarm(int hours, int minutes)
     QGraphicsObject *root_object = ui->view->rootObject();
     root_object->setProperty("ui_alarm_hours", hours);
     root_object->setProperty("ui_alarm_minutes", minutes);
+    root_object->setProperty("ui_alarm_active", true);
 }

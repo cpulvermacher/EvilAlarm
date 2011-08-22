@@ -107,6 +107,7 @@ Rectangle{
 
     AlarmSwitch{
         id: alarmSwitch
+        on: ui_alarm_active
         x: 534
         y: 12
         width: 248
