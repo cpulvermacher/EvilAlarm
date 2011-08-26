@@ -27,14 +27,14 @@ class Backend;
 class Alarm : public QDialog {
 	Q_OBJECT
 public:
-	Alarm(QWidget *parent);
+	explicit Alarm(QWidget *parent);
 	virtual ~Alarm() = 0;
 protected:
 	virtual void closeEvent(QCloseEvent*);
 protected slots:
 	virtual void deviceLockChanged(QString mode);
 	virtual void restart();
-	virtual void snooze();
+	void snooze();
 protected:
 	Backend *backend;
 	QTime alarm_started;

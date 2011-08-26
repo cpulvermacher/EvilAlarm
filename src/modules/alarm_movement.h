@@ -27,13 +27,13 @@
 class AlarmMovement : public Alarm {
 	Q_OBJECT
 public:
-	AlarmMovement(QWidget *parent = 0);
+	explicit AlarmMovement(QWidget *parent = 0);
 	~AlarmMovement();
 protected slots:
 	void accelUpdate(int, int, int);
 	void updateScreen();
 	virtual void restart();
-	virtual void snooze();
+	void snooze();
 private:
 	QLabel *label;
 	QPushButton *snooze_button;

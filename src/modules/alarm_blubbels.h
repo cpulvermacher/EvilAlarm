@@ -27,14 +27,14 @@
 class AlarmBlubbels : public Alarm {
 	Q_OBJECT
 public:
-	AlarmBlubbels(QWidget *parent = 0);
+	explicit AlarmBlubbels(QWidget *parent = 0);
 	~AlarmBlubbels();
 protected slots:
 	void checkScore(int);
 	void onActivity();
 	void updateScreen();
 	virtual void restart();
-	virtual void snooze();
+	void snooze();
 private:
 	QLabel *label;
 	QPushButton *snooze_button;

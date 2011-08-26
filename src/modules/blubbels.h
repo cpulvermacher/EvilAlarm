@@ -34,7 +34,7 @@ struct Box {
 };
 
 struct Bubble {
-	Bubble(short color = 0):
+	explicit Bubble(short color = 0):
 		color(color), xoffset(0), yoffset(0), xspeed(0), yspeed(0), scale_step(0)
 	{
 		//used for animations, should be enough for gridsize <= 16
@@ -54,7 +54,7 @@ struct Bubble {
 class GameWidget : public QWidget {
 	Q_OBJECT
 public:
-	GameWidget(QWidget* parent = 0);
+	explicit GameWidget(QWidget* parent = 0);
 public slots:
 	void restart();
 	void undo();

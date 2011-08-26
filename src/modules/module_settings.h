@@ -6,7 +6,7 @@
 class ModuleSettings : public QWidget {
 	Q_OBJECT
 public:
-	ModuleSettings(QWidget *parent): QWidget(parent) { }
+	explicit ModuleSettings(QWidget *parent): QWidget(parent) { }
 	virtual ~ModuleSettings() { }
 	virtual void save() = 0;
 };

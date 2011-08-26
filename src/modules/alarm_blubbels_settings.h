@@ -8,7 +8,7 @@
 class AlarmBlubbelsSettings : public ModuleSettings {
 	Q_OBJECT
 public:
-	AlarmBlubbelsSettings(QWidget *parent);
+	explicit AlarmBlubbelsSettings(QWidget *parent);
 	virtual ~AlarmBlubbelsSettings();
 	virtual void save();
 private:

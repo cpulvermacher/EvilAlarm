@@ -10,7 +10,7 @@ class Accelerometer;
 class AlarmMovementSettings : public ModuleSettings {
 	Q_OBJECT
 public:
-	AlarmMovementSettings(QWidget *parent);
+	explicit AlarmMovementSettings(QWidget *parent);
 	virtual ~AlarmMovementSettings();
 	virtual void save();
 private slots:

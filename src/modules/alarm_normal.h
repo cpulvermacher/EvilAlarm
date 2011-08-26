@@ -26,12 +26,12 @@
 class AlarmNormal : public Alarm {
 	Q_OBJECT
 public:
-	AlarmNormal(QWidget *parent = 0);
+	explicit AlarmNormal(QWidget *parent = 0);
 	~AlarmNormal() { }
 protected slots:
 	void updateScreen();
 	virtual void restart();
-	virtual void snooze();
+	void snooze();
 private:
 	QLabel *label;
 	QPushButton *snooze_button;
