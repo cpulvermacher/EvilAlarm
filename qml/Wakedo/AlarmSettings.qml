@@ -227,6 +227,7 @@ Rectangle{
             }
         }
 
+/*
         MouseArea {
             id: mouse_area1
             onClicked: window.selectAlarmType()
@@ -263,10 +264,12 @@ Rectangle{
                 font.pixelSize: 28
             }
         }
+        */
 
         MouseArea {
             id: mouse_area2
-            x: 254
+            //x: 254
+            x: 0
             y: 0
             onClicked: window.showAlarmHistory(alarmHour, alarmMinute);
             width: 283
