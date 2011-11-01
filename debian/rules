@@ -57,32 +57,32 @@ install: build
 	dh_install icons/64x64/evilalarm.png $(ICONDIR)64x64/apps
 	dh_install icons/26x26/evilalarm.png $(ICONDIR)26x26/apps
 #QML files
-	dh_install qml/Wakedo/AlarmSettings.qml $(QMLDIR)Wakedo/
-	dh_install qml/Wakedo/AlarmSettingsCorner.qml $(QMLDIR)Wakedo/
-	dh_install qml/Wakedo/AlarmSwitch.qml $(QMLDIR)Wakedo/
-	dh_install qml/Wakedo/Clock2.qml $(QMLDIR)Wakedo/
-	dh_install qml/Wakedo/Spinner.qml $(QMLDIR)Wakedo/
-	dh_install qml/Wakedo/Switch.qml $(QMLDIR)Wakedo/
-	dh_install qml/Wakedo/TimeDisplay.qml $(QMLDIR)Wakedo/
-	dh_install qml/Wakedo/TimeDisplayCorner.qml $(QMLDIR)Wakedo/
-	dh_install qml/Wakedo/TimeText.qml $(QMLDIR)Wakedo/
-	dh_install qml/Wakedo/Wakedo.qml $(QMLDIR)Wakedo/
-	dh_install qml/Wakedo/main.qml $(QMLDIR)Wakedo/
+	dh_install qml/AlarmSettings.qml $(QMLDIR)
+	dh_install qml/AlarmSettingsCorner.qml $(QMLDIR)
+	dh_install qml/AlarmSwitch.qml $(QMLDIR)
+	dh_install qml/Clock2.qml $(QMLDIR)
+	dh_install qml/Spinner.qml $(QMLDIR)
+	dh_install qml/Switch.qml $(QMLDIR)
+	dh_install qml/TimeDisplay.qml $(QMLDIR)
+	dh_install qml/TimeDisplayCorner.qml $(QMLDIR)
+	dh_install qml/TimeText.qml $(QMLDIR)
+	dh_install qml/Wakedo.qml $(QMLDIR)
+	dh_install qml/main.qml $(QMLDIR)
 #graphics
-	dh_install qml/Wakedo/Wakedo.png $(QMLDIR)Wakedo/
-	dh_install qml/Wakedo/bell.png $(QMLDIR)Wakedo/
-	dh_install qml/Wakedo/minute.svg $(QMLDIR)Wakedo/
-	dh_install qml/Wakedo/hour.svg $(QMLDIR)Wakedo/
-	dh_install qml/Wakedo/second.png $(QMLDIR)Wakedo/
-	dh_install qml/Wakedo/alarmHand.png $(QMLDIR)Wakedo/
-	dh_install qml/Wakedo/clockscreen.svg $(QMLDIR)Wakedo/
-	dh_install qml/Wakedo/anvil-clock-small-sans-anvil.png $(QMLDIR)Wakedo/
-	dh_install qml/Wakedo/TimeDisplayCorner.svg $(QMLDIR)Wakedo/
-	dh_install qml/Wakedo/background.svg $(QMLDIR)Wakedo/
-	dh_install qml/Wakedo/ok.svg $(QMLDIR)Wakedo/
-	dh_install qml/Wakedo/spinner-bg.png $(QMLDIR)Wakedo/
-	dh_install qml/Wakedo/spinner-select.png $(QMLDIR)Wakedo/
-	dh_install qml/Wakedo/spinner-bg-hover.png $(QMLDIR)Wakedo/
-	dh_install qml/Wakedo/metalball2.png $(QMLDIR)Wakedo/
+	dh_install qml/Wakedo.png $(QMLDIR)
+	dh_install qml/bell.png $(QMLDIR)
+	dh_install qml/minute.svg $(QMLDIR)
+	dh_install qml/hour.svg $(QMLDIR)
+	dh_install qml/second.png $(QMLDIR)
+	dh_install qml/alarmHand.png $(QMLDIR)
+	dh_install qml/clockscreen.svg $(QMLDIR)
+	dh_install qml/anvil-clock-small-sans-anvil.png $(QMLDIR)
+	dh_install qml/TimeDisplayCorner.svg $(QMLDIR)
+	dh_install qml/background.svg $(QMLDIR)
+	dh_install qml/ok.svg $(QMLDIR)
+	dh_install qml/spinner-bg.png $(QMLDIR)
+	dh_install qml/spinner-select.png $(QMLDIR)
+	dh_install qml/spinner-bg-hover.png $(QMLDIR)
+	dh_install qml/metalball2.png $(QMLDIR)
 
 .PHONY: build clean binary-arch binary install

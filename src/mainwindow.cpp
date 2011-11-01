@@ -36,11 +36,11 @@ MainWindow::MainWindow(QWidget *parent) :
     context->setContextProperty("evilalarm_active", Daemon::isRunning());
 
     QString path;
-    const QString maemo_install_path("/opt/evilalarm/qml/Wakedo/main.qml");
+    const QString maemo_install_path("/opt/evilalarm/qml/main.qml");
     if(QFile::exists(maemo_install_path)) {
         path = maemo_install_path;
     } else { //simulator
-        path = QApplication::applicationDirPath()+"/qml/Wakedo/main.qml";
+        path = QApplication::applicationDirPath()+"/qml/main.qml";
     }
 
     //now load UI
