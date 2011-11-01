@@ -36,12 +36,11 @@ MainWindow::MainWindow(QWidget *parent) :
     context->setContextProperty("evilalarm_active", Daemon::isRunning());
 
     QString path;
-    const QString realMaemo("/opt/evilalarm/qml/Wakedo/main.qml");
-    if(QFile::exists(realMaemo)) {
-        path=realMaemo;
-    } else {
-        //simulator
-        path=QApplication::applicationDirPath()+"/qml/Wakedo/main.qml";
+    const QString maemo_install_path("/opt/evilalarm/qml/Wakedo/main.qml");
+    if(QFile::exists(maemo_install_path)) {
+        path = maemo_install_path;
+    } else { //simulator
+        path = QApplication::applicationDirPath()+"/qml/Wakedo/main.qml";
     }
 
     //now load UI
@@ -167,6 +166,12 @@ void MainWindow::showAlarmHistory(int hours, int minutes)
 void MainWindow::setUIAlarm(int hours, int minutes)
 {
     QGraphicsObject *root_object = ui->view->rootObject();
+		//disable old alarm first
+		//(changing hours / minutes to something else is required to trigger the onChanged slots...)
+    root_object->setProperty("ui_alarm_active", false);
+    root_object->setProperty("ui_alarm_hours", -1);
+    root_object->setProperty("ui_alarm_minutes", -1);
+
     root_object->setProperty("ui_alarm_hours", hours);
     root_object->setProperty("ui_alarm_minutes", minutes);
     root_object->setProperty("ui_alarm_active", true);

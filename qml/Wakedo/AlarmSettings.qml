@@ -34,18 +34,17 @@ Rectangle{
 
             var totalMinutes = hours*60+minutes;
             var totalAlarmMinutes = alarmHour*60+alarmMinute;
-            var hoursLeft;
-            var minutesLeft;
 
             if(totalMinutes >= totalAlarmMinutes) //alarm tomorrow
                 totalAlarmMinutes += 24*60;
-            hoursLeft=Math.floor((totalAlarmMinutes-totalMinutes)/60);
-            minutesLeft=Math.floor((totalAlarmMinutes-totalMinutes)%60);
+            var hoursLeft=Math.floor((totalAlarmMinutes-totalMinutes)/60);
+            var minutesLeft=Math.floor((totalAlarmMinutes-totalMinutes)%60);
 
             untilAlarm.text = "Until alarm:\n"+hoursLeft+" hours "+minutesLeft+" minutes"
 
             if(!spinnerHour.moving && !spinnerMinute.moving //spinners have stopped
-            && totalAlarmMinutesSet != totalAlarmMinutes%(24*60)) { //and alarm isn't set yet
+            && totalAlarmMinutesSet != totalAlarmMinutes) { //and alarm isn't set yet
+                //console.log("will now call setAlarm(). totalAlarmMinutesSet: " + totalAlarmMinutesSet + ", totalAlarmMinutes: " + totalAlarmMinutes)
                 window.setAlarm(alarmHour, alarmMinute);
                 totalAlarmMinutesSet = totalAlarmMinutes;
 
@@ -70,8 +69,8 @@ Rectangle{
 
     //turn alarm state off again
     function alarmExpired() {
-        totalAlarmMinutesSet = -1;
         alarmOn = false;
+        totalAlarmMinutesSet = -1;
         updateUntilAlarm();
     }
 
@@ -113,6 +112,7 @@ Rectangle{
         width: 248
         height: 223
         onOnChanged: {
+            //console.log("alarmSwitch state " + on)
             updateUntilAlarm();
         }
     }
@@ -161,9 +161,11 @@ Rectangle{
                 delegate: Text { font.pixelSize: 40; text: index; height: parent.itemHeight+10; width: (index>9)?40:20; }
 
                 onCurrentIndexChanged: {
-                    updateUntilAlarmTimer.start();
-                    if(!alarmSwitch.on && initialized){
-                        alarmSwitch.aswitch.toggle();
+                    //console.log("hourspinner changed")
+                    if(initialized) {
+                        updateUntilAlarmTimer.start();
+                        if(!alarmSwitch.on)
+                            alarmSwitch.aswitch.toggle();
                     }
                 }
             }
@@ -186,9 +188,11 @@ Rectangle{
                 }
 
                 onCurrentIndexChanged: {
-                    updateUntilAlarmTimer.start();
-                    if(!alarmSwitch.on && initialized){
-                        alarmSwitch.aswitch.toggle();
+                    //console.log("minutespinner changed")
+                    if(initialized) {
+                        updateUntilAlarmTimer.start();
+                        if(!alarmSwitch.on)
+                            alarmSwitch.aswitch.toggle();
                     }
                 }
             }

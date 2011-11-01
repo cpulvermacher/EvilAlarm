@@ -75,9 +75,8 @@ Flipable {
                 }
                 PropertyChanges {
                     target: timeDisplay.noAlarm;
-                    // this is negative to make rotation go reverse, i.e. to have paper fold approach user
                     text: "No alarm"
-                    visible:true
+                    visible: true
                 }
             }]
     transform: Rotation {
