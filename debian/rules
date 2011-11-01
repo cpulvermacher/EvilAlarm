@@ -53,9 +53,9 @@ install: build
 	dh_link /${OPTBINDIR}evilalarm /$(BINDIR)evilalarm
 	dh_install keepvolume.sh ${RESDIR}
 	dh_install evilalarm.desktop $(DESKTOP_DIR)
+	dh_install icons/26x26/evilalarm.png $(ICONDIR)26x26/apps
 	dh_install icons/48x48/evilalarm.png $(ICONDIR)48x48/apps
 	dh_install icons/64x64/evilalarm.png $(ICONDIR)64x64/apps
-	dh_install icons/26x26/evilalarm.png $(ICONDIR)26x26/apps
 #QML files
 	dh_install qml/AlarmSettings.qml $(QMLDIR)
 	dh_install qml/AlarmSettingsCorner.qml $(QMLDIR)
@@ -69,20 +69,20 @@ install: build
 	dh_install qml/Wakedo.qml $(QMLDIR)
 	dh_install qml/main.qml $(QMLDIR)
 #graphics
-	dh_install qml/Wakedo.png $(QMLDIR)
-	dh_install qml/bell.png $(QMLDIR)
-	dh_install qml/minute.svg $(QMLDIR)
-	dh_install qml/hour.svg $(QMLDIR)
-	dh_install qml/second.png $(QMLDIR)
-	dh_install qml/alarmHand.png $(QMLDIR)
-	dh_install qml/clockscreen.svg $(QMLDIR)
-	dh_install qml/anvil-clock-small-sans-anvil.png $(QMLDIR)
 	dh_install qml/TimeDisplayCorner.svg $(QMLDIR)
+	dh_install qml/Wakedo.png $(QMLDIR)
+	dh_install qml/alarmHand.png $(QMLDIR)
+	dh_install qml/anvil-clock-small-sans-anvil.png $(QMLDIR)
 	dh_install qml/background.svg $(QMLDIR)
+	dh_install qml/bell.png $(QMLDIR)
+	dh_install qml/clockscreen.svg $(QMLDIR)
+	dh_install qml/hour.svg $(QMLDIR)
+	dh_install qml/metalball2.png $(QMLDIR)
+	dh_install qml/minute.svg $(QMLDIR)
 	dh_install qml/ok.svg $(QMLDIR)
+	dh_install qml/second.png $(QMLDIR)
+	dh_install qml/spinner-bg-hover.png $(QMLDIR)
 	dh_install qml/spinner-bg.png $(QMLDIR)
 	dh_install qml/spinner-select.png $(QMLDIR)
-	dh_install qml/spinner-bg-hover.png $(QMLDIR)
-	dh_install qml/metalball2.png $(QMLDIR)
 
 .PHONY: build clean binary-arch binary install
