@@ -173,7 +173,6 @@ void Settings::clearHistory()
         QSettings settings;
         settings.remove("history");
         settings.sync();
+        clear_history->setEnabled(false);
     }
-
-		clear_history->setEnabled(false);
 }
