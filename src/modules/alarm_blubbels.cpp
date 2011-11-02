@@ -25,7 +25,9 @@
 
 AlarmBlubbels::AlarmBlubbels(QWidget *parent):
 	Alarm(parent),
-	label(new QLabel(this))
+	label(new QLabel(this)),
+	snooze_button(new QPushButton(this)),
+	stop_button(new QPushButton(this))
 {
 	setWindowTitle("EvilAlarm");
 
@@ -37,10 +39,13 @@ AlarmBlubbels::AlarmBlubbels(QWidget *parent):
 	icon_label->setAlignment(Qt::AlignCenter);
 	label->setWordWrap(true);
 
+	stop_button->setText(tr("Stop Alarm"));
+	stop_button->setVisible(false);
+
 	layout0->addWidget(icon_label);
 	layout0->addWidget(label);
-	snooze_button = new QPushButton(this);
 	layout0->addWidget(snooze_button);
+	layout2->addWidget(stop_button);
 
 	mainlayout->addLayout(layout0);
 	mainlayout->addWidget(&gamewidget);
@@ -49,6 +54,8 @@ AlarmBlubbels::AlarmBlubbels(QWidget *parent):
 
 	connect(snooze_button, SIGNAL(clicked()),
 		this, SLOT(snooze()));
+	connect(stop_button, SIGNAL(clicked()),
+		this, SLOT(close()));
 
 	connect(&gamewidget, SIGNAL(newScore(int)),
 		this, SLOT(checkScore(int)));
@@ -87,15 +94,15 @@ AlarmBlubbels::~AlarmBlubbels() { }
 
 void AlarmBlubbels::updateScreen()
 {
-	if(!snoozing) {
-		//shutdown time reached?
+	if(!snoozing and !stop_button->isVisible()) {
 		if(alarm_started.elapsed()/1000 > alarm_timeout*60) {
-			close();
+			//shutdown time reached
+			backend->pause();
+			stop_button->setVisible(true);
 			return;
-		}
-		
-		//inactive for too long?
-		if(last_active.elapsed()/1000 > inactivity_timeout) {
+
+		} else if(last_active.elapsed()/1000 > inactivity_timeout) {
+			//inactive for too long
 			backend->volumeUp();
 		}
 	}
@@ -116,7 +123,10 @@ void AlarmBlubbels::updateScreen()
 	}
 	label_text += tr("%1&nbsp;s remaining</center>", "", secs_remaining%60).arg(secs_remaining%60);
 
-	label->setText(label_text);
+	if(secs_remaining > 0)
+		label->setText(label_text);
+	else
+		label->setText(tr("Alarm over.</center>"));
 }
 
 void AlarmBlubbels::snooze()

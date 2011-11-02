@@ -4,6 +4,7 @@ evilalarm (0.9) unstable; urgency=low
   * Added 'Normal' module with a stop button (default for new installations)
   * Stop media player when alarm starts (no sound otherwise)
   * Fix audio hang when playback is paused right before repeating
+  * Blubbels module: Allow user to finish game when alarm is over
 
  -- Christian Pulvermacher <pulvermacher@gmx.de>  Sat, 28 May 2011 00:12:07 +0200
 

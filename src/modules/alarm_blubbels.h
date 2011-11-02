@@ -38,6 +38,7 @@ protected slots:
 private:
 	QLabel *label;
 	QPushButton *snooze_button;
+	QPushButton *stop_button;
 	GameWidget gamewidget;
 
 	int inactivity_timeout;
