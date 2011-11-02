@@ -45,7 +45,7 @@ AlarmBlubbels::AlarmBlubbels(QWidget *parent):
 	layout0->addWidget(icon_label);
 	layout0->addWidget(label);
 	layout0->addWidget(snooze_button);
-	layout2->addWidget(stop_button);
+	layout0->addWidget(stop_button);
 
 	mainlayout->addLayout(layout0);
 	mainlayout->addWidget(&gamewidget);
@@ -121,12 +121,12 @@ void AlarmBlubbels::updateScreen()
 	if(secs_remaining >= 60) {
 		label_text += tr("%1&nbsp;min, ", "", secs_remaining/60).arg(secs_remaining/60);
 	}
-	label_text += tr("%1&nbsp;s remaining</center>", "", secs_remaining%60).arg(secs_remaining%60);
 
 	if(secs_remaining > 0)
-		label->setText(label_text);
-	else
-		label->setText(tr("Alarm over.</center>"));
+		label_text += tr("%1&nbsp;s remaining", "", secs_remaining%60).arg(secs_remaining%60);
+	
+	label_text += "</center>";
+	label->setText(label_text);
 }
 
 void AlarmBlubbels::snooze()
