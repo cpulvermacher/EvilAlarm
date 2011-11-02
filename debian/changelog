@@ -1,5 +1,7 @@
 evilalarm (0.9) unstable; urgency=low
 
+  * Major interface overhaul, many thanks to Olli Savolainen
+  * Added 'Normal' module with a stop button (default for new installations)
   * Stop media player when alarm starts (no sound otherwise)
   * Fix audio hang when playback is paused right before repeating
 
