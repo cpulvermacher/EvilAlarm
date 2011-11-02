@@ -1,29 +1,9 @@
 import QtQuick 1.0
-//import "screenorientation.js" as ScreenOrientation
 
 Flipable {
     id: wakedo
 
     width: 800; height: 430
-
-    /*clip: true
-    property variant selectedOrientation: Orientation.UnknownOrientation
-    property variant activeOrientation: selectedOrientation == Orientation.UnknownOrientation ? runtime.orientation : selectedOrientation
-    state: "orientation " + activeOrientation
-    property bool inPortrait: (activeOrientation == Orientation.Portrait || activeOrientation == Orientation.PortraitInverted);
-
-    // rotation correction for landscape devices like N900
-    property bool landscapeWindow: window.width > window.height
-    property variant rotationDelta: landscapeWindow ? -90 : 0
-    rotation: rotationDelta
-
-    // initial state is portrait
-    property real baseWidth: landscapeWindow ? window.height-10 : window.width-10
-    property real baseHeight: landscapeWindow ? window.width-10 : window.height-10
-
-    width: baseWidth
-    height: baseHeight
-*/
 
     property int xAxis: 0
     property int yAxis: 0
