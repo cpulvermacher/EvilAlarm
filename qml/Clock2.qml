@@ -49,7 +49,7 @@ Item {
     property int seconds
     // time zone shift; not in use
     property real shift: 0
-    property bool night: false
+    //property bool night: false
 
     property bool alarmOn
     property int alarmHours
@@ -61,7 +61,7 @@ Item {
     function timeChanged() {
         var date = new Date;
         hours = shift ? date.getUTCHours() + Math.floor(clock.shift) : date.getHours()
-        night = ( hours < 7 || hours > 19 )
+        //night = ( hours < 7 || hours > 19 )
         minutes = shift ? date.getUTCMinutes() + ((clock.shift % 1) * 60) : date.getMinutes()
         seconds = date.getUTCSeconds();
 
@@ -77,13 +77,6 @@ Item {
 
     /*    Image { source: "anvil-clock-small-sans-anvil.png"; visible: clock.night == true}*/
     Image { id: background; source: "anvil-clock-small-sans-anvil.png"; /* visible: clock.night == false */
-
-        Image {
-            id: image1
-            x: 133
-            y: 176
-            source: "clockscreen.svg"
-        }
     }
 
 

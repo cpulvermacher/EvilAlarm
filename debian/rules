@@ -75,7 +75,6 @@ install: build
 	dh_install qml/anvil-clock-small-sans-anvil.png $(QMLDIR)
 	dh_install qml/background.svg $(QMLDIR)
 	dh_install qml/bell.png $(QMLDIR)
-	dh_install qml/clockscreen.svg $(QMLDIR)
 	dh_install qml/hour.svg $(QMLDIR)
 	dh_install qml/metalball2.png $(QMLDIR)
 	dh_install qml/minute.svg $(QMLDIR)
