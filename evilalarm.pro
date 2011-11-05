@@ -3,8 +3,6 @@ TARGET = evilalarm
 QT += maemo5 dbus phonon declarative
 CONFIG += silent release
 
-DEFINES += EVILALARM
-
 OBJECTS_DIR = $${PWD}/tmp
 MOC_DIR = $${PWD}/tmp
 UI_DIR = $${PWD}/tmp
@@ -43,20 +41,20 @@ maemo5 {
 }
 
 OTHER_FILES += \
-    qml/Wakedo/main.qml \
-    qml/Wakedo/AlarmSwitch.qml \
-    qml/Wakedo/TimeDisplayCorner.qml \
-    qml/Wakedo/AlarmSettingsCorner.qml \
-    qml/Wakedo/TimeText.qml \
-    qml/Wakedo/TimeDisplay.qml \
-    qml/Wakedo/Spinner.qml \
-    qml/Wakedo/Wakedo.qml \
-    qml/Wakedo/Switch.qml \
-    qml/Wakedo/Clock2.qml \
-    qml/Wakedo/AlarmSettings.qml
+    qml/main.qml \
+    qml/AlarmSwitch.qml \
+    qml/TimeDisplayCorner.qml \
+    qml/AlarmSettingsCorner.qml \
+    qml/TimeText.qml \
+    qml/TimeDisplay.qml \
+    qml/Spinner.qml \
+    qml/Wakedo.qml \
+    qml/Switch.qml \
+    qml/Clock2.qml \
+    qml/AlarmSettings.qml
 
 # Add more folders to ship with the application, here
-folder_01.source = qml/Wakedo
+folder_01.source = qml
 folder_01.target = qml
 DEPLOYMENTFOLDERS = folder_01 folder_02
 
