@@ -57,6 +57,11 @@ Item {
 
     onAlarmOnChanged: { alarmHand.visible = alarmOn; }
     Component.onCompleted: { timeChanged(); }
+    onMinutesChanged: {
+        non_user_action = true;
+        alarmSettings.updateUntilAlarm();
+        non_user_action = false;
+    }
 
     function timeChanged() {
         var date = new Date;

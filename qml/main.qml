@@ -11,11 +11,16 @@ Rectangle{
     //used by Clock2 to stop updates when display is off
     property bool displayOn: true
 
-    //used to change the alarm type in UI (which in turn will trigger setAlarm(), so this can't be used for initialization)
+    //when true, changes to variables/UI state do not trigger any signals like setAlarm()
+    //this is useful for initalization or changes originating from the C++ side of the application
+    property bool non_user_action: false;
+
+    //used to change the alarm type in UI
     //-1 as a start value so changing them is effective even when something like 0:0 is set
     property int ui_alarm_hours: -1
     property int ui_alarm_minutes: -1
-    property bool ui_alarm_active: false
+    property bool ui_alarm_active: false //updates UI [remaining time] & starts necessary timers, so change the others first
+
 
     Row {
         anchors.centerIn: parent; spacing: 0

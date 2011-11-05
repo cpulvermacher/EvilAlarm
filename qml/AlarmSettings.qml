@@ -5,27 +5,14 @@ Rectangle{
 
     property alias alarmHour: spinnerHour.currentIndex
     property alias alarmMinute: spinnerMinute.currentIndex
-
     property alias alarmOn: alarmSwitch.on
 
-    // time zone shift; not in use
-    property real shift: 0
-
+    property real shift: 0 // time zone shift; not in use
     property int totalAlarmMinutesSet: -1; //hold current alarm time as 60*h+m, or -1 if none is set
-
-    //initialize
-    property bool initialized: false;
-    Component.onCompleted: {
-        alarmHour = evilalarm_hours;
-        alarmMinute = evilalarm_minutes;
-        alarmOn = evilalarm_active;
-        initialized = true;
-
-        updateUntilAlarm();
-    }
 
 
     function updateUntilAlarm() {
+        //console.log("updateUntilAlarm()");
         if(alarmOn){
             var date = new Date;
             var hours = shift ? date.getUTCHours() + Math.floor(clock.shift) : date.getHours()
@@ -43,41 +30,47 @@ Rectangle{
             untilAlarm.text = "Until alarm:\n"+hoursLeft+" hours "+minutesLeft+" minutes"
 
             if(!spinnerHour.moving && !spinnerMinute.moving //spinners have stopped
-            && totalAlarmMinutesSet != totalAlarmMinutes) { //and alarm isn't set yet
-                //console.log("will now call setAlarm(). totalAlarmMinutesSet: " + totalAlarmMinutesSet + ", totalAlarmMinutes: " + totalAlarmMinutes)
-                window.setAlarm(alarmHour, alarmMinute);
-                totalAlarmMinutesSet = totalAlarmMinutes;
+            && totalAlarmMinutesSet != totalAlarmMinutes%(24*60)) { //and alarm isn't set yet
+                if(!non_user_action) {
+                    window.setAlarm(alarmHour, alarmMinute);
+                }
+                totalAlarmMinutesSet = totalAlarmMinutes%(24*60);
 
                 //set timer to turn alarm off again (note: secondsLeft = 0 - seconds)
                 var milisecondsUntilAlarm = 1000*(3600*hoursLeft + 60*minutesLeft - seconds);
                 alarmExpiredTimer.interval = milisecondsUntilAlarm;
                 alarmExpiredTimer.start();
+
+                updateUntilAlarmTimer.stop();
             }
         } else {
             untilAlarm.text="";
 
-            //only stop alarm if we know it's running
-            if(totalAlarmMinutesSet != -1) {
-                totalAlarmMinutesSet = -1;
-                window.unsetAlarm()
-            }
+            if(!non_user_action) {
+                //only stop alarm if we know it's running
+                if(totalAlarmMinutesSet != -1) {
+                    totalAlarmMinutesSet = -1;
+                    window.unsetAlarm()
+                }
 
-            alarmExpiredTimer.stop();
-            updateUntilAlarmTimer.stop();
+                alarmExpiredTimer.stop();
+            }
         }
     }
 
     //turn alarm state off again
     function alarmExpired() {
-        alarmOn = false;
+        non_user_action = true;
         totalAlarmMinutesSet = -1;
-        updateUntilAlarm();
+        alarmOn = false;
+        non_user_action = false;
     }
 
 
+    //used for setting alarm after the spinners have stopped
     Timer {
         id: updateUntilAlarmTimer;
-        interval: 1000; running: false; repeat: true;
+        interval: 500; running: false; repeat: true;
         onTriggered: updateUntilAlarm();
     }
     Timer {
@@ -162,7 +155,7 @@ Rectangle{
 
                 onCurrentIndexChanged: {
                     //console.log("hourspinner changed")
-                    if(initialized) {
+                    if(!non_user_action) {
                         updateUntilAlarmTimer.start();
                         if(!alarmSwitch.on)
                             alarmSwitch.aswitch.toggle();
@@ -189,7 +182,7 @@ Rectangle{
 
                 onCurrentIndexChanged: {
                     //console.log("minutespinner changed")
-                    if(initialized) {
+                    if(!non_user_action) {
                         updateUntilAlarmTimer.start();
                         if(!alarmSwitch.on)
                             alarmSwitch.aswitch.toggle();

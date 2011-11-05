@@ -27,13 +27,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     setAttribute(Qt::WA_Maemo5StackedWindow);
 
-    //load alarm
-    QSettings settings;
-    const QTime alarm_time = settings.value("wake_at", QTime::currentTime()).toTime();
-    QDeclarativeContext *context = ui->view->rootContext();
-    context->setContextProperty("evilalarm_hours", alarm_time.hour());
-    context->setContextProperty("evilalarm_minutes", alarm_time.minute());
-    context->setContextProperty("evilalarm_active", Daemon::isRunning());
 
     QString path;
     const QString maemo_install_path("/opt/evilalarm/qml/main.qml");
@@ -45,9 +38,18 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //now load UI
     ui->view->setSource(QUrl::fromLocalFile(path));
-
-
     QGraphicsObject *root_object = ui->view->rootObject();
+
+    //load alarm
+    QSettings settings;
+    const QTime alarm_time = settings.value("wake_at", QTime::currentTime()).toTime();
+    root_object->setProperty("non_user_action", true);
+    root_object->setProperty("ui_alarm_hours", alarm_time.hour());
+    root_object->setProperty("ui_alarm_minutes", alarm_time.minute());
+    root_object->setProperty("ui_alarm_active", Daemon::isRunning());
+    root_object->setProperty("non_user_action", false);
+
+
     QObject::connect(root_object, SIGNAL(selectAlarmType()),
             this, SLOT(showAlarmTypeSelector()));
     QObject::connect(root_object, SIGNAL(showAlarmHistory(int, int)),
@@ -72,7 +74,7 @@ void MainWindow::showAlarmTypeSelector() {
 
 
 void MainWindow::setEvilAlarm(int hours, int minutes) {
-    std::cout << "setEvilAlarm()\n";
+    std::cout << "setEvilAlarm(" << hours << ", " << minutes << ")\n";
     QSettings settings;
 
     const QTime wake_at(hours, minutes);
@@ -163,11 +165,12 @@ void MainWindow::showAlarmHistory(int hours, int minutes)
     delete alarmHistory;
 }
 
+//set alarm in UI (onChanged handlers are triggered)
 void MainWindow::setUIAlarm(int hours, int minutes)
 {
     QGraphicsObject *root_object = ui->view->rootObject();
-		//disable old alarm first
-		//(changing hours / minutes to something else is required to trigger the onChanged slots...)
+    //disable old alarm first
+    //(changing hours / minutes to something else is required to trigger the onChanged slots...)
     root_object->setProperty("ui_alarm_active", false);
     root_object->setProperty("ui_alarm_hours", -1);
     root_object->setProperty("ui_alarm_minutes", -1);
