@@ -6,7 +6,7 @@ evilalarm (0.9) unstable; urgency=low
   * Added 'Normal' module with a stop button (default for new installations)
   * Blubbels module: Allow user to finish game when alarm is over
 
- -- Christian Pulvermacher <pulvermacher@gmx.de>  Sat, 28 May 2011 00:12:07 +0200
+ -- Christian Pulvermacher <pulvermacher@gmx.de>  Sat, 12 Nov 2011 16:51:41 +0100
 
 evilalarm (0.8) unstable; urgency=low
 
