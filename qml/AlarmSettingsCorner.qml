@@ -26,16 +26,6 @@ Rectangle {
         anchors.right: parent.right
         anchors.rightMargin: 0
         source: "TimeDisplayCorner.svg"
-        Image{
-            source:"ok.svg"
-            x:165
-            y:95
-            anchors.right: parent.right
-            anchors.rightMargin: 9
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 15
-            visible: false
-        }
     }
 
     MouseArea {

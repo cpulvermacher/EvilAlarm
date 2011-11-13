@@ -78,7 +78,6 @@ install: build
 	dh_install qml/hour.svg $(QMLDIR)
 	dh_install qml/metalball2.png $(QMLDIR)
 	dh_install qml/minute.svg $(QMLDIR)
-	dh_install qml/ok.svg $(QMLDIR)
 	dh_install qml/second.png $(QMLDIR)
 	dh_install qml/spinner-bg-hover.png $(QMLDIR)
 	dh_install qml/spinner-bg.png $(QMLDIR)
