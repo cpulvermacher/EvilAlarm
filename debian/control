@@ -8,7 +8,7 @@ Standards-Version: 3.7.3
 
 Package: evilalarm
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, mce, qtquickcompat
+Depends: ${shlibs:Depends}, ${misc:Depends}, mce
 Description: An alarm clock which cannot be turned off while asleep
  The alarm behaviour can be configured, multiple modules are available:
  Normal: Ordinary (i.e. non-evil) alarm with a stop button
