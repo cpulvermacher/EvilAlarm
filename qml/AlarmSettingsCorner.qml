@@ -22,10 +22,13 @@ Rectangle {
     Image{
         id: image1
         x: 0
-        height:150;
         anchors.right: parent.right
         anchors.rightMargin: 0
         source: "TimeDisplayCorner.svg"
+        sourceSize.width: 240
+        sourceSize.height: 150
+        width: 240;
+        height: 150;
     }
 
     MouseArea {

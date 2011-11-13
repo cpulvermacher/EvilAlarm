@@ -7,7 +7,6 @@ Rectangle{
     property alias alarmMinute: spinnerMinute.currentIndex
     property alias alarmOn: alarmSwitch.on
 
-    property real shift: 0 // time zone shift; not in use
     property int totalAlarmMinutesSet: -1; //hold current alarm time as 60*h+m, or -1 if none is set
 
 
@@ -15,9 +14,9 @@ Rectangle{
         //console.log("updateUntilAlarm()");
         if(alarmOn){
             var date = new Date;
-            var hours = shift ? date.getUTCHours() + Math.floor(clock.shift) : date.getHours()
-            var minutes = shift ? date.getUTCMinutes() + ((clock.shift % 1) * 60) : date.getMinutes()
-            var seconds = date.getUTCSeconds();
+            var hours = date.getHours()
+            var minutes = date.getMinutes()
+            var seconds = date.getSeconds();
 
             var totalMinutes = hours*60+minutes;
             var totalAlarmMinutes = alarmHour*60+alarmMinute;
@@ -134,7 +133,7 @@ Rectangle{
             Image {
                 x: -56
                 y: 4
-                width: 50
+                width: 48
                 height: 48
                 smooth: true
                 source: "bell.png"

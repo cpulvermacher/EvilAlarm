@@ -7,13 +7,15 @@ Rectangle {
     Image{
         anchors.bottom: parent.bottom;
         anchors.right: parent.right;
-        width:240;
-        height:150;
+        source: "TimeDisplayCorner.svg"
+        sourceSize.width: 240
+        sourceSize.height: 150
+        width: 240;
+        height: 150;
         Image{
             source:"bell.png"
             x:160
             y:67
         }
-        source: "TimeDisplayCorner.svg"
     }
 }

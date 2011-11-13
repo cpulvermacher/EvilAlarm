@@ -47,9 +47,6 @@ Item {
     property int hours
     property int minutes
     property int seconds
-    // time zone shift; not in use
-    property real shift: 0
-    //property bool night: false
 
     property bool alarmOn
     property int alarmHours
@@ -65,24 +62,25 @@ Item {
 
     function timeChanged() {
         var date = new Date;
-        hours = shift ? date.getUTCHours() + Math.floor(clock.shift) : date.getHours()
-        //night = ( hours < 7 || hours > 19 )
-        minutes = shift ? date.getUTCMinutes() + ((clock.shift % 1) * 60) : date.getMinutes()
-        seconds = date.getUTCSeconds();
+        hours = date.getHours()
+        minutes = date.getMinutes()
+        seconds = date.getSeconds();
 
         currentTime.text = Qt.formatTime(date, Qt.SystemLocaleShortDate);
+
+        //refresh time ~200ms after second actually changes to ensure regular updates
+        tickTimer.interval =  1000 - date.getMilliseconds() + 200;
     }
 
     Timer {
-        interval: 300;
+        id: tickTimer;
+        interval: 1000;
         running: displayOn; //defined in main.qml
         repeat: true;
         onTriggered: clock.timeChanged()
     }
 
-    /*    Image { source: "anvil-clock-small-sans-anvil.png"; visible: clock.night == true}*/
-    Image { id: background; source: "anvil-clock-small-sans-anvil.png"; /* visible: clock.night == false */
-    }
+    Image { id: background; source: "anvil-clock-small-sans-anvil.png"; }
 
 
     Image {

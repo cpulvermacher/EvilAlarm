@@ -43,7 +43,6 @@ import Qt 4.7
 Item {
     id: toggleswitch
     width: background.width; height: background.height
-    property alias knob: knob
 
     property bool on: false
     onOnChanged: { state = on?"on":"off"; }
@@ -64,6 +63,8 @@ Item {
     Image {
         id: background
         source: "background.svg"
+        sourceSize.width: 247;
+        sourceSize.height: 129;
 
         MouseArea {
             anchors.fill: parent; onClicked: toggle()
