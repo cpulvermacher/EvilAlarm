@@ -7,37 +7,42 @@ Rectangle{
     property alias alarmMinute: spinnerMinute.currentIndex
     property alias alarmOn: alarmSwitch.on
 
-    property int totalAlarmMinutesSet: -1; //hold current alarm time as 60*h+m, or -1 if none is set
+    property int alarmTimeMinutes: -1; //hold current alarm time as 60*h+m, or -1 if none is set
 
 
     function updateUntilAlarm() {
-        //console.log("updateUntilAlarm()");
         if(alarmOn){
-            var date = new Date;
-            var hours = date.getHours()
-            var minutes = date.getMinutes()
-            var seconds = date.getSeconds();
+            var currentTime = new Date;
+            var hours = currentTime.getHours()
+            var minutes = currentTime.getMinutes()
+            var seconds = currentTime.getSeconds();
 
-            var totalMinutes = hours*60+minutes;
-            var totalAlarmMinutes = alarmHour*60+alarmMinute;
+            var alarmTime = new Date;
+            alarmTime.setHours(alarmHour, alarmMinute, 0, 0);
+            if(hours*60 + minutes >= alarmHour*60 + alarmMinute) { //alarm tomorrow
+                alarmTime.setDate(alarmTime.getDate() + 1);
+            }
+            if(alarmHour != alarmTime.getHours()) {
+                //invalid alarm time set (i.e. missing hour when switching to DST), force selection to corrected value
+                non_user_action = true;
+                alarmHour = alarmTime.getHours();
+                non_user_action = false;
+            }
+            var millisecondsUntilAlarm = alarmTime - currentTime;
 
-            if(totalMinutes >= totalAlarmMinutes) //alarm tomorrow
-                totalAlarmMinutes += 24*60;
-            var hoursLeft=Math.floor((totalAlarmMinutes-totalMinutes)/60);
-            var minutesLeft=Math.floor((totalAlarmMinutes-totalMinutes)%60);
-
+            var hoursLeft = Math.floor(millisecondsUntilAlarm / (1000 * 3600));
+            var minutesLeft = Math.floor(millisecondsUntilAlarm / (1000 * 60)) % 60;
             untilAlarm.text = "Until alarm:\n"+hoursLeft+" hours "+minutesLeft+" minutes"
 
             if(!spinnerHour.moving && !spinnerMinute.moving //spinners have stopped
-            && totalAlarmMinutesSet != totalAlarmMinutes%(24*60)) { //and alarm isn't set yet
+            && alarmTimeMinutes != alarmHour*60+alarmMinute) { //and alarm isn't set yet
                 if(!non_user_action) {
                     window.setAlarm(alarmHour, alarmMinute);
                 }
-                totalAlarmMinutesSet = totalAlarmMinutes%(24*60);
+                alarmTimeMinutes = alarmHour*60 + alarmMinute;
 
-                //set timer to turn alarm off again (note: secondsLeft = 0 - seconds)
-                var milisecondsUntilAlarm = 1000*(3600*hoursLeft + 60*minutesLeft - seconds);
-                alarmExpiredTimer.interval = milisecondsUntilAlarm;
+                //set timer to turn alarm off again
+                alarmExpiredTimer.interval = millisecondsUntilAlarm;
                 alarmExpiredTimer.start();
 
                 updateUntilAlarmTimer.stop();
@@ -47,8 +52,8 @@ Rectangle{
 
             if(!non_user_action) {
                 //only stop alarm if we know it's running
-                if(totalAlarmMinutesSet != -1) {
-                    totalAlarmMinutesSet = -1;
+                if(alarmTimeMinutes != -1) {
+                    alarmTimeMinutes = -1;
                     window.unsetAlarm()
                 }
 
@@ -60,7 +65,7 @@ Rectangle{
     //turn alarm state off again
     function alarmExpired() {
         non_user_action = true;
-        totalAlarmMinutesSet = -1;
+        alarmTimeMinutes = -1;
         alarmOn = false;
         non_user_action = false;
     }

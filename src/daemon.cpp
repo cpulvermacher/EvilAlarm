@@ -25,102 +25,110 @@
 
 Daemon::Daemon()
 {
-	QSettings settings;
-	const QTime wake_at = settings.value("wake_at").toTime();
-	if(!wake_at.isValid()) {
-		std::cerr << "Invalid alarm time, aborting!\n";
-		exit(1);
-	}
+    QSettings settings;
+    const QTime wake_at_time = settings.value("wake_at").toTime();
+    if(!wake_at_time.isValid()) {
+        std::cerr << "Invalid alarm time, aborting!\n";
+        exit(1);
+    }
 
-	int msecs = QTime::currentTime().msecsTo(wake_at);
-	if(msecs < 0) //alarm tomorrow?
-		msecs += 24*60*60*1000; //+24h
-	
-	QTimer::singleShot(msecs, this, SLOT(wake()));
+    QDateTime wake_at(QDate::currentDate(), wake_at_time);
+    if(QDateTime::currentDateTime() > wake_at) //alarm tomorrow
+        wake_at = wake_at.addDays(1);
 
-	std::cout << "Daemon started\n";
+    int msecs = QDateTime::currentDateTime().msecsTo(wake_at);
+    //when switching back from DST (i.e. an extra hour added) the same time occurs twice in 2 hours, with no way to distinguish them. To make things worse, the QML side thinks you mean the second hour, QDateTime takes the first.
+    //We'll emulate the QML behaviour here so at least the '.. hours left' message is correct.
+    const QDateTime wake_at_plus_1h(wake_at.date(), wake_at.time().addSecs(3600));
+    if(wake_at.secsTo(wake_at_plus_1h) == 2*3600) {
+        msecs += 60*60*1000; //set alarm into extra hour
+    }
+
+    QTimer::singleShot(msecs, this, SLOT(wake()));
+
+    std::cout << "Daemon started, alarm at: " << qPrintable(wake_at.toString()) << "\n";
 }
 
 
 void Daemon::wake()
 {
-	//start evilalarm --wakeup
-	ui_process = new QProcess(this);
-	connect(ui_process, SIGNAL(finished(int, QProcess::ExitStatus)),
-		this, SLOT(uiFinished(int, QProcess::ExitStatus)));
-	ui_process->start(QCoreApplication::applicationFilePath(), QStringList("--wakeup"));
-	std::cout << "evilalarm --wakeup started\n";
+    //start evilalarm --wakeup
+    ui_process = new QProcess(this);
+    connect(ui_process, SIGNAL(finished(int, QProcess::ExitStatus)),
+            this, SLOT(uiFinished(int, QProcess::ExitStatus)));
+    ui_process->start(QCoreApplication::applicationFilePath(), QStringList("--wakeup"));
+    std::cout << "evilalarm --wakeup started\n";
 }
 
 
 void Daemon::uiFinished(int, QProcess::ExitStatus status)
 {
-	delete ui_process;
+    delete ui_process;
 
-	if(status == QProcess::CrashExit) {
-		std::cerr << "UI probably got killed, restarting\n";
-		wake();
-	} else {
-		//UI exited normally, stop daemon
-		QSettings settings;
-		settings.setValue("daemon_pid", 0);
-		settings.sync();
+    if(status == QProcess::CrashExit) {
+        std::cerr << "UI probably got killed, restarting\n";
+        wake();
+    } else {
+        //UI exited normally, stop daemon
+        QSettings settings;
+        settings.setValue("daemon_pid", 0);
+        settings.sync();
 
-		std::cout << "Alarm finished, daemon shutting down\n";
-		QCoreApplication::quit();
-	}
+        std::cout << "Alarm finished, daemon shutting down\n";
+        QCoreApplication::quit();
+    }
 }
 
 
 //static members
 void Daemon::start()
 {
-	if(isRunning())
-		return;
+    if(isRunning())
+        return;
 
-	qint64 pid;
-	const bool success = QProcess::startDetached(QCoreApplication::applicationFilePath(), QStringList("--daemon"), QString(), &pid);
-	if(!success) {
-		std::cerr << "Couldn't start evilalarm daemon!\n";
-		exit(1);
-	}
+    qint64 pid;
+    const bool success = QProcess::startDetached(QCoreApplication::applicationFilePath(), QStringList("--daemon"), QString(), &pid);
+    if(!success) {
+        std::cerr << "Couldn't start evilalarm daemon!\n";
+        exit(1);
+    }
 
-	QSettings settings;
-	settings.setValue("daemon_pid", pid);
-	settings.sync();
+    QSettings settings;
+    settings.setValue("daemon_pid", pid);
+    settings.sync();
 }
 
 void Daemon::stop()
 {
-	if(!isRunning())
-		return;
+    if(!isRunning())
+        return;
 
-	std::cout << "Stopping daemon\n";	
-	
-	QSettings settings;
-	const int pid = settings.value("daemon_pid", 0).toInt();
+    std::cout << "Stopping daemon\n";	
 
-	QProcess::execute(QString("kill %1").arg(pid));
+    QSettings settings;
+    const int pid = settings.value("daemon_pid", 0).toInt();
 
-	settings.setValue("daemon_pid", 0);
-	settings.sync();
+    QProcess::execute(QString("kill %1").arg(pid));
+
+    settings.setValue("daemon_pid", 0);
+    settings.sync();
 }
 
 bool Daemon::isRunning()
 {
-	QSettings settings;
-	const int pid = settings.value("daemon_pid", 0).toInt();
-	if(pid == 0)
-		return false;
+    QSettings settings;
+    const int pid = settings.value("daemon_pid", 0).toInt();
+    if(pid == 0)
+        return false;
 
-	//busybox doesn't support 'ps --pid' :(
-	const bool running = QFile::exists(QString("/proc/%1/").arg(pid));
-	if(!running) {
-		std::cerr << "Daemon didn't shut down cleanly last time, removing old PID\n";
+    //busybox doesn't support 'ps --pid' :(
+    const bool running = QFile::exists(QString("/proc/%1/").arg(pid));
+    if(!running) {
+        std::cerr << "Daemon didn't shut down cleanly last time, removing old PID\n";
 
-		settings.setValue("daemon_pid", 0);
-		settings.sync();
-	}
+        settings.setValue("daemon_pid", 0);
+        settings.sync();
+    }
 
-	return running;
+    return running;
 }

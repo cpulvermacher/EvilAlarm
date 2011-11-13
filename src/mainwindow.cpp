@@ -89,10 +89,6 @@ void MainWindow::setEvilAlarm(int hours, int minutes) {
 
     settings.setValue("wake_at", wake_at);
 
-    int msecs = QTime::currentTime().msecsTo(wake_at);
-    if(msecs < 0) //alarm tomorrow?
-        msecs += 24*60*60*1000; //+24h
-
     //save to history
     settings.beginGroup("history");
     const int num_used = settings.value(QString("%1/used").arg(wake_at.toString()), 0).toInt();
