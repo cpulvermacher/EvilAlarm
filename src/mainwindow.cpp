@@ -32,8 +32,8 @@ MainWindow::MainWindow(QWidget *parent) :
     const QString maemo_install_path("/opt/evilalarm/qml/main.qml");
     if(QFile::exists(maemo_install_path)) {
         path = maemo_install_path;
-    } else { //simulator
-        path = QApplication::applicationDirPath()+"/qml/main.qml";
+    } else { //for QtCreator
+        path = QApplication::applicationDirPath()+"/../qml/qml/main.qml";
     }
 
     //now load UI
