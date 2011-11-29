@@ -1,4 +1,3 @@
-
 #ifndef alarmhistoryitem_H
 #define alarmhistoryitem_H
 
@@ -7,7 +6,7 @@
 const int NUM_HISTORY_ITEMS = 6;
 
 class AlarmHistoryItem : public QPushButton {
-	Q_OBJECT
+    Q_OBJECT
 public:
     AlarmHistoryItem(QTime t, int used, QWidget *parent);
     ~AlarmHistoryItem();
@@ -19,19 +18,19 @@ public:
     void setTotalUsed(int t) { total = t; }
 
 public slots:
-	void updateItem();
-	void longPress();
-	void emitRemove();
-	void emitSelected();
+    void updateItem();
+    void longPress();
+    void emitRemove();
+    void emitSelected();
 
 signals:
-	void remove(QTime);
-	void selected(QTime);
+    void remove(QTime);
+    void selected(QTime);
 
 private:
     QTimer button_held_timer;
-	QTime alarm_time;
-	int num_used;
+    QTime alarm_time;
+    int num_used;
     int total; //num_used of all history items
 };
 #endif

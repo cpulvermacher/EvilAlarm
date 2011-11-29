@@ -10,31 +10,31 @@
 
 Alarm* ModuleList::getModuleInstance(QWidget *parent)
 {
-	QSettings settings;
-	QString modulename = settings.value("module").toString().toLower();
+    QSettings settings;
+    QString modulename = settings.value("module").toString().toLower();
 
-	if(modulename == "normal")
-		return new AlarmNormal(parent);
-	else if(modulename == "movement")
-		return new AlarmMovement(parent);
-	else if(modulename == "blubbels")
-		return new AlarmBlubbels(parent);
-	else
-		return new AlarmMovement(parent);
+    if(modulename == "normal")
+        return new AlarmNormal(parent);
+    else if(modulename == "movement")
+        return new AlarmMovement(parent);
+    else if(modulename == "blubbels")
+        return new AlarmBlubbels(parent);
+    else
+        return new AlarmMovement(parent);
 }
 
 ModuleSettings* ModuleList::getSettingsInstance(QString name, QWidget *parent)
 {
-	name = name.toLower();
-	if(name == "movement")
-		return new AlarmMovementSettings(parent);
-	else if(name == "blubbels")
-		return new AlarmBlubbelsSettings(parent);
-	else
-		return 0;
+    name = name.toLower();
+    if(name == "movement")
+        return new AlarmMovementSettings(parent);
+    else if(name == "blubbels")
+        return new AlarmBlubbelsSettings(parent);
+    else
+        return 0;
 }
 
 QStringList ModuleList::availableModules()
 {
-	return QStringList() << "Normal" << "Blubbels" << "Movement";
+    return QStringList() << "Normal" << "Blubbels" << "Movement";
 }

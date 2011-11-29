@@ -33,84 +33,84 @@ const qreal VOLUME_STEP = 0.1;
 
 
 Backend::Backend(QObject *parent):
-	QObject(parent),
-	noise(new Phonon::MediaObject(this)),
-	audio_output(new Phonon::AudioOutput(Phonon::MusicCategory,  this)),
-	alarm_playing(false),
-	is_vibrating(false),
-	volume(1.0)
+    QObject(parent),
+    noise(new Phonon::MediaObject(this)),
+    audio_output(new Phonon::AudioOutput(Phonon::MusicCategory,  this)),
+    alarm_playing(false),
+    is_vibrating(false),
+    volume(1.0)
 {
-	QSettings settings;
+    QSettings settings;
 
-	int max_volume = settings.value("max_volume", MAX_VOLUME).toInt();
-	use_vibration = settings.value("use_vibration", USE_VIBRATION).toBool();
-	QString sound_filename = settings.value("sound_filename", SOUND_FILE).toString();
+    int max_volume = settings.value("max_volume", MAX_VOLUME).toInt();
+    use_vibration = settings.value("use_vibration", USE_VIBRATION).toBool();
+    QString sound_filename = settings.value("sound_filename", SOUND_FILE).toString();
 
-	connect(noise, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
-		this, SLOT(handleAudioStateChange(Phonon::State)));
-	connect(noise, SIGNAL(aboutToFinish()),
-		this, SLOT(repeatSound()));
+    connect(noise, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
+            this, SLOT(handleAudioStateChange(Phonon::State)));
+    connect(noise, SIGNAL(aboutToFinish()),
+            this, SLOT(repeatSound()));
 
-	Phonon::createPath(noise, audio_output);
-	noise->setCurrentSource(Phonon::MediaSource(sound_filename));
+    Phonon::createPath(noise, audio_output);
+    noise->setCurrentSource(Phonon::MediaSource(sound_filename));
 
-	//save old profile
-	QDBusInterface interface("com.nokia.profiled", "/com/nokia/profiled", "com.nokia.profiled");
-	QDBusReply<QString> profile = interface.call("get_profile");
-	old_profile = profile;
+    //save old profile
+    QDBusInterface interface("com.nokia.profiled", "/com/nokia/profiled", "com.nokia.profiled");
+    QDBusReply<QString> profile = interface.call("get_profile");
+    old_profile = profile;
 
-	//workaround to avoid hangs when calling external programs
-	//seems to occur only while playing audio and shortly afterwards; results in 100% CPU usage, clone() syscall that it should be doing at this point never appears in strace output
-	//somehow looks similar to this: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=575534
+    //workaround to avoid hangs when calling external programs
+    //seems to occur only while playing audio and shortly afterwards; results in 100% CPU usage, clone() syscall that it should be doing at this point never appears in strace output
+    //somehow looks similar to this: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=575534
 
-	//reset volume and profile regularly, also saves current volume & restores on SIGTERM
-	keepvolume.start(QString("sh /opt/evilalarm/share/keepvolume.sh %1").arg(max_volume));
+    //reset volume and profile regularly, also saves current volume & restores on SIGTERM
+    keepvolume.start(QString("sh /opt/evilalarm/share/keepvolume.sh %1").arg(max_volume));
 
-	//workaround Qt bug occuring when pause() is called shortly before the audio file is over, resulting in no sound but a Phonon::PlayingState
-	QTimer *hangcheck_timer = new QTimer(this);
-	hangcheck_timer->setInterval(500);
-	connect(hangcheck_timer, SIGNAL(timeout()),
-		this, SLOT(checkForHang()));
-	hangcheck_timer->start();
+    //workaround Qt bug occuring when pause() is called shortly before the audio file is over, resulting in no sound but a Phonon::PlayingState
+    QTimer *hangcheck_timer = new QTimer(this);
+    hangcheck_timer->setInterval(500);
+    connect(hangcheck_timer, SIGNAL(timeout()),
+            this, SLOT(checkForHang()));
+    hangcheck_timer->start();
 }
 
 Backend::~Backend()
 {
-	pause();
-	std::cout << "~Backend\n";
+    pause();
+    std::cout << "~Backend\n";
 
-	//don't kill process while starting up
-	keepvolume.waitForStarted(2000);
-	keepvolume.terminate();
-	keepvolume.waitForFinished(2000); //don't free memory of QProcess before it's done
+    //don't kill process while starting up
+    keepvolume.waitForStarted(2000);
+    keepvolume.terminate();
+    keepvolume.waitForFinished(2000); //don't free memory of QProcess before it's done
 
-	//restore profile
-	QDBusInterface interface("com.nokia.profiled", "/com/nokia/profiled", "com.nokia.profiled");
-	interface.call("set_profile", old_profile);
+    //restore profile
+    QDBusInterface interface("com.nokia.profiled", "/com/nokia/profiled", "com.nokia.profiled");
+    interface.call("set_profile", old_profile);
 
-	delete audio_output;
-	delete noise;
-	std::cout << "done\n";
+    delete audio_output;
+    delete noise;
+    std::cout << "done\n";
 }
 
 void Backend::play()
 {
-	std::cout << "Backend::play()\n";
-	alarm_playing = true;
+    std::cout << "Backend::play()\n";
+    alarm_playing = true;
 
-	noise->play();
-	if(use_vibration)
-		startVibrator();
+    noise->play();
+    if(use_vibration)
+        startVibrator();
 }
 
 void Backend::pause()
 {
-	std::cout << "Backend::pause()\n";
-	alarm_playing = false;
+    std::cout << "Backend::pause()\n";
+    alarm_playing = false;
 
-	noise->pause();
-	if(use_vibration)
-		stopVibrator();
+    noise->pause();
+    if(use_vibration)
+        stopVibrator();
 }
 
 void Backend::volumeUp() { setVolume(volume + VOLUME_STEP); }
@@ -118,18 +118,18 @@ void Backend::volumeDown() { setVolume(volume - VOLUME_STEP); }
 
 void Backend::setVolume(qreal v)
 {
-	if(v <= 0) {
-		v = 0;
-		pause();
-	} else if(v > volume and !alarm_playing) {
-		play();
-	}
+    if(v <= 0) {
+        v = 0;
+        pause();
+    } else if(v > volume and !alarm_playing) {
+        play();
+    }
 
-	if(v > 1.0)
-		v = 1.0;
+    if(v > 1.0)
+        v = 1.0;
 
-	volume = v;
-	audio_output->setVolume(volume);
+    volume = v;
+    audio_output->setVolume(volume);
 }
 
 void Backend::repeatSound() { noise->enqueue(noise->currentSource()); }
@@ -143,59 +143,59 @@ void Backend::setVibratorStateOff() { is_vibrating = false; }
 
 void Backend::startVibrator()
 {
-	if(!alarm_playing or is_vibrating)
-		return;
+    if(!alarm_playing or is_vibrating)
+        return;
 
-	QDBusInterface interface("com.nokia.mce", "/com/nokia/mce/request", "com.nokia.mce.request", QDBusConnection::systemBus());
-	interface.call("req_vibrator_pattern_activate", "PatternIncomingCall");
-	is_vibrating = true;
+    QDBusInterface interface("com.nokia.mce", "/com/nokia/mce/request", "com.nokia.mce.request", QDBusConnection::systemBus());
+    interface.call("req_vibrator_pattern_activate", "PatternIncomingCall");
+    is_vibrating = true;
 
-	QTimer::singleShot(VIBRATOR_ON_MSECS, this, SLOT(stopVibrator()));
+    QTimer::singleShot(VIBRATOR_ON_MSECS, this, SLOT(stopVibrator()));
 }
 
 void Backend::stopVibrator()
 {
-	if(!is_vibrating)
-		return;
+    if(!is_vibrating)
+        return;
 
-	QDBusInterface interface("com.nokia.mce", "/com/nokia/mce/request", "com.nokia.mce.request", QDBusConnection::systemBus());
-	interface.call("req_vibrator_pattern_deactivate", "PatternIncomingCall");
+    QDBusInterface interface("com.nokia.mce", "/com/nokia/mce/request", "com.nokia.mce.request", QDBusConnection::systemBus());
+    interface.call("req_vibrator_pattern_deactivate", "PatternIncomingCall");
 
-	QTimer::singleShot(VIBRATOR_OFF_MSECS, this, SLOT(startVibrator()));
+    QTimer::singleShot(VIBRATOR_OFF_MSECS, this, SLOT(startVibrator()));
 
-	//phone doesn't stop vibrating right away...
-	QTimer::singleShot(200, this, SLOT(setVibratorStateOff()));
+    //phone doesn't stop vibrating right away...
+    QTimer::singleShot(200, this, SLOT(setVibratorStateOff()));
 }
 
 void Backend::handleAudioStateChange(Phonon::State newstate)
 {
-	if(newstate == Phonon::ErrorState) {
-		std::cout << "Error playing the audio file!\n";
-		if(!use_vibration) {
-			std::cout << "Enabling vibration as fallback.\n";
+    if(newstate == Phonon::ErrorState) {
+        std::cout << "Error playing the audio file!\n";
+        if(!use_vibration) {
+            std::cout << "Enabling vibration as fallback.\n";
 
-			use_vibration = true;
-			if(alarm_playing)
-				startVibrator();
-		}
-	}
+            use_vibration = true;
+            if(alarm_playing)
+                startVibrator();
+        }
+    }
 }
 
 void Backend::checkForHang()
 {
-	//only check if Phonon says it is playing
-	if(noise->state() != Phonon::PlayingState or noise->totalTime() == -1)
-		return;
+    //only check if Phonon says it is playing
+    if(noise->state() != Phonon::PlayingState or noise->totalTime() == -1)
+        return;
 
-	static int last_pos = -1;
-	const int new_pos = noise->currentTime();
-	if(last_pos == new_pos) {
-		//hang detected, reset audio
-		noise->clear();
-		QSettings settings;
-		QString sound_filename = settings.value("sound_filename", SOUND_FILE).toString();
-		noise->setCurrentSource(Phonon::MediaSource(sound_filename));
-		noise->play();
-	}
-	last_pos = new_pos;
+    static int last_pos = -1;
+    const int new_pos = noise->currentTime();
+    if(last_pos == new_pos) {
+        //hang detected, reset audio
+        noise->clear();
+        QSettings settings;
+        QString sound_filename = settings.value("sound_filename", SOUND_FILE).toString();
+        noise->setCurrentSource(Phonon::MediaSource(sound_filename));
+        noise->play();
+    }
+    last_pos = new_pos;
 }
