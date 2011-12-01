@@ -161,8 +161,19 @@ Rectangle{
                     //console.log("hourspinner changed")
                     if(!non_user_action) {
                         updateUntilAlarmTimer.start();
-                        if(!alarmSwitch.on)
-                            alarmSwitch.aswitch.toggle();
+                        if(!alarmSwitch.on){
+                            // when user touches spinner, turn alarm on
+                            // commented out: usability testing shows
+                            // that some users tend to want to toggle the
+                            // switch without actually paying attention to
+                            // the state it visually expresses;
+                            // if it is turned on automatically,
+                            // the next thing the user will do is
+                            // to turn it off again, assuming they
+                            // are turning it on.
+                            //alarmSwitch.aswitch.toggle();
+                        }
+
                     }
                 }
             }
@@ -188,8 +199,12 @@ Rectangle{
                     //console.log("minutespinner changed")
                     if(!non_user_action) {
                         updateUntilAlarmTimer.start();
-                        if(!alarmSwitch.on)
-                            alarmSwitch.aswitch.toggle();
+                        if(!alarmSwitch.on){
+                            // when user touches spinner, turn alarm on
+                            // commented out: see comment above in spinnerHour
+
+                            //alarmSwitch.aswitch.toggle();
+                        }
                     }
                 }
             }
