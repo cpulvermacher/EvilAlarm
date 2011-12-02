@@ -14,6 +14,7 @@
 #include <QSettings>
 #include <QGraphicsObject>
 #include <QFile>
+#include <QMaemo5InformationBox>
 
 #include <mce/mode-names.h>
 #include <mce/dbus-names.h>
@@ -66,8 +67,8 @@ MainWindow::MainWindow(QWidget *parent) :
         QMaemo5InformationBox::information(this, tr("Can't write settings to /home/user/.config/EvilAlarm/EvilAlarm - Please fix its file permissions and restart EvilAlarm"));
     }
 
-    if(!QFile::permissions(KEEPVOLUME_PATH).testFlag(QFile::ExeOther)) {
-        QMaemo5InformationBox::information(this, tr("Can't execute %1 - Please reinstall EvilAlarm!").arg(KEEPVOLUME_PATH));
+    if(!QFile::permissions(KEEPVOLUME_PATH).testFlag(QFile::ReadOther)) {
+        QMaemo5InformationBox::information(this, tr("Can't access %1 - Please reinstall EvilAlarm!").arg(KEEPVOLUME_PATH));
     }
 }
 

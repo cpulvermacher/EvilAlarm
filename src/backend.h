@@ -22,7 +22,7 @@
 #include <QtCore>
 #include <Phonon>
 
-const char* KEEPVOLUME_PATH = "/opt/evilalarm/share/keepvolume.sh";
+const QString KEEPVOLUME_PATH = "/opt/evilalarm/share/keepvolume.sh";
 
 //handles audio & vibration
 class Backend : public QObject {
