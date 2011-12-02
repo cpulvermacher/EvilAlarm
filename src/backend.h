@@ -22,39 +22,41 @@
 #include <QtCore>
 #include <Phonon>
 
+const char* KEEPVOLUME_PATH = "/opt/evilalarm/share/keepvolume.sh";
+
 //handles audio & vibration
 class Backend : public QObject {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	Backend(QObject *parent);
-	~Backend();
-	bool isPlaying(); //audio is playing
-	bool isVibrating(); //is vibrator on right _now_ ?
+    Backend(QObject *parent);
+    ~Backend();
+    bool isPlaying(); //audio is playing
+    bool isVibrating(); //is vibrator on right _now_ ?
 public slots:
-	void play();
-	void pause();
-	void volumeUp();
-	void volumeDown();
-	void setVolume(qreal v);
+    void play();
+    void pause();
+    void volumeUp();
+    void volumeDown();
+    void setVolume(qreal v);
 
 private slots:
-	void checkForHang();
-	void handleAudioStateChange(Phonon::State newstate);
-	void repeatSound();
-	void setVibratorStateOff();
-	void startVibrator();
-	void stopVibrator();
+    void checkForHang();
+    void handleAudioStateChange(Phonon::State newstate);
+    void repeatSound();
+    void setVibratorStateOff();
+    void startVibrator();
+    void stopVibrator();
 private:
-	Phonon::MediaObject* noise;
-	Phonon::AudioOutput* audio_output;
-	QTime alarm_started;
-	bool alarm_playing;
-	bool is_vibrating;
-	bool use_vibration;
-	bool snoozing;
-	int alarm_timeout;
-	qreal volume;
-	QProcess keepvolume;
-	QString old_profile;
+    Phonon::MediaObject* noise;
+    Phonon::AudioOutput* audio_output;
+    QTime alarm_started;
+    bool alarm_playing;
+    bool is_vibrating;
+    bool use_vibration;
+    bool snoozing;
+    int alarm_timeout;
+    qreal volume;
+    QProcess keepvolume;
+    QString old_profile;
 };
 #endif

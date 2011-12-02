@@ -22,17 +22,17 @@
 #include <QtCore>
 
 class Daemon : public QObject {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	Daemon();
+    Daemon();
 
-	static void start(); //does nothing if daemon is running
-	static void stop();
-	static bool isRunning();
+    static void start(); //does nothing if daemon is running
+    static void stop();
+    static bool isRunning();
 private slots:
-	void wake();
-	void uiFinished(int, QProcess::ExitStatus);
+    void wake();
+    void uiFinished(int, QProcess::ExitStatus);
 private:
-	QProcess *ui_process;
+    QProcess *ui_process;
 };
 #endif

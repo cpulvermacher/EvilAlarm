@@ -35,11 +35,14 @@ FORMS += \
     about.ui \
     settings.ui
 
+
+#QtCreator stuff
 maemo5 {
     target.path = /opt/evilalarm/bin
     INSTALLS += target
 }
 
+#files shown in project pane
 OTHER_FILES += \
     qml/main.qml \
     qml/AlarmSwitch.qml \

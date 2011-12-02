@@ -6,6 +6,7 @@
 #include "about.h"
 #include "daemon.h"
 #include "alarm.h"
+#include "backend.h"
 #include "module_list.h"
 
 #include <QDeclarativeContext>
@@ -32,8 +33,8 @@ MainWindow::MainWindow(QWidget *parent) :
     const QString maemo_install_path("/opt/evilalarm/qml/main.qml");
     if(QFile::exists(maemo_install_path)) {
         path = maemo_install_path;
-    } else { //simulator
-        path = QApplication::applicationDirPath()+"/qml/main.qml";
+    } else { //for QtCreator
+        path = QApplication::applicationDirPath()+"/../qml/qml/main.qml";
     }
 
     //now load UI
@@ -60,6 +61,14 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(setEvilAlarm(int, int)));
     QDBusConnection::systemBus().connect("", MCE_SIGNAL_PATH, MCE_SIGNAL_IF, MCE_DISPLAY_SIG,
             this, SLOT(displayStateChanged(QString)));
+
+    if(!settings.isWritable()) {
+        QMaemo5InformationBox::information(this, tr("Can't write settings to /home/user/.config/EvilAlarm/EvilAlarm - Please fix its file permissions and restart EvilAlarm"));
+    }
+
+    if(!QFile::permissions(KEEPVOLUME_PATH).testFlag(QFile::ExeOther)) {
+        QMaemo5InformationBox::information(this, tr("Can't execute %1 - Please reinstall EvilAlarm!").arg(KEEPVOLUME_PATH));
+    }
 }
 
 MainWindow::~MainWindow()
