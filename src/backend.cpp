@@ -64,7 +64,7 @@ Backend::Backend(QObject *parent):
     //somehow looks similar to this: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=575534
 
     //reset volume and profile regularly, also saves current volume & restores on SIGTERM
-    keepvolume.start(QString("sh /opt/evilalarm/share/keepvolume.sh %1").arg(max_volume));
+    keepvolume.start(QString("sh %1 %2").arg(KEEPVOLUME_PATH).arg(max_volume));
 
     //workaround Qt bug occuring when pause() is called shortly before the audio file is over, resulting in no sound but a Phonon::PlayingState
     QTimer *hangcheck_timer = new QTimer(this);
