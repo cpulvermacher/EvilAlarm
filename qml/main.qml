@@ -21,9 +21,9 @@ Rectangle{
     property int ui_alarm_minutes: -1
     property bool ui_alarm_active: false //updates UI [remaining time] & starts necessary timers, so change the others first
 
-
-    Row {
-        anchors.centerIn: parent; spacing: 0
-        Wakedo { angle: 180; yAxis: 1 }
+    Wakedo {
+        angle: 180
+        yAxis: 1
+        anchors.centerIn: parent
     }
 }

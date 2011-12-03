@@ -65,6 +65,6 @@ Flipable {
     }
 
     transitions: Transition {
-        NumberAnimation { target: rotation1; properties: "angle"; duration: 250; easing.type: Easing.OutInExpo; }
+        NumberAnimation { target: rotation1; properties: "angle"; duration: 250; }
     }
 }
