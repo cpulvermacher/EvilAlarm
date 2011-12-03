@@ -92,7 +92,7 @@ void AlarmHistory::removeAlarm(QTime time)
     settings.sync();
 
     //reload list
-    if(listname == "favorites")	
+    if(listname == "favorites")
         loadAlarmList("favorites", favorites_layout);
     else
         loadAlarmList("history", history_layout, NUM_HISTORY_ITEMS);
@@ -149,7 +149,6 @@ void AlarmHistory::loadAlarmList(QString listname, QHBoxLayout *list_layout, int
 
     //and display them
     QList<AlarmHistoryItem*>::iterator i;
-    int num_used_total = 0;
     for(i = alarm_list.begin(); i != cutoff; i++) {
         AlarmHistoryItem *item = *i;
 
@@ -159,14 +158,6 @@ void AlarmHistory::loadAlarmList(QString listname, QHBoxLayout *list_layout, int
 				//without QueuedConnection, execution would continue in the destoyed object!
         connect(item, SIGNAL(remove(QTime)),
                 this, SLOT(removeAlarm(QTime)), Qt::QueuedConnection);
-        num_used_total += item->numUsed();
-    }
-    //normalize
-    for(i = alarm_list.begin(); i != cutoff; i++) {
-        AlarmHistoryItem *item = *i;
-
-        item->setTotalUsed(num_used_total);
-        item->updateItem();
     }
 
     //delete unused alarm items (or they'll end up still being shown as they're children of this dialog)

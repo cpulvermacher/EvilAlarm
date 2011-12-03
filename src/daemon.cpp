@@ -103,7 +103,7 @@ void Daemon::stop()
     if(!isRunning())
         return;
 
-    std::cout << "Stopping daemon\n";	
+    std::cout << "Stopping daemon\n";
 
     QSettings settings;
     const int pid = settings.value("daemon_pid", 0).toInt();

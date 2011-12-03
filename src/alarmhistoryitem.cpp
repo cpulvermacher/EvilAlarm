@@ -5,10 +5,10 @@ const int LONG_PRESS_MS = 1000;
 AlarmHistoryItem::AlarmHistoryItem(QTime t, int used, QWidget *parent):
     QPushButton(parent),
     alarm_time(t),
-    num_used(used),
-    total(used)
+    num_used(used)
 {
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
+    setText(alarm_time.toString(Qt::SystemLocaleShortDate));
 
     connect(this, SIGNAL(clicked()),
             this, SLOT(emitSelected()));
@@ -24,15 +24,6 @@ AlarmHistoryItem::AlarmHistoryItem(QTime t, int used, QWidget *parent):
 }
 
 AlarmHistoryItem::~AlarmHistoryItem() { }
-
-void AlarmHistoryItem::updateItem()
-{
-    //assuming n items, if used equally they should have 15pt
-    const double font_size_pt = qBound(12.0, 15.0*NUM_HISTORY_ITEMS*double(num_used)/total, 30.0);
-
-    setText(alarm_time.toString(Qt::SystemLocaleShortDate));
-    setStyleSheet(tr("QPushButton { font-size: %1pt; }").arg(font_size_pt, 0, 'g', 3));
-}
 
 void AlarmHistoryItem::longPress()
 {

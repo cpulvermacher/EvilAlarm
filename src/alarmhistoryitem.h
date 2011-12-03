@@ -15,10 +15,8 @@ public:
     int numUsed() const { return num_used; }
     void setTime(QTime t) { alarm_time = t; }
     QTime time() const { return alarm_time; }
-    void setTotalUsed(int t) { total = t; }
 
 public slots:
-    void updateItem();
     void longPress();
     void emitRemove();
     void emitSelected();
@@ -31,6 +29,5 @@ private:
     QTimer button_held_timer;
     QTime alarm_time;
     int num_used;
-    int total; //num_used of all history items
 };
 #endif
