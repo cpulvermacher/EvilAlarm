@@ -121,8 +121,8 @@ bool Daemon::isRunning()
     if(pid == 0)
         return false;
 
-    //busybox doesn't support 'ps --pid' :(
-    const bool running = QFile::exists(QString("/proc/%1/").arg(pid));
+    //config thinks it's running, check if signals can be sent to process
+    const bool running = (0 == QProcess::execute(QString("kill -0 %1").arg(pid)));
     if(!running) {
         std::cerr << "Daemon didn't shut down cleanly last time, removing old PID\n";
 

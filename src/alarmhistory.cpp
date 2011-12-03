@@ -74,28 +74,28 @@ void AlarmHistory::addCurrentAlarmToFavorites()
 
 void AlarmHistory::removeAlarm(QTime time)
 {
-	QWidget *sender_wdgt = dynamic_cast<QWidget*>(sender());
-	Q_ASSERT(sender_wdgt);
+    QWidget *sender_wdgt = dynamic_cast<QWidget*>(sender());
+    Q_ASSERT(sender_wdgt);
 
-	//did the selected item come from history or favorites?
-	QString listname;
-	if(history_layout->indexOf(sender_wdgt) != -1)
-		listname = "history";
-	else
-		listname = "favorites";
+    //did the selected item come from history or favorites?
+    QString listname;
+    if(history_layout->indexOf(sender_wdgt) != -1)
+        listname = "history";
+    else
+        listname = "favorites";
 
-	//remove item
-	QSettings settings;
-	settings.beginGroup(listname);
-	settings.remove(time.toString());
-	settings.endGroup();
-	settings.sync();
+    //remove item
+    QSettings settings;
+    settings.beginGroup(listname);
+    settings.remove(time.toString());
+    settings.endGroup();
+    settings.sync();
 
-	//reload list
-	if(listname == "favorites")	
-		loadAlarmList("favorites", favorites_layout);
-	else
-		loadAlarmList("history", history_layout, NUM_HISTORY_ITEMS);
+    //reload list
+    if(listname == "favorites")	
+        loadAlarmList("favorites", favorites_layout);
+    else
+        loadAlarmList("history", history_layout, NUM_HISTORY_ITEMS);
 }
 
 void AlarmHistory::setAlarmTime(QTime time)

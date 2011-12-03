@@ -33,7 +33,7 @@ pasr --store > /tmp/evilalarm_sinkstate.backup
 while true;
 do
 	#don't keep running when evilalarm dies/is killed
-	ps | grep evilalarm | egrep -v 'grep|keep' > /dev/null
+	pgrep evilalarm > /dev/null
 	if [ $? -ne 0 ]
 	then
 		echo "keepvolume.sh: no evilalarm process found!"
