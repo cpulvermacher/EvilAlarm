@@ -1,7 +1,9 @@
 TEMPLATE = app
 TARGET = evilalarm
 QT += maemo5 dbus phonon declarative
-CONFIG += silent release
+CONFIG += silent release warn_on
+
+QMAKE_CXXFLAGS_WARN_ON = -Wall -Wundef -Wextra
 
 OBJECTS_DIR = $${PWD}/tmp
 MOC_DIR = $${PWD}/tmp
