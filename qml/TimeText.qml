@@ -27,7 +27,7 @@ Rectangle {
         text: ""
         visible: true
         //anchors.horizontalCenter: parent.horizontalCenter
-        color: "#555"
+        color: "#777777"
         font.family: "Nokia Sans"
         font.pixelSize: 30
         //style: Text.Raised; styleColor: "white"

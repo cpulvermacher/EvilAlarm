@@ -215,7 +215,7 @@ Rectangle{
         id: untilAlarm
         x: 534
         y: 218
-        color: "#555555"
+        color: "#777777"
         text: ""
         font.pixelSize: 28
     }
@@ -298,7 +298,7 @@ Rectangle{
                 y: 13
                 width: 168
                 height: 62
-                color: "#626262"
+                color: "#777777"
                 text: "Previous alarms >"
                 style: Text.Raised
                 anchors.verticalCenterOffset: 13
