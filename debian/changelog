@@ -2,6 +2,7 @@ evilalarm (1.0) unstable; urgency=low
 
   * Changing the alarm time does no longer turn the alarm on.
   * Make alarm aware of daylight saving time (DST).
+  * Allow changing alarm type when setting an alarm.
 
  -- Christian Pulvermacher <pulvermacher@gmx.de>  Sun, 13 Nov 2011 20:20:36 +0100
 

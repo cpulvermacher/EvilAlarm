@@ -2,10 +2,8 @@
 #define SELECTALARMTYPE_H
 
 #include <QDialog>
+#include <QListWidget>
 
-namespace Ui {
-    class SelectAlarmType;
-}
 
 class SelectAlarmType : public QDialog
 {
@@ -15,8 +13,11 @@ public:
     explicit SelectAlarmType(QWidget *parent = 0);
     ~SelectAlarmType();
 
+public slots:
+    void selected(QListWidgetItem* item);
+
 private:
-    Ui::SelectAlarmType *ui;
+    QListWidget *module_list;
 };
 
 #endif // SELECTALARMTYPE_H

@@ -33,7 +33,6 @@ SOURCES += main.cpp backend.cpp settings.cpp alarm.cpp daemon.cpp alarmhistoryit
 
 FORMS += \
     mainwindow.ui \
-    selectalarmtype.ui \
     about.ui \
     settings.ui
 

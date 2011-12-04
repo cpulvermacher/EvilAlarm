@@ -243,71 +243,41 @@ Rectangle{
             }
         }
 
-/*
         MouseArea {
-            id: mouse_area1
-            onClicked: window.selectAlarmType()
-            x: 7
-            y: 0
-            width: 244
-            height: 54
-            transformOrigin: Item.TopLeft
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 0
-            anchors.right: parent.right
-            anchors.rightMargin: 462
-            anchors.left: parent.left
-            anchors.leftMargin: 7
-            anchors.top: parent.top
-            anchors.topMargin: 0
-
-            Text {
-                id: text1
-                x: 1
-                y: 12
-                width: 239
-                height: 44
-                color: "#626262"
-                text: "Normal alarm >"
-                anchors.horizontalCenterOffset: -1
-                font.italic: false
-                style: Text.Raised
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenterOffset: 3
-                anchors.verticalCenter: parent.verticalCenter
-                horizontalAlignment: Text.AlignHCenter
-                wrapMode: Text.NoWrap
-                font.pixelSize: 28
-            }
-        }
-        */
-
-        MouseArea {
-            id: mouse_area2
-            //x: 254
-            x: 0
-            y: 0
+            id: historyarea
             onClicked: window.showAlarmHistory(alarmHour, alarmMinute);
-            width: 283
+            x: 21+15
+            width: 240
             height: 62
-            anchors.verticalCenterOffset: 0
-            anchors.verticalCenter: parent.verticalCenter
             Text {
                 id: text2
-                x: 58
-                y: 13
-                width: 168
-                height: 62
                 color: "#777777"
                 text: "Previous alarms >"
                 style: Text.Raised
-                anchors.verticalCenterOffset: 13
-                anchors.verticalCenter: parent.verticalCenter
+                anchors.fill: historyarea
                 font.pixelSize: 28
                 wrapMode: Text.NoWrap
-                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
             }
-            transformOrigin: Item.TopLeft
         }
+
+        MouseArea {
+            id: alarmtypearea
+            onClicked: window.selectAlarmType()
+            x: 278+15
+            width: 244
+            height: 62
+            Text {
+                id: alarmtypetext
+                color: "#777777"
+                text: ui_alarm_type + " alarm >"
+                style: Text.Raised
+                anchors.fill: alarmtypearea
+                font.pixelSize: 28
+                wrapMode: Text.NoWrap
+                verticalAlignment: Text.AlignVCenter
+            }
+        }
+
     }
 }

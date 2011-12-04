@@ -49,6 +49,7 @@ MainWindow::MainWindow(QWidget *parent) :
     root_object->setProperty("ui_alarm_hours", alarm_time.hour());
     root_object->setProperty("ui_alarm_minutes", alarm_time.minute());
     root_object->setProperty("ui_alarm_active", Daemon::isRunning());
+    root_object->setProperty("ui_alarm_type", settings.value("module", "Normal").toString());
     root_object->setProperty("non_user_action", false);
 
 
@@ -78,8 +79,14 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::showAlarmTypeSelector() {
-    static SelectAlarmType* selectAlarmType = new SelectAlarmType(this);
-    selectAlarmType->show();
+    SelectAlarmType* selectAlarmType = new SelectAlarmType(this);
+    selectAlarmType->exec();
+
+    QGraphicsObject *root_object = ui->view->rootObject();
+    QSettings settings;
+    root_object->setProperty("ui_alarm_type", settings.value("module", "Normal").toString());
+
+    delete selectAlarmType;
 }
 
 
@@ -138,6 +145,10 @@ void MainWindow::on_actionSettings_triggered()
     settingsWindow->setWindowFlags(windowFlags() | Qt::Window);
     settingsWindow->exec();
     delete settingsWindow;
+
+    QGraphicsObject *root_object = ui->view->rootObject();
+    QSettings settings;
+    root_object->setProperty("ui_alarm_type", settings.value("module", "Normal").toString());
 }
 
 void MainWindow::on_actionAbout_triggered()

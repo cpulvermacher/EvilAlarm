@@ -20,6 +20,7 @@ Rectangle{
     property int ui_alarm_hours: -1
     property int ui_alarm_minutes: -1
     property bool ui_alarm_active: false //updates UI [remaining time] & starts necessary timers, so change the others first
+    property string ui_alarm_type: ""
 
     Wakedo {
         angle: 180
