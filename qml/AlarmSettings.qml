@@ -109,7 +109,6 @@ Rectangle{
         width: 248
         height: 223
         onOnChanged: {
-            //console.log("alarmSwitch state " + on)
             updateUntilAlarm();
         }
     }

@@ -45,6 +45,7 @@ Item {
     width: background.width; height: background.height
 
     property bool on: false
+    state: "off"
     onOnChanged: { state = on?"on":"off"; }
 
 
