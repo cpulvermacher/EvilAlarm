@@ -53,7 +53,6 @@ private:
     bool alarm_playing;
     bool is_vibrating;
     bool use_vibration;
-    bool snoozing;
     int alarm_timeout;
     qreal volume;
     QProcess keepvolume;

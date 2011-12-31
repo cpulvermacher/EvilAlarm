@@ -25,6 +25,7 @@
 #include <cstdlib>
 #include <iostream>
 
+
 //same as PatternIncomingCall defaults
 const int VIBRATOR_ON_MSECS = 900;
 const int VIBRATOR_OFF_MSECS = 1000;
@@ -66,7 +67,6 @@ Backend::Backend(QObject *parent):
     //reset volume and profile regularly, also saves current volume & restores on SIGTERM
     keepvolume.start(QString("sh %1 %2").arg(KEEPVOLUME_PATH).arg(max_volume));
 
-    //workaround Qt bug occuring when pause() is called shortly before the audio file is over, resulting in no sound but a Phonon::PlayingState
     QTimer *hangcheck_timer = new QTimer(this);
     hangcheck_timer->setInterval(500);
     connect(hangcheck_timer, SIGNAL(timeout()),
@@ -181,16 +181,19 @@ void Backend::handleAudioStateChange(Phonon::State newstate)
     }
 }
 
+//workaround for Qt bug occuring when pause() is called shortly before the audio file is over, resulting in no sound but a Phonon::PlayingState
 void Backend::checkForHang()
 {
-    //only check if Phonon says it is playing
-    if(noise->state() != Phonon::PlayingState or noise->totalTime() == -1)
+    //only check if Phonon says it is playing (and we're supposed to play sound)
+    if(!alarm_playing
+            or noise->state() != Phonon::PlayingState
+            or noise->totalTime() == -1)
         return;
 
     static int last_pos = -1;
     const int new_pos = noise->currentTime();
     if(last_pos == new_pos) {
-        //hang detected, reset audio
+        std::cout << "Audio hang detected, resetting.\n";
         noise->clear();
         QSettings settings;
         QString sound_filename = settings.value("sound_filename", SOUND_FILE).toString();
