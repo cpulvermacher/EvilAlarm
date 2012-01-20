@@ -125,10 +125,11 @@ void AlarmMovement::accelUpdate(int x, int y, int z)
         backend->volumeUp();
     }
 
-    if(!backend->isVibrating()) //ignore huge spikes
+    if(!backend->isVibrating()) { //ignore huge spikes
         lastx = x;
-    lasty = y;
-    lastz = z;
+        lasty = y;
+        lastz = z;
+    }
 }
 
 void AlarmMovement::updateScreen()
