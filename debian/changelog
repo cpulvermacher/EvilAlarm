@@ -4,6 +4,7 @@ evilalarm (1.0) unstable; urgency=low
   * Make alarm aware of daylight saving time (DST).
   * Allow changing alarm type when setting an alarm.
   * Fix: Snooze button occasionally wouldn't stop the alarm
+  * Movement module: Added option to turn off alarm when charger is plugged in
 
  -- Christian Pulvermacher <pulvermacher@gmx.de>  Sun, 13 Nov 2011 20:20:36 +0100
 

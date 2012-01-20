@@ -5,8 +5,6 @@
 #include <QMaemo5ValueButton>
 
 //default values
-const int ACCELEROMETER_POLL_MSEC = 200;
-const int ACCELEROMETER_THRESHOLD = 50;
 const QString SOUND_FILE = "/home/user/MyDocs/.sounds/Ringtones/Beep.aac";
 const float MAX_VOLUME = 80;
 const int INACTIVITY_TIMEOUT = 4; //seconds before noise will restart after device has stopped moving
@@ -47,7 +45,7 @@ private:
     QCheckBox *fullscreen;
     QCheckBox *prevent_device_lock;
     QCheckBox *vibration;
-		QPushButton *clear_history;
+    QPushButton *clear_history;
     Ui::Settings *ui;
 };
 

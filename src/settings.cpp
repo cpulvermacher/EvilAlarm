@@ -12,7 +12,7 @@ Settings::Settings(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    //basic settings 
+    //basic settings
     int row = 0;
     QLabel *snooze_time_label = new QLabel(tr("Snooze time"));
     snooze_time = new QSpinBox();
@@ -58,7 +58,7 @@ Settings::Settings(QWidget *parent) :
     module->addItems(ModuleList::availableModules());
     int current_idx = module->findText(settings.value("module").toString(), Qt::MatchFixedString); //case insensitive search
     if(current_idx == -1) //invalid module, use default
-			current_idx = module->findText("Normal");
+        current_idx = module->findText("Normal");
     module->setCurrentIndex(current_idx);
     ui->alarmtype->addWidget(module_label, row, 0);
     ui->alarmtype->addWidget(module, row, 1);
@@ -67,10 +67,10 @@ Settings::Settings(QWidget *parent) :
     module_settings_layout = new QStackedLayout();
     ui->alarmtype->addLayout(module_settings_layout, row, 0, 1, 2);
     foreach(QString modulename, ModuleList::availableModules()) {
-			QWidget *widget = ModuleList::getSettingsInstance(modulename, this);
-			if(!widget)
-				widget = new QWidget(this); //module not configurable
-			module_settings_layout->addWidget(widget);
+        QWidget *widget = ModuleList::getSettingsInstance(modulename, this);
+        if(!widget)
+            widget = new QWidget(this); //module not configurable
+        module_settings_layout->addWidget(widget);
     }
     connect(module, SIGNAL(activated(int)),
             module_settings_layout, SLOT(setCurrentIndex(int)));
