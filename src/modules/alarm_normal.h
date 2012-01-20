@@ -23,18 +23,19 @@
 
 #include <QtGui>
 
-class AlarmNormal : public Alarm {
-	Q_OBJECT
+class AlarmNormal : public Alarm
+{
+    Q_OBJECT
 public:
-	explicit AlarmNormal(QWidget *parent = 0);
-	~AlarmNormal() { }
+    explicit AlarmNormal(QWidget *parent = 0);
+    ~AlarmNormal() { }
 protected slots:
-	void updateScreen();
-	virtual void restart();
-	void snooze();
+    void updateScreen();
+    virtual void restart();
+    void snooze();
 private:
-	QLabel *label;
-	QPushButton *snooze_button;
-	QPushButton *stop_button;
+    QLabel *label;
+    QPushButton *snooze_button;
+    QPushButton *stop_button;
 };
 #endif

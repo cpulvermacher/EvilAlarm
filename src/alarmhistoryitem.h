@@ -5,7 +5,8 @@
 
 const int NUM_HISTORY_ITEMS = 6;
 
-class AlarmHistoryItem : public QPushButton {
+class AlarmHistoryItem : public QPushButton
+{
     Q_OBJECT
 public:
     AlarmHistoryItem(QTime t, int used, QWidget *parent);

@@ -11,7 +11,8 @@ const bool TURN_OFF_VIA_CHARGER = false;
 
 class Accelerometer;
 
-class AlarmMovementSettings : public ModuleSettings {
+class AlarmMovementSettings : public ModuleSettings
+{
     Q_OBJECT
 public:
     explicit AlarmMovementSettings(QWidget *parent);

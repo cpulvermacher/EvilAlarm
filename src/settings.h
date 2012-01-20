@@ -14,8 +14,9 @@ const int NUM_SNOOZE_MAX = 1;
 const bool FULLSCREEN = false;
 const bool USE_VIBRATION = false;
 
-namespace Ui {
-    class Settings;
+namespace Ui
+{
+class Settings;
 }
 
 class Settings : public QDialog

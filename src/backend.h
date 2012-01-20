@@ -25,7 +25,8 @@
 const QString KEEPVOLUME_PATH = "/opt/evilalarm/share/keepvolume.sh";
 
 //handles audio & vibration
-class Backend : public QObject {
+class Backend : public QObject
+{
     Q_OBJECT
 public:
     Backend(QObject *parent);

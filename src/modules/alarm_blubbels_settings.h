@@ -5,14 +5,15 @@
 
 #include "module_settings.h"
 
-class AlarmBlubbelsSettings : public ModuleSettings {
-	Q_OBJECT
+class AlarmBlubbelsSettings : public ModuleSettings
+{
+    Q_OBJECT
 public:
-	explicit AlarmBlubbelsSettings(QWidget *parent);
-	virtual ~AlarmBlubbelsSettings();
-	virtual void save();
+    explicit AlarmBlubbelsSettings(QWidget *parent);
+    virtual ~AlarmBlubbelsSettings();
+    virtual void save();
 private:
-	QSpinBox *threshold;
+    QSpinBox *threshold;
 };
 
 #endif

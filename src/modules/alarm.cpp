@@ -28,83 +28,83 @@
 
 
 Alarm::Alarm(QWidget *parent):
-	QDialog(parent),
-	backend(new Backend(this)),
-	num_snooze(0)
+    QDialog(parent),
+    backend(new Backend(this)),
+    num_snooze(0)
 {
-	QSettings settings;
-	if(parent == 0 and settings.value("fullscreen", FULLSCREEN).toBool()) {
-		setWindowState(windowState() | Qt::WindowFullScreen);
-	} else {
-		setWindowFlags(Qt::Window); //allow multitasking
-	}
+    QSettings settings;
+    if(parent == 0 and settings.value("fullscreen", FULLSCREEN).toBool()) {
+        setWindowState(windowState() | Qt::WindowFullScreen);
+    } else {
+        setWindowFlags(Qt::Window); //allow multitasking
+    }
 
-	alarm_timeout = settings.value("alarm_timeout", ALARM_TIMEOUT).toInt();
+    alarm_timeout = settings.value("alarm_timeout", ALARM_TIMEOUT).toInt();
 
-	if(settings.value("prevent_device_lock", false).toBool()) {
-		QDBusConnection::systemBus().connect("", MCE_SIGNAL_PATH, MCE_SIGNAL_IF, MCE_DEVLOCK_MODE_SIG, this, SLOT(deviceLockChanged(QString)));
-	}
+    if(settings.value("prevent_device_lock", false).toBool()) {
+        QDBusConnection::systemBus().connect("", MCE_SIGNAL_PATH, MCE_SIGNAL_IF, MCE_DEVLOCK_MODE_SIG, this, SLOT(deviceLockChanged(QString)));
+    }
 }
 
 Alarm::~Alarm()
 {
-	delete backend;
+    delete backend;
 }
 
 //starts/restarts the alarm
 void Alarm::restart()
 {
-	snoozing = false;
+    snoozing = false;
 
-	backend->play();
-	backend->setVolume(1.0); //start with max volume
-	alarm_started = QTime::currentTime();
-	
-	//activate display
-	QDBusInterface interface("com.nokia.mce", "/com/nokia/mce/request", "com.nokia.mce.request", QDBusConnection::systemBus());
-	interface.call("req_tklock_mode_change", "unlocked");
+    backend->play();
+    backend->setVolume(1.0); //start with max volume
+    alarm_started = QTime::currentTime();
 
-	//unlock device
-	QSettings settings;
-	if(settings.value("prevent_device_lock", false).toBool()) {
-		interface.asyncCall("devlock_callback", qint32(2));
-	}
+    //activate display
+    QDBusInterface interface("com.nokia.mce", "/com/nokia/mce/request", "com.nokia.mce.request", QDBusConnection::systemBus());
+    interface.call("req_tklock_mode_change", "unlocked");
+
+    //unlock device
+    QSettings settings;
+    if(settings.value("prevent_device_lock", false).toBool()) {
+        interface.asyncCall("devlock_callback", qint32(2));
+    }
 }
 
 
 void Alarm::closeEvent(QCloseEvent* ev)
 {
-	if(parent() == 0 and ev->spontaneous()) {
-		//user tried to close window
-		ev->ignore();
-		return;
-	}
+    if(parent() == 0 and ev->spontaneous()) {
+        //user tried to close window
+        ev->ignore();
+        return;
+    }
 
-	hide();
-	backend->pause();
+    hide();
+    backend->pause();
 }
 
 //turns off alarm for snooze_time minutes, then restarts alarm
 void Alarm::snooze()
 {
-	snoozing = true;
-	num_snooze++;
+    snoozing = true;
+    num_snooze++;
 
-	backend->pause();
+    backend->pause();
 
-	QSettings settings;
-	const int snooze_time = settings.value("snooze_time", SNOOZE_TIME).toInt();
-	const int snooze_time_msecs = snooze_time * 60 * 1000;
-	snooze_till = QTime::currentTime().addMSecs(snooze_time_msecs);
+    QSettings settings;
+    const int snooze_time = settings.value("snooze_time", SNOOZE_TIME).toInt();
+    const int snooze_time_msecs = snooze_time * 60 * 1000;
+    snooze_till = QTime::currentTime().addMSecs(snooze_time_msecs);
 
-	QTimer::singleShot(snooze_time_msecs, this, SLOT(restart()));
+    QTimer::singleShot(snooze_time_msecs, this, SLOT(restart()));
 }
 
 void Alarm::deviceLockChanged(QString mode)
 {
-	if(mode == "locked") {
-		//unlock
-		QDBusInterface interface("com.nokia.mce", "/com/nokia/mce/request", "com.nokia.mce.request", QDBusConnection::systemBus());
-		interface.asyncCall("devlock_callback", qint32(2));
-	}
+    if(mode == "locked") {
+        //unlock
+        QDBusInterface interface("com.nokia.mce", "/com/nokia/mce/request", "com.nokia.mce.request", QDBusConnection::systemBus());
+        interface.asyncCall("devlock_callback", qint32(2));
+    }
 }

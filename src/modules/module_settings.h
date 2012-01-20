@@ -3,12 +3,13 @@
 
 #include <QWidget>
 
-class ModuleSettings : public QWidget {
-	Q_OBJECT
+class ModuleSettings : public QWidget
+{
+    Q_OBJECT
 public:
-	explicit ModuleSettings(QWidget *parent): QWidget(parent) { }
-	virtual ~ModuleSettings() { }
-	virtual void save() = 0;
+    explicit ModuleSettings(QWidget *parent): QWidget(parent) { }
+    virtual ~ModuleSettings() { }
+    virtual void save() = 0;
 };
 
 #endif

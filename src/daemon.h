@@ -21,7 +21,8 @@
 
 #include <QtCore>
 
-class Daemon : public QObject {
+class Daemon : public QObject
+{
     Q_OBJECT
 public:
     Daemon();

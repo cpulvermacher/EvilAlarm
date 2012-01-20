@@ -27,66 +27,66 @@ class QMouseEvent;
 class QTimer;
 
 struct Box {
-	Box(int x = -1, int y = -1): x(x), y(y) { }
-	bool operator==(const Box &o) const { return x == o.x && y == o.y; }
+    Box(int x = -1, int y = -1): x(x), y(y) { }
+    bool operator==(const Box &o) const { return x == o.x && y == o.y; }
 
-	int x,y;
+    int x,y;
 };
 
 struct Bubble {
-	explicit Bubble(short color = 0):
-		color(color), xoffset(0), yoffset(0), xspeed(0), yspeed(0), scale_step(0)
-	{
-		//used for animations, should be enough for gridsize <= 16
-		static short i = 0;
-		id = i++;
-	}
-	short color; // 0 means empty
+    explicit Bubble(short color = 0):
+        color(color), xoffset(0), yoffset(0), xspeed(0), yspeed(0), scale_step(0) {
+        //used for animations, should be enough for gridsize <= 16
+        static short i = 0;
+        id = i++;
+    }
+    short color; // 0 means empty
 
-	//for animations
-	float xoffset, yoffset; //in negative x/y-direction, 0 if none - in grid units
-	float xspeed, yspeed;
-	int scale_step; // in [0..num_scale_steps-1], 0 being full size
-	short id;
+    //for animations
+    float xoffset, yoffset; //in negative x/y-direction, 0 if none - in grid units
+    float xspeed, yspeed;
+    int scale_step; // in [0..num_scale_steps-1], 0 being full size
+    short id;
 };
 
 
-class GameWidget : public QWidget {
-	Q_OBJECT
+class GameWidget : public QWidget
+{
+    Q_OBJECT
 public:
-	explicit GameWidget(QWidget* parent = 0);
+    explicit GameWidget(QWidget* parent = 0);
 public slots:
-	void restart();
-	void undo();
+    void restart();
+    void undo();
 signals:
-	void activity();
-	void enableUndo(bool on);
-	void newScore(int score);
+    void activity();
+    void enableUndo(bool on);
+    void newScore(int score);
 protected: //overrides
-	void mouseMoveEvent(QMouseEvent *event);
-	void mouseReleaseEvent(QMouseEvent *event);
-	void paintEvent(QPaintEvent *event);
-	void resizeEvent(QResizeEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+    void paintEvent(QPaintEvent *event);
+    void resizeEvent(QResizeEvent *event);
 private slots:
-	void animationStep();
+    void animationStep();
 private:
-	void checkGameOver();
-	void compressBubbles();
-	void getConnectedBubbles(Box pos, QList<Box> &list);
-	Box getGridPos(int x, int y);
+    void checkGameOver();
+    void compressBubbles();
+    void getConnectedBubbles(Box pos, QList<Box> &list);
+    Box getGridPos(int x, int y);
 
-	const static int grid_size = 11;
-	const static int num_colors = 5;
-	const static int num_scale_steps = 10;
+    const static int grid_size = 11;
+    const static int num_colors = 5;
+    const static int num_scale_steps = 10;
 
-	Bubble grid[grid_size][grid_size];
-	Bubble old_grid[grid_size][grid_size];
-	QList<Box> selection;
-	int bubblesize, margin, xoff, yoff;
-	int score, oldscore;
-	bool use_animations;
-	QPixmap bubblePixmap[num_colors+1][num_scale_steps]; // [color][scale], color 0 is empty, scale 0 is full size
+    Bubble grid[grid_size][grid_size];
+    Bubble old_grid[grid_size][grid_size];
+    QList<Box> selection;
+    int bubblesize, margin, xoff, yoff;
+    int score, oldscore;
+    bool use_animations;
+    QPixmap bubblePixmap[num_colors+1][num_scale_steps]; // [color][scale], color 0 is empty, scale 0 is full size
 
-	QTimer *timer; //for animations
+    QTimer *timer; //for animations
 };
 #endif

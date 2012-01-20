@@ -24,24 +24,25 @@
 
 #include <QtGui>
 
-class AlarmMovement : public Alarm {
-	Q_OBJECT
+class AlarmMovement : public Alarm
+{
+    Q_OBJECT
 public:
-	explicit AlarmMovement(QWidget *parent = 0);
-	~AlarmMovement();
+    explicit AlarmMovement(QWidget *parent = 0);
+    ~AlarmMovement();
 protected slots:
-	void accelUpdate(int, int, int);
-	void updateScreen();
-	virtual void restart();
-	void snooze();
+    void accelUpdate(int, int, int);
+    void updateScreen();
+    virtual void restart();
+    void snooze();
 private:
-	QLabel *label;
-	QPushButton *snooze_button;
+    QLabel *label;
+    QPushButton *snooze_button;
 
-	Accelerometer *accel;
-	int inactivity_timeout;
-	int accel_threshold;
-	int lastx, lasty, lastz;
-	QTime last_active;
+    Accelerometer *accel;
+    int inactivity_timeout;
+    int accel_threshold;
+    int lastx, lasty, lastz;
+    QTime last_active;
 };
 #endif

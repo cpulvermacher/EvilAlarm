@@ -54,15 +54,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     QObject::connect(root_object, SIGNAL(selectAlarmType()),
-            this, SLOT(showAlarmTypeSelector()));
+                     this, SLOT(showAlarmTypeSelector()));
     QObject::connect(root_object, SIGNAL(showAlarmHistory(int, int)),
-            this, SLOT(showAlarmHistory(int, int)));
+                     this, SLOT(showAlarmHistory(int, int)));
     QObject::connect(root_object, SIGNAL(unsetAlarm()),
-            this, SLOT(unsetEvilAlarm()));
+                     this, SLOT(unsetEvilAlarm()));
     QObject::connect(root_object, SIGNAL(setAlarm(int, int)),
-            this, SLOT(setEvilAlarm(int, int)));
+                     this, SLOT(setEvilAlarm(int, int)));
     QDBusConnection::systemBus().connect("", MCE_SIGNAL_PATH, MCE_SIGNAL_IF, MCE_DISPLAY_SIG,
-            this, SLOT(displayStateChanged(QString)));
+                                         this, SLOT(displayStateChanged(QString)));
 
     if(!settings.isWritable()) {
         QMaemo5InformationBox::information(this, tr("Can't write settings to /home/user/.config/EvilAlarm/EvilAlarm - Please fix its file permissions and restart EvilAlarm"));
@@ -78,7 +78,8 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::showAlarmTypeSelector() {
+void MainWindow::showAlarmTypeSelector()
+{
     SelectAlarmType* selectAlarmType = new SelectAlarmType(this);
     selectAlarmType->exec();
 
@@ -90,7 +91,8 @@ void MainWindow::showAlarmTypeSelector() {
 }
 
 
-void MainWindow::setEvilAlarm(int hours, int minutes) {
+void MainWindow::setEvilAlarm(int hours, int minutes)
+{
     std::cout << "setEvilAlarm(" << hours << ", " << minutes << ")\n";
     QSettings settings;
 
@@ -117,7 +119,8 @@ void MainWindow::setEvilAlarm(int hours, int minutes) {
     Daemon::start();
 }
 
-void MainWindow::unsetEvilAlarm() {
+void MainWindow::unsetEvilAlarm()
+{
     std::cout << "unsetEvilAlarm()\n";
     Daemon::stop();
 
@@ -177,7 +180,7 @@ void MainWindow::showAlarmHistory(int hours, int minutes)
 {
     AlarmHistory* alarmHistory = new AlarmHistory(this, hours, minutes);
     connect(alarmHistory, SIGNAL(setAlarm(int, int)),
-        this, SLOT(setUIAlarm(int, int)));
+            this, SLOT(setUIAlarm(int, int)));
     alarmHistory->exec();
     delete alarmHistory;
 }

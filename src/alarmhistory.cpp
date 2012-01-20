@@ -21,7 +21,7 @@ AlarmHistory::AlarmHistory(QWidget *parent, int hours, int minutes) :
     current_alarm_time(QTime(hours, minutes))
 {
     QSettings settings;
-    
+
     setWindowTitle(tr("Previous Alarms"));
     QVBoxLayout *layout = new QVBoxLayout(this);
 
@@ -46,7 +46,7 @@ AlarmHistory::AlarmHistory(QWidget *parent, int hours, int minutes) :
     layout->addWidget(history_box);
 
     connect(add_to_favorites_button, SIGNAL(clicked()),
-        this, SLOT(addCurrentAlarmToFavorites()));
+            this, SLOT(addCurrentAlarmToFavorites()));
 
     //populate lists
     loadAlarmList("favorites", favorites_layout);
@@ -155,7 +155,7 @@ void AlarmHistory::loadAlarmList(QString listname, QHBoxLayout *list_layout, int
         list_layout->addWidget(item);
         connect(item, SIGNAL(selected(QTime)),
                 this, SLOT(setAlarmTime(QTime)));
-				//without QueuedConnection, execution would continue in the destoyed object!
+        //without QueuedConnection, execution would continue in the destoyed object!
         connect(item, SIGNAL(remove(QTime)),
                 this, SLOT(removeAlarm(QTime)), Qt::QueuedConnection);
     }

@@ -115,7 +115,7 @@ Settings::Settings(QWidget *parent) :
 
 
     connect(clear_history, SIGNAL(clicked()),
-        this, SLOT(clearHistory()));
+            this, SLOT(clearHistory()));
 
     moduleChanged(); //manually update after loading settings so unrelated options can be disabled
 }
@@ -167,8 +167,8 @@ void Settings::moduleChanged()
 void Settings::clearHistory()
 {
     const int ret = QMessageBox::question(this, tr("EvilAlarm"),
-            tr("Do you really want to remove all history entries?"),
-            QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+                                          tr("Do you really want to remove all history entries?"),
+                                          QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
     if(ret == QMessageBox::Yes) {
         QSettings settings;
         settings.remove("history");

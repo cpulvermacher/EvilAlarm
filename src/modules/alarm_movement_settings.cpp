@@ -55,7 +55,9 @@ void AlarmMovementSettings::accelUpdate(int x, int y, int z)
     text += ")";
 
     threshold_label->setText(text);
-    lastx = x; lasty = y; lastz = z;
+    lastx = x;
+    lasty = y;
+    lastz = z;
 }
 
 void AlarmMovementSettings::save()

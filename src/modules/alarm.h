@@ -24,23 +24,24 @@
 class Backend;
 
 //abstract base class for alarm modules
-class Alarm : public QDialog {
-	Q_OBJECT
+class Alarm : public QDialog
+{
+    Q_OBJECT
 public:
-	explicit Alarm(QWidget *parent);
-	virtual ~Alarm() = 0;
+    explicit Alarm(QWidget *parent);
+    virtual ~Alarm() = 0;
 protected:
-	virtual void closeEvent(QCloseEvent*);
+    virtual void closeEvent(QCloseEvent*);
 protected slots:
-	virtual void deviceLockChanged(QString mode);
-	virtual void restart();
-	void snooze();
+    virtual void deviceLockChanged(QString mode);
+    virtual void restart();
+    void snooze();
 protected:
-	Backend *backend;
-	QTime alarm_started;
-	int alarm_timeout;
-	bool snoozing;
-	QTime snooze_till;
-	int num_snooze;
+    Backend *backend;
+    QTime alarm_started;
+    int alarm_timeout;
+    bool snoozing;
+    QTime snooze_till;
+    int num_snooze;
 };
 #endif

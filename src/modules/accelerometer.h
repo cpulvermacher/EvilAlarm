@@ -26,18 +26,19 @@
 class QTimer;
 
 //emits orientationChanged() every interval miliseconds
-class Accelerometer : public QObject {
-	Q_OBJECT
+class Accelerometer : public QObject
+{
+    Q_OBJECT
 public:
-	Accelerometer(QObject *parent, int interval);
-	~Accelerometer();
+    Accelerometer(QObject *parent, int interval);
+    ~Accelerometer();
 signals:
-	void orientationChanged(int, int, int);
+    void orientationChanged(int, int, int);
 private slots:
-	void orientationUpdate(const QString &, const QString &, const QString &, int, int, int);
-	void tick();
+    void orientationUpdate(const QString &, const QString &, const QString &, int, int, int);
+    void tick();
 private:
-	QTimer *timer;
-	int interval;
+    QTimer *timer;
+    int interval;
 };
 #endif

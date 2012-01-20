@@ -24,137 +24,137 @@
 
 
 AlarmBlubbels::AlarmBlubbels(QWidget *parent):
-	Alarm(parent),
-	label(new QLabel(this)),
-	snooze_button(new QPushButton(this)),
-	stop_button(new QPushButton(this))
+    Alarm(parent),
+    label(new QLabel(this)),
+    snooze_button(new QPushButton(this)),
+    stop_button(new QPushButton(this))
 {
-	setWindowTitle("EvilAlarm");
+    setWindowTitle("EvilAlarm");
 
-	//setup ui
-	QHBoxLayout* mainlayout = new QHBoxLayout();
-	QVBoxLayout* layout0 = new QVBoxLayout();
-	QLabel *icon_label = new QLabel(this);
-	icon_label->setPixmap(QPixmap("/usr/share/icons/hicolor/64x64/apps/evilalarm.png"));
-	icon_label->setAlignment(Qt::AlignCenter);
-	label->setWordWrap(true);
+    //setup ui
+    QHBoxLayout* mainlayout = new QHBoxLayout();
+    QVBoxLayout* layout0 = new QVBoxLayout();
+    QLabel *icon_label = new QLabel(this);
+    icon_label->setPixmap(QPixmap("/usr/share/icons/hicolor/64x64/apps/evilalarm.png"));
+    icon_label->setAlignment(Qt::AlignCenter);
+    label->setWordWrap(true);
 
-	stop_button->setText(tr("Stop Alarm"));
-	stop_button->setVisible(false);
+    stop_button->setText(tr("Stop Alarm"));
+    stop_button->setVisible(false);
 
-	layout0->addWidget(icon_label);
-	layout0->addWidget(label);
-	layout0->addWidget(snooze_button);
-	layout0->addWidget(stop_button);
+    layout0->addWidget(icon_label);
+    layout0->addWidget(label);
+    layout0->addWidget(snooze_button);
+    layout0->addWidget(stop_button);
 
-	mainlayout->addLayout(layout0);
-	mainlayout->addWidget(&gamewidget);
-	gamewidget.setFixedWidth(550); //we need lots of space
-	setLayout(mainlayout);
+    mainlayout->addLayout(layout0);
+    mainlayout->addWidget(&gamewidget);
+    gamewidget.setFixedWidth(550); //we need lots of space
+    setLayout(mainlayout);
 
-	connect(snooze_button, SIGNAL(clicked()),
-		this, SLOT(snooze()));
-	connect(stop_button, SIGNAL(clicked()),
-		this, SLOT(close()));
+    connect(snooze_button, SIGNAL(clicked()),
+            this, SLOT(snooze()));
+    connect(stop_button, SIGNAL(clicked()),
+            this, SLOT(close()));
 
-	connect(&gamewidget, SIGNAL(newScore(int)),
-		this, SLOT(checkScore(int)));
-	connect(&gamewidget, SIGNAL(activity()),
-		this, SLOT(onActivity()));
+    connect(&gamewidget, SIGNAL(newScore(int)),
+            this, SLOT(checkScore(int)));
+    connect(&gamewidget, SIGNAL(activity()),
+            this, SLOT(onActivity()));
 
-	//actually start alarm
-	restart();
+    //actually start alarm
+    restart();
 
-	//refresh UI every second
-	QTimer *ui_timer = new QTimer(this);
-	connect(ui_timer, SIGNAL(timeout()),
-		this, SLOT(updateScreen()));
-	ui_timer->start(1000);
+    //refresh UI every second
+    QTimer *ui_timer = new QTimer(this);
+    connect(ui_timer, SIGNAL(timeout()),
+            this, SLOT(updateScreen()));
+    ui_timer->start(1000);
 }
 
 //starts/restarts the alarm
 void AlarmBlubbels::restart()
 {
-	QSettings settings;
-	inactivity_timeout = settings.value("inactivity_timeout", INACTIVITY_TIMEOUT).toInt();
-	const int num_snooze_max = settings.value("num_snooze_max", NUM_SNOOZE_MAX).toInt();
-	if(num_snooze_max == 0) {
-		//snooze completely disabled
-		snooze_button->setVisible(false);
-	} else {
-		snooze_button->setEnabled(num_snooze < num_snooze_max);
-		snooze_button->setText(tr("Snooze (%1/%2)").arg(num_snooze).arg(num_snooze_max));
-	}
+    QSettings settings;
+    inactivity_timeout = settings.value("inactivity_timeout", INACTIVITY_TIMEOUT).toInt();
+    const int num_snooze_max = settings.value("num_snooze_max", NUM_SNOOZE_MAX).toInt();
+    if(num_snooze_max == 0) {
+        //snooze completely disabled
+        snooze_button->setVisible(false);
+    } else {
+        snooze_button->setEnabled(num_snooze < num_snooze_max);
+        snooze_button->setText(tr("Snooze (%1/%2)").arg(num_snooze).arg(num_snooze_max));
+    }
 
-	last_active = QTime::currentTime();
-	Alarm::restart();
+    last_active = QTime::currentTime();
+    Alarm::restart();
 }
 
 AlarmBlubbels::~AlarmBlubbels() { }
 
 void AlarmBlubbels::updateScreen()
 {
-	if(!snoozing and !stop_button->isVisible()) {
-		if(alarm_started.elapsed()/1000 > alarm_timeout*60) {
-			//shutdown time reached
-			backend->pause();
-			stop_button->setVisible(true);
-			return;
+    if(!snoozing and !stop_button->isVisible()) {
+        if(alarm_started.elapsed()/1000 > alarm_timeout*60) {
+            //shutdown time reached
+            backend->pause();
+            stop_button->setVisible(true);
+            return;
 
-		} else if(last_active.elapsed()/1000 > inactivity_timeout) {
-			//inactive for too long
-			backend->volumeUp();
-		}
-	}
+        } else if(last_active.elapsed()/1000 > inactivity_timeout) {
+            //inactive for too long
+            backend->volumeUp();
+        }
+    }
 
-	QString label_text = tr("<center><h1>%1</h1>").arg(QTime::currentTime().toString(Qt::SystemLocaleShortDate));
+    QString label_text = tr("<center><h1>%1</h1>").arg(QTime::currentTime().toString(Qt::SystemLocaleShortDate));
 
-	//display remaining alarm or snooze time
-	int secs_remaining;
-	if(snoozing) {
-		secs_remaining = QTime::currentTime().secsTo(snooze_till);
-		label_text += tr("Snooze: ");
-	} else {
-		secs_remaining = alarm_timeout*60 - alarm_started.elapsed()/1000;
-	}
+    //display remaining alarm or snooze time
+    int secs_remaining;
+    if(snoozing) {
+        secs_remaining = QTime::currentTime().secsTo(snooze_till);
+        label_text += tr("Snooze: ");
+    } else {
+        secs_remaining = alarm_timeout*60 - alarm_started.elapsed()/1000;
+    }
 
-	if(secs_remaining >= 60) {
-		label_text += tr("%1&nbsp;min, ", "", secs_remaining/60).arg(secs_remaining/60);
-	}
+    if(secs_remaining >= 60) {
+        label_text += tr("%1&nbsp;min, ", "", secs_remaining/60).arg(secs_remaining/60);
+    }
 
-	if(secs_remaining > 0)
-		label_text += tr("%1&nbsp;s remaining", "", secs_remaining%60).arg(secs_remaining%60);
-	
-	label_text += "</center>";
-	label->setText(label_text);
+    if(secs_remaining > 0)
+        label_text += tr("%1&nbsp;s remaining", "", secs_remaining%60).arg(secs_remaining%60);
+
+    label_text += "</center>";
+    label->setText(label_text);
 }
 
 void AlarmBlubbels::snooze()
 {
-	snooze_button->setEnabled(false);
+    snooze_button->setEnabled(false);
 
-	Alarm::snooze();
+    Alarm::snooze();
 }
 
 void AlarmBlubbels::checkScore(int score)
 {
-	//game finished, check if score is high enough
-	QSettings settings;
-	const int score_needed = settings.value("blubbels_threshold", 500).toInt();
+    //game finished, check if score is high enough
+    QSettings settings;
+    const int score_needed = settings.value("blubbels_threshold", 500).toInt();
 
-	if(score >= score_needed) {
-		//yes, stop alarm
-		QMessageBox::information(this, tr("Game Over"), tr("Your Score: %1<br>Congratulations!").arg(score));
+    if(score >= score_needed) {
+        //yes, stop alarm
+        QMessageBox::information(this, tr("Game Over"), tr("Your Score: %1<br>Congratulations!").arg(score));
 
-		close();
-	} else {
-		QMessageBox::information(this, tr("Game Over"), tr("Your Score: %1<br>You need %2 to turn off the alarm, try again!").arg(score).arg(score_needed));
-	}
+        close();
+    } else {
+        QMessageBox::information(this, tr("Game Over"), tr("Your Score: %1<br>You need %2 to turn off the alarm, try again!").arg(score).arg(score_needed));
+    }
 }
 
 //user activity in game widget
 void AlarmBlubbels::onActivity()
 {
-	backend->pause();
-	last_active.restart();
+    backend->pause();
+    last_active.restart();
 }

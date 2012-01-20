@@ -24,24 +24,25 @@
 
 #include <QtGui>
 
-class AlarmBlubbels : public Alarm {
-	Q_OBJECT
+class AlarmBlubbels : public Alarm
+{
+    Q_OBJECT
 public:
-	explicit AlarmBlubbels(QWidget *parent = 0);
-	~AlarmBlubbels();
+    explicit AlarmBlubbels(QWidget *parent = 0);
+    ~AlarmBlubbels();
 protected slots:
-	void checkScore(int);
-	void onActivity();
-	void updateScreen();
-	virtual void restart();
-	void snooze();
+    void checkScore(int);
+    void onActivity();
+    void updateScreen();
+    virtual void restart();
+    void snooze();
 private:
-	QLabel *label;
-	QPushButton *snooze_button;
-	QPushButton *stop_button;
-	GameWidget gamewidget;
+    QLabel *label;
+    QPushButton *snooze_button;
+    QPushButton *stop_button;
+    GameWidget gamewidget;
 
-	int inactivity_timeout;
-	QTime last_active;
+    int inactivity_timeout;
+    QTime last_active;
 };
 #endif

@@ -63,7 +63,7 @@ AlarmMovement::AlarmMovement(QWidget *parent):
     const bool turn_off_via_charger = settings.value("turn_off_via_charger", TURN_OFF_VIA_CHARGER).toBool();
     if(turn_off_via_charger) {
         QDBusConnection::systemBus().connect("", "/com/nokia/bme/signal", "com.nokia.bme.signal", "charger_connected",
-                this, SLOT(close()));
+                                             this, SLOT(close()));
     }
 
     //TODO: remove
@@ -126,7 +126,9 @@ void AlarmMovement::accelUpdate(int x, int y, int z)
     }
 
     if(!backend->isVibrating()) //ignore huge spikes
-        lastx = x; lasty = y; lastz = z;
+        lastx = x;
+    lasty = y;
+    lastz = z;
 }
 
 void AlarmMovement::updateScreen()

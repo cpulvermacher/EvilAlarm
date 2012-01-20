@@ -23,7 +23,7 @@ SelectAlarmType::SelectAlarmType(QWidget *parent) :
     setLayout(layout);
 
     connect(module_list, SIGNAL(itemActivated(QListWidgetItem*)),
-        this, SLOT(selected(QListWidgetItem*)));
+            this, SLOT(selected(QListWidgetItem*)));
 }
 
 SelectAlarmType::~SelectAlarmType()
