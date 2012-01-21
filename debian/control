@@ -14,7 +14,8 @@ Description: An alarm clock which cannot be turned off while asleep
  Normal: Ordinary (i.e. non-evil) alarm with a stop button
  Movement: Moving the phone will silence the alarm for a short time,
  but it will restart unless you get up and carry your phone around. The alarm
- will turn off after a (configurable) time span.
+ will turn off after a (configurable) time span, or, optionally, when the
+ charger is plugged in.
  Blubbels: Beat the game to turn off the alarm.
 XB-Maemo-Display-Name: EvilAlarm
 XSBC-Bugtracker: https://github.com/cpulvermacher/EvilAlarm/issues
