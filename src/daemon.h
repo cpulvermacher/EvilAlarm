@@ -19,21 +19,10 @@
 #ifndef DAEMON_H
 #define DAEMON_H
 
-#include <QtCore>
-
-class Daemon : public QObject
+namespace Daemon
 {
-    Q_OBJECT
-public:
-    Daemon();
-
-    static void start(); //does nothing if daemon is running
-    static void stop();
-    static bool isRunning();
-private slots:
-    void wake();
-    void uiFinished(int, QProcess::ExitStatus);
-private:
-    QProcess *ui_process;
+    void start(); //does nothing if daemon is running
+    void stop();
+    bool isRunning();
 };
 #endif

@@ -52,6 +52,7 @@ install: build
 	dh_install ${BUILDDIR}evilalarm ${OPTBINDIR}
 	dh_link /${OPTBINDIR}evilalarm /$(BINDIR)evilalarm
 	dh_install keepvolume.sh ${RESDIR}
+	dh_install evilalarm-daemon ${BINDIR}
 	dh_install evilalarm.desktop $(DESKTOP_DIR)
 	dh_install icons/26x26/evilalarm.png $(ICONDIR)26x26/apps
 	dh_install icons/48x48/evilalarm.png $(ICONDIR)48x48/apps

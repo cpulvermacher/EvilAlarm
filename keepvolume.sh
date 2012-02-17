@@ -4,6 +4,7 @@
 if [ $# -ne 1 ]
 then
 	echo "Usage: $0 max_volume"
+	exit 1
 fi
 
 
@@ -49,3 +50,5 @@ do
 
 	sleep 5
 done
+
+#cleanup() is called automatically after exiting

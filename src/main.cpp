@@ -1,6 +1,5 @@
 #include "alarm.h"
 #include "module_list.h"
-#include "daemon.h"
 #include "mainwindow.h"
 
 #include <QApplication>
@@ -15,14 +14,11 @@ int main(int argc, char* argv[])
     //ensure destructors are called
     QScopedPointer<QWidget> widget_pointer;
 
-    if(QCoreApplication::arguments().contains(QString("--daemon"))) {
-        new Daemon;
-    } else if(QCoreApplication::arguments().contains(QString("--wakeup"))) {
+    if(QCoreApplication::arguments().contains(QString("--wakeup"))) {
         widget_pointer.reset(ModuleList::getModuleInstance());
-        widget_pointer->show();
     } else {
         widget_pointer.reset(new MainWindow);
-        widget_pointer->show();
     }
+    widget_pointer->show();
     return app.exec();
 }
