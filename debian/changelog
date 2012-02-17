@@ -1,3 +1,9 @@
+evilalarm (1.1) unstable; urgency=low
+
+  * Avoid bug that would hang with 100% CPU instead of starting alarm.
+
+ -- Christian Pulvermacher <pulvermacher@gmx.de>  Fri, 17 Feb 2012 21:22:37 +0100
+
 evilalarm (1.0) unstable; urgency=low
 
   * Changing the alarm time does no longer turn the alarm on.
