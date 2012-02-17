@@ -1,0 +1,27 @@
+#!/bin/sh
+
+if [ $# -ne 1 ]
+then
+    echo "Usage: $0 SECONDS_UNTIL_ALARM"
+    echo "or:    $0 --test"
+    echo -e "\nNote that any daemon you start yourself will not show up inside EvilAlarm."
+    exit 1
+fi
+
+if [ $1 != "--test" ]
+then
+    sleep $1
+    if [ $? -ne 0 ]
+    then
+        #invalid argument
+        exit 1
+    fi
+fi
+
+#start alarm
+until evilalarm --wakeup #repeat until this returns 0
+do
+    echo "EvilAlarm killed, restarting"
+done
+
+echo "evilalarm-daemon done."
