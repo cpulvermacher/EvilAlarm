@@ -8,19 +8,19 @@
 #include "modules/alarm_movement_settings.h"
 
 
-Alarm* ModuleList::getModuleInstance(QWidget *parent)
+Alarm* ModuleList::getModuleInstance(bool test, QWidget *parent)
 {
     QSettings settings;
-    QString modulename = settings.value("module").toString().toLower();
+    const QString modulename = settings.value("module").toString().toLower();
 
     if(modulename == "normal")
-        return new AlarmNormal(parent);
+        return new AlarmNormal(parent, test);
     else if(modulename == "movement")
-        return new AlarmMovement(parent);
+        return new AlarmMovement(parent, test);
     else if(modulename == "blubbels")
-        return new AlarmBlubbels(parent);
+        return new AlarmBlubbels(parent, test);
     else
-        return new AlarmMovement(parent);
+        return new AlarmNormal(parent, test);
 }
 
 ModuleSettings* ModuleList::getSettingsInstance(QString name, QWidget *parent)

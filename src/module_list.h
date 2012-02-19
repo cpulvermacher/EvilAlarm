@@ -9,7 +9,7 @@ class ModuleSettings;
 namespace ModuleList
 {
 //get the user-configured module
-Alarm* getModuleInstance(QWidget *parent = 0);
+Alarm* getModuleInstance(bool test = false, QWidget *parent = 0);
 
 //get a settings widget for the given module name
 ModuleSettings* getSettingsInstance(QString name, QWidget *parent = 0);

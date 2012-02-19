@@ -73,6 +73,7 @@ void Daemon::stop()
     QSettings settings;
     const int pid = settings.value("daemon_pid", 0).toInt();
 
+    //TODO: this will leave 'sleep' processes around
     QProcess::execute(QString("kill %1").arg(pid));
 
     settings.setValue("daemon_pid", 0);

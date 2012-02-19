@@ -1,6 +1,8 @@
 evilalarm (1.1) unstable; urgency=low
 
   * Avoid bug that would hang with 100% CPU instead of starting alarm.
+  * Note that the volume may be louder than in previous versions, please
+    recheck your settings
 
  -- Christian Pulvermacher <pulvermacher@gmx.de>  Fri, 17 Feb 2012 21:22:37 +0100
 

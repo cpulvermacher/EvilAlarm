@@ -1,12 +1,16 @@
 #!/bin/sh
-#workaround for weird race condition that would lock up evilalarm when calling pasr
+#reset volume and profile regularly, will be restored on exit
 
-if [ $# -ne 1 ]
+#workaround for weird race condition that would lock up evilalarm when calling pasr
+#seems to occur only while playing audio and shortly afterwards; results in 100% CPU usage, clone() syscall that it should be doing at this point never appears in strace output
+#somehow looks similar to this: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=575534
+
+pgrep -f evilalarm-daemon | grep $PPID > /dev/null
+if [ $? -ne 0 ]
 then
-	echo "Usage: $0 max_volume"
+	echo "$0 needs to be started by evilalarm-daemon"
 	exit 1
 fi
-
 
 cleanup()
 {
@@ -14,19 +18,15 @@ cleanup()
 	echo "restoring profile: $OLD_PROFILE"
 	dbus-send --type=method_call --dest=com.nokia.profiled /com/nokia/profiled com.nokia.profiled.set_profile string:"$OLD_PROFILE"
 
-	echo "restoring volume"
 	#restore volume
-	pasr --restore < /tmp/evilalarm_sinkstate.backup
-	rm /tmp/evilalarm_sinkstate.backup
+	if [ -f /tmp/evilalarm_sinkstate.backup ]
+	then
+		echo "restoring volume"
+		pasr --restore < /tmp/evilalarm_sinkstate.backup
+		rm /tmp/evilalarm_sinkstate.backup
+	fi
 }
-
-#trap SIGHUP, SIGINT & SIGTERM, do nothing. this causes busybox to emit a signal 0 that's not there otherwise!
-trap "true" 1 2 15
-
-#so we'll trap that.
-trap "cleanup" 0
-#no, directly running cleanup() in the first trap doesn't work. 0 needs to be trapped.
-
+trap "cleanup" 1 2 15
 
 #stop media player to stop it from interfering with audio playback (pause isn't enough)
 dbus-send --dest=com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer /com/nokia/mafw/renderer/gstrenderer com.nokia.mafw.renderer.stop
@@ -41,22 +41,25 @@ OLD_PROFILE=`echo $OLD_PROFILE` #trim leading whitespace
 
 while true;
 do
-	#don't keep running when evilalarm dies/is killed
-	pgrep evilalarm > /dev/null
+	#check if parent is still alive
+	kill -0 $PPID > /dev/null 2>&1
 	if [ $? -ne 0 ]
 	then
-		echo "keepvolume.sh: no evilalarm process found!"
+		cleanup
 		exit 0
 	fi
-
 
 	#reset profile
 	dbus-send --type=method_call --dest=com.nokia.profiled /com/nokia/profiled com.nokia.profiled.set_profile string:"general"
 
 	#reset volume to maximum
-	pasr -u -s sink-input-by-media-role:x-maemo -l $1
+	pasr -u -s sink-input-by-media-role:x-maemo -l 100
 
-	sleep 5
+	sleep 5 &
+	wait $! #done to make traps work
+	if [ $? -ne 0 ]
+	then
+		cleanup
+		exit 1
+	fi
 done
-
-#cleanup() is called automatically after exiting

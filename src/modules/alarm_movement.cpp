@@ -26,8 +26,8 @@
 
 #include <iostream>
 
-AlarmMovement::AlarmMovement(QWidget *parent):
-    Alarm(parent),
+AlarmMovement::AlarmMovement(QWidget *parent, bool test):
+    Alarm(parent, test),
     label(new QLabel(this)),
     snooze_button(new QPushButton(this)),
     accel(0)

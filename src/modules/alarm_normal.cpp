@@ -22,8 +22,8 @@
 #include <QtGui>
 
 
-AlarmNormal::AlarmNormal(QWidget *parent):
-    Alarm(parent),
+AlarmNormal::AlarmNormal(QWidget *parent, bool test):
+    Alarm(parent, test),
     label(new QLabel(this)),
     snooze_button(new QPushButton(this)),
     stop_button(new QPushButton(this))

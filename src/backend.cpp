@@ -22,7 +22,6 @@
 #include <QFile>
 #include <QtDBus>
 
-#include <cstdlib>
 #include <iostream>
 
 
@@ -43,7 +42,7 @@ Backend::Backend(QObject *parent):
 {
     QSettings settings;
 
-    int max_volume = settings.value("max_volume", MAX_VOLUME).toInt();
+    max_volume = 0.01 * settings.value("max_volume", MAX_VOLUME).toInt(); //setting is in percent
     use_vibration = settings.value("use_vibration", USE_VIBRATION).toBool();
     QString sound_filename = settings.value("sound_filename", SOUND_FILE).toString();
 
@@ -55,13 +54,6 @@ Backend::Backend(QObject *parent):
     Phonon::createPath(noise, audio_output);
     noise->setCurrentSource(Phonon::MediaSource(sound_filename));
 
-    //workaround to avoid hangs when calling external programs
-    //seems to occur only while playing audio and shortly afterwards; results in 100% CPU usage, clone() syscall that it should be doing at this point never appears in strace output
-    //somehow looks similar to this: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=575534
-
-    //reset volume and profile regularly, also saves current volume & restores on SIGTERM
-    keepvolume.start(QString("sh %1 %2").arg(KEEPVOLUME_PATH).arg(max_volume));
-
     QTimer *hangcheck_timer = new QTimer(this);
     hangcheck_timer->setInterval(500);
     connect(hangcheck_timer, SIGNAL(timeout()),
@@ -71,17 +63,11 @@ Backend::Backend(QObject *parent):
 
 Backend::~Backend()
 {
-    pause();
     std::cout << "~Backend\n";
-
-    //don't kill process while starting up
-    keepvolume.waitForStarted(2000);
-    keepvolume.terminate();
-    keepvolume.waitForFinished(2000); //don't free memory of QProcess before it's done
+    pause();
 
     delete audio_output;
     delete noise;
-    std::cout << "done\n";
 }
 
 void Backend::play()
@@ -120,7 +106,7 @@ void Backend::setVolume(qreal v)
         v = 1.0;
 
     volume = v;
-    audio_output->setVolume(volume);
+    audio_output->setVolume(volume*max_volume);
 }
 
 void Backend::repeatSound() { noise->enqueue(noise->currentSource()); }

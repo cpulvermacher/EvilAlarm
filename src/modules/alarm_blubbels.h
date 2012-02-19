@@ -28,7 +28,7 @@ class AlarmBlubbels : public Alarm
 {
     Q_OBJECT
 public:
-    explicit AlarmBlubbels(QWidget *parent = 0);
+    explicit AlarmBlubbels(QWidget *parent = 0, bool test = false);
     ~AlarmBlubbels();
 protected slots:
     void checkScore(int);

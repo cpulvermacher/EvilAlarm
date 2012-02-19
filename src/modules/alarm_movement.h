@@ -28,7 +28,7 @@ class AlarmMovement : public Alarm
 {
     Q_OBJECT
 public:
-    explicit AlarmMovement(QWidget *parent = 0);
+    explicit AlarmMovement(QWidget *parent = 0, bool test = false);
     ~AlarmMovement();
 protected slots:
     void accelUpdate(int, int, int);

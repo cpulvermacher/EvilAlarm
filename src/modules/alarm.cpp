@@ -27,13 +27,14 @@
 #include <mce/dbus-names.h>
 
 
-Alarm::Alarm(QWidget *parent):
+Alarm::Alarm(QWidget *parent, bool test):
     QDialog(parent),
+    test(test),
     backend(new Backend(this)),
     num_snooze(0)
 {
     QSettings settings;
-    if(parent == 0 and settings.value("fullscreen", FULLSCREEN).toBool()) {
+    if(parent == 0 and !test and settings.value("fullscreen", FULLSCREEN).toBool()) {
         setWindowState(windowState() | Qt::WindowFullScreen);
     } else {
         setWindowFlags(Qt::Window); //allow multitasking
@@ -74,7 +75,7 @@ void Alarm::restart()
 
 void Alarm::closeEvent(QCloseEvent* ev)
 {
-    if(parent() == 0 and ev->spontaneous()) {
+    if(parent() == 0 and !test and ev->spontaneous()) {
         //user tried to close window
         ev->ignore();
         return;

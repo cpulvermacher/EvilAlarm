@@ -15,7 +15,8 @@ int main(int argc, char* argv[])
     QScopedPointer<QWidget> widget_pointer;
 
     if(QCoreApplication::arguments().contains(QString("--wakeup"))) {
-        widget_pointer.reset(ModuleList::getModuleInstance());
+        const bool test = QCoreApplication::arguments().contains(QString("--test"));
+        widget_pointer.reset(ModuleList::getModuleInstance(test));
     } else {
         widget_pointer.reset(new MainWindow);
     }

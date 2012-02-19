@@ -27,7 +27,7 @@ class AlarmNormal : public Alarm
 {
     Q_OBJECT
 public:
-    explicit AlarmNormal(QWidget *parent = 0);
+    explicit AlarmNormal(QWidget *parent = 0, bool test = false);
     ~AlarmNormal() { }
 protected slots:
     void updateScreen();

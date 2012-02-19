@@ -23,8 +23,8 @@
 #include <QtGui>
 
 
-AlarmBlubbels::AlarmBlubbels(QWidget *parent):
-    Alarm(parent),
+AlarmBlubbels::AlarmBlubbels(QWidget *parent, bool test):
+    Alarm(parent, test),
     label(new QLabel(this)),
     snooze_button(new QPushButton(this)),
     stop_button(new QPushButton(this))

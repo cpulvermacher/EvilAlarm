@@ -28,7 +28,7 @@ class Alarm : public QDialog
 {
     Q_OBJECT
 public:
-    explicit Alarm(QWidget *parent);
+    explicit Alarm(QWidget *parent, bool test);
     virtual ~Alarm() = 0;
 protected:
     virtual void closeEvent(QCloseEvent*);
@@ -37,6 +37,7 @@ protected slots:
     virtual void restart();
     void snooze();
 protected:
+    bool test;
     Backend *backend;
     QTime alarm_started;
     int alarm_timeout;

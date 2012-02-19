@@ -68,8 +68,12 @@ MainWindow::MainWindow(QWidget *parent) :
         QMaemo5InformationBox::information(this, tr("Can't write settings to /home/user/.config/EvilAlarm/EvilAlarm - Please fix its file permissions and restart EvilAlarm"));
     }
 
-    if(!QFile::permissions(KEEPVOLUME_PATH).testFlag(QFile::ReadOther)) {
-        QMaemo5InformationBox::information(this, tr("Can't access %1 - Please reinstall EvilAlarm!").arg(KEEPVOLUME_PATH));
+    QStringList file_paths;
+    file_paths << "/usr/bin/evilalarm-daemon" << "/opt/evilalarm/share/keepvolume.sh";
+    foreach(const QString &file_path, file_paths) {
+        if(!QFile::permissions(file_path).testFlag(QFile::ExeOther)) {
+            QMaemo5InformationBox::information(this, tr("Can't execute %1 - Please reinstall EvilAlarm!").arg(file_path));
+        }
     }
 }
 
@@ -164,9 +168,7 @@ void MainWindow::on_actionAbout_triggered()
 
 void MainWindow::on_actionTest_Alarm_triggered()
 {
-    Alarm* test_alarm = ModuleList::getModuleInstance(this);
-    test_alarm->exec();
-    delete test_alarm;
+    QProcess::startDetached(QString("evilalarm-daemon --test"));
 }
 
 void MainWindow::displayStateChanged(QString state)

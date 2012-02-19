@@ -22,8 +22,6 @@
 #include <QtCore>
 #include <Phonon>
 
-const QString KEEPVOLUME_PATH = "/opt/evilalarm/share/keepvolume.sh";
-
 //handles audio & vibration
 class Backend : public QObject
 {
@@ -55,7 +53,7 @@ private:
     bool is_vibrating;
     bool use_vibration;
     int alarm_timeout;
-    qreal volume;
-    QProcess keepvolume;
+    qreal volume; //interpreted as a fraction of max_volume
+    qreal max_volume;
 };
 #endif

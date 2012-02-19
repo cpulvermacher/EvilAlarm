@@ -36,7 +36,7 @@ Settings::Settings(QWidget *parent) :
     sound_filename = new QMaemo5ValueButton(tr("Alarm sound"), this);
     sound_filename->setValueText(settings.value("sound_filename", SOUND_FILE).toString());
     volume = new QSlider(Qt::Horizontal, this);
-    volume->setRange(10, 100);
+    volume->setRange(0, 100);
     volume->setValue(settings.value("max_volume", MAX_VOLUME).toInt());
     volume->setMinimumWidth(100);
     ui->basic->addWidget(sound_filename, row, 0);

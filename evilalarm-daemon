@@ -8,18 +8,41 @@ then
     exit 1
 fi
 
+ARGS=""
+SLEEPPID=0
+
+cleanup()
+{
+    echo "killing sleep..."
+    if [ $SLEEPPID -ne 0 ]
+    then
+        kill $SLEEPPID
+    fi
+}
+trap "cleanup" 1 2 15
+
 if [ $1 != "--test" ]
 then
-    sleep $1
+    #sleep, but keep its PID around for cleanup()
+    sleep $1 &
+    SLEEPPID=$!
+    wait $SLEEPPID
+
     if [ $? -ne 0 ]
     then
         #invalid argument
         exit 1
     fi
+else
+    ARGS="--test"
 fi
 
+#separate script to prevent changes to volume/profile
+#will exit once this evilalarm-daemon process shuts down
+/opt/evilalarm/share/keepvolume.sh &
+
 #start alarm
-until evilalarm --wakeup #repeat until this returns 0
+until evilalarm --wakeup $ARGS #repeat until this returns 0
 do
     echo "EvilAlarm killed, restarting"
 done
