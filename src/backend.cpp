@@ -55,11 +55,6 @@ Backend::Backend(QObject *parent):
     Phonon::createPath(noise, audio_output);
     noise->setCurrentSource(Phonon::MediaSource(sound_filename));
 
-    //save old profile
-    QDBusInterface interface("com.nokia.profiled", "/com/nokia/profiled", "com.nokia.profiled");
-    QDBusReply<QString> profile = interface.call("get_profile");
-    old_profile = profile;
-
     //workaround to avoid hangs when calling external programs
     //seems to occur only while playing audio and shortly afterwards; results in 100% CPU usage, clone() syscall that it should be doing at this point never appears in strace output
     //somehow looks similar to this: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=575534
@@ -83,10 +78,6 @@ Backend::~Backend()
     keepvolume.waitForStarted(2000);
     keepvolume.terminate();
     keepvolume.waitForFinished(2000); //don't free memory of QProcess before it's done
-
-    //restore profile
-    QDBusInterface interface("com.nokia.profiled", "/com/nokia/profiled", "com.nokia.profiled");
-    interface.call("set_profile", old_profile);
 
     delete audio_output;
     delete noise;

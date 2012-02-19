@@ -10,6 +10,10 @@ fi
 
 cleanup()
 {
+	#restore profile
+	echo "restoring profile: $OLD_PROFILE"
+	dbus-send --type=method_call --dest=com.nokia.profiled /com/nokia/profiled com.nokia.profiled.set_profile string:"$OLD_PROFILE"
+
 	echo "restoring volume"
 	#restore volume
 	pasr --restore < /tmp/evilalarm_sinkstate.backup
@@ -30,6 +34,10 @@ dbus-send --dest=com.nokia.mafw.renderer.Mafw-Gst-Renderer-Plugin.gstrenderer /c
 
 #save current volume
 pasr --store > /tmp/evilalarm_sinkstate.backup
+
+#save old profile
+OLD_PROFILE=`dbus-send --print-reply=literal --type=method_call --dest=com.nokia.profiled /com/nokia/profiled com.nokia.profiled.get_profile`
+OLD_PROFILE=`echo $OLD_PROFILE` #trim leading whitespace
 
 while true;
 do

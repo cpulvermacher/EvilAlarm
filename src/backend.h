@@ -57,6 +57,5 @@ private:
     int alarm_timeout;
     qreal volume;
     QProcess keepvolume;
-    QString old_profile;
 };
 #endif
