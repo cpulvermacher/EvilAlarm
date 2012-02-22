@@ -1,5 +1,5 @@
 TEMPLATE = app
-TARGET = evilalarm
+TARGET = evilalarm-ui
 QT += maemo5 dbus phonon declarative
 CONFIG += silent release warn_on
 

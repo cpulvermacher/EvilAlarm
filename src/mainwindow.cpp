@@ -72,7 +72,7 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
     QStringList file_paths;
-    file_paths << "/usr/bin/evilalarm-daemon" << "/opt/evilalarm/share/keepvolume.sh";
+    file_paths << "/opt/evilalarm/bin/keepvolume.sh";
     foreach(const QString &file_path, file_paths) {
         if(!QFile::permissions(file_path).testFlag(QFile::ExeOther)) {
             QMaemo5InformationBox::information(this, tr("Can't execute %1 - Please reinstall EvilAlarm!").arg(file_path));
@@ -171,7 +171,7 @@ void MainWindow::on_actionAbout_triggered()
 
 void MainWindow::on_actionTest_Alarm_triggered()
 {
-    QProcess::startDetached(QString("evilalarm-daemon --test"));
+    QProcess::startDetached(QString("evilalarm --test"));
 }
 
 void MainWindow::displayStateChanged(QString state)

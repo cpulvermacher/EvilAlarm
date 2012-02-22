@@ -1,0 +1,66 @@
+#!/bin/sh
+#wrapper for starting evilalarm
+usagehint()
+{
+    echo "Usage: $0               to start the UI"
+    echo "or:    $0 --daemon SECS start alarm in SECS seconds"
+    echo "or:    $0 --test        start alarm right now, but allow closing"
+    echo "or:    $0 --wakeup      start alarm right now (equivalent to --daemon 0)"
+    echo -e "\nNote that any daemon you start yourself will not show up inside EvilAlarm."
+}
+
+OPTBINDIR=/opt/evilalarm/bin
+SLEEPPID=0
+ARGS=""
+
+cleanup()
+{
+    echo "killing sleep..."
+    if [ $SLEEPPID -ne 0 ]
+    then
+        kill $SLEEPPID
+    fi
+}
+
+if [ $# -eq 0 ]
+then
+    exec $OPTBINDIR/evilalarm-ui
+elif [ "$1" = "--daemon" ] && [ $# -eq 2 ]
+then
+    #sleep, but keep its PID around for cleanup()
+    trap "cleanup" 1 2 15
+    sleep $2 &
+    SLEEPPID=$!
+    wait $SLEEPPID
+
+    if [ $? -ne 0 ]
+    then
+        usagehint
+        exit 1
+    fi
+elif [ $# -eq 1 ] && [ "$1" = "--wakeup" ]
+then
+    true
+    #continue after fi
+elif [ $# -eq 1 ] && [ "$1" = "--test" ]
+then
+    ARGS="--test"
+    #continue after fi
+else
+    usagehint
+    exit 1
+fi
+
+echo "starting alarm"
+#start alarm
+
+#separate script to prevent changes to volume/profile
+#will exit once this evilalarm-daemon process shuts down
+$OPTBINDIR/keepvolume.sh &
+
+until $OPTBINDIR/evilalarm-ui --wakeup $ARGS #repeat until this returns 0
+do
+    echo "EvilAlarm killed, restarting"
+done
+
+echo "evilalarm-daemon done."

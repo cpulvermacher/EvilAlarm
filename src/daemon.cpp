@@ -49,8 +49,8 @@ void Daemon::start()
 
     qint64 pid;
     const bool success = QProcess::startDetached(
-            QString("evilalarm-daemon"),
-            QStringList(QString::number(seconds)), //args
+            QString("evilalarm"),
+            (QStringList() << "--daemon" << QString::number(seconds)), //args
             QString(), //working directory
             &pid);
     if(!success) {
