@@ -5,9 +5,6 @@
 #include "settings.h"
 #include "about.h"
 #include "daemon.h"
-#include "alarm.h"
-#include "backend.h"
-#include "module_list.h"
 
 #include <QDeclarativeContext>
 #include <QDBusConnection>
@@ -41,6 +38,12 @@ MainWindow::MainWindow(QWidget *parent) :
     //now load UI
     ui->view->setSource(QUrl::fromLocalFile(path));
     QGraphicsObject *root_object = ui->view->rootObject();
+
+    //avoid flicker at start
+    setAttribute(Qt::WA_OpaquePaintEvent);
+    setAttribute(Qt::WA_NoSystemBackground);
+    ui->view->setAttribute(Qt::WA_OpaquePaintEvent);
+    ui->view->setAttribute(Qt::WA_NoSystemBackground);
 
     //load alarm
     QSettings settings;
