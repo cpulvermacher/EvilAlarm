@@ -1,7 +1,9 @@
 import Qt 4.7
 
-Rectangle{
+Image {
     id: alarmSettings
+    width: 800; height: 430
+    source: "background.png"
 
     property alias alarmHour: spinnerHour.currentIndex
     property alias alarmMinute: spinnerMinute.currentIndex
@@ -84,22 +86,6 @@ Rectangle{
     }
 
 
-    width: 800; height: 430
-    gradient: Gradient {
-        GradientStop {
-            position: 0.00;
-            color: "#4b4f59";
-        }
-        GradientStop {
-            position: 0.35;
-            color: "#232323";
-        }
-        GradientStop {
-            position: 1.00;
-            color: "#232323";
-        }
-    }
-    border.color: "black"
 
     AlarmSwitch{
         id: alarmSwitch
@@ -219,28 +205,12 @@ Rectangle{
         font.pixelSize: 28
     }
 
-    Rectangle {
+    Item {
         id: changeAlarmType
         x: -1
         y: 368
         width: 713
         height: 62
-        gradient: Gradient {
-            GradientStop {
-                position: 0
-                color: "#19191c"
-            }
-
-            GradientStop {
-                position: 0.91
-                color: "#232323"
-            }
-
-            GradientStop {
-                position: 1
-                color: "#232323"
-            }
-        }
 
         MouseArea {
             id: historyarea
@@ -277,6 +247,5 @@ Rectangle{
                 verticalAlignment: Text.AlignVCenter
             }
         }
-
     }
 }
