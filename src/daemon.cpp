@@ -72,8 +72,6 @@ void Daemon::stop()
 
     QSettings settings;
     const int pid = settings.value("daemon_pid", 0).toInt();
-
-    //TODO: this will leave 'sleep' processes around
     QProcess::execute(QString("kill %1").arg(pid));
 
     settings.setValue("daemon_pid", 0);
@@ -90,8 +88,7 @@ bool Daemon::isRunning()
     //config thinks it's running, check if signals can be sent to process
     const bool running = (0 == QProcess::execute(QString("kill -0 %1").arg(pid)));
     if(!running) {
-        std::cerr << "Daemon didn't shut down cleanly last time, removing old PID\n";
-
+        //daemon gone, remove PID
         settings.setValue("daemon_pid", 0);
         settings.sync();
     }

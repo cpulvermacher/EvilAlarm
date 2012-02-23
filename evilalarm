@@ -15,7 +15,6 @@ ARGS=""
 
 cleanup()
 {
-    echo "killing sleep..."
     if [ $SLEEPPID -ne 0 ]
     then
         kill $SLEEPPID
@@ -51,7 +50,6 @@ else
     exit 1
 fi
 
-echo "starting alarm"
 #start alarm
 
 #separate script to prevent changes to volume/profile
@@ -62,5 +60,3 @@ until $OPTBINDIR/evilalarm-ui --wakeup $ARGS #repeat until this returns 0
 do
     echo "EvilAlarm killed, restarting"
 done
-
-echo "evilalarm-daemon done."
