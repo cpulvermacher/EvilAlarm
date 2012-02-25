@@ -55,8 +55,11 @@ Item {
     onAlarmOnChanged: { alarmHand.visible = alarmOn; }
     Component.onCompleted: { timeChanged(); }
     onMinutesChanged: {
+        if(alarmSettings.status != Loader.Ready)
+            return;
+
         non_user_action = true;
-        alarmSettings.updateUntilAlarm();
+        alarmSettings.item.updateUntilAlarm();
         non_user_action = false;
     }
 
@@ -69,7 +72,7 @@ Item {
         currentTime.text = Qt.formatTime(date, Qt.SystemLocaleShortDate);
 
         //refresh time ~200ms after second actually changes to ensure regular updates
-        tickTimer.interval =  1000 - date.getMilliseconds() + 200;
+        tickTimer.interval = 1000 - date.getMilliseconds() + 200;
     }
 
     Timer {

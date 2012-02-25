@@ -1,7 +1,6 @@
 import Qt 4.7
 
 Image {
-    id: alarmSettings
     width: 800; height: 424
     y: 1
     source: "plain-bg.png"

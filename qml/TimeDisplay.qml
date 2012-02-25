@@ -3,14 +3,10 @@ import Qt 4.7
 Image {
     MouseArea {
         //make full area clickable, since there are no interactive elements anyway
-        onClicked: wakedo.flipped = !wakedo.flipped
-        x:0;
-        y:0;
-        width:800;
-        height:424;
+        anchors.fill: parent
         z: 0
+        onClicked: wakedo.flipped = !wakedo.flipped
     }
-    id: rectangle1
     width: 800; height: 424
     y: 1
     source: "time-display-bg.png"

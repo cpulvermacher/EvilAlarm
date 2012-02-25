@@ -5,25 +5,41 @@ Flipable {
 
     width: 800; height: 424
 
-    property int xAxis: 0
-    property int yAxis: 0
-    property int angle: 0
+    property int angle: 180
     property bool flipped: false
 
     function showAlarmTime() {
-        timeDisplay.clock.alarmHours=alarmSettings.alarmHour;
-        timeDisplay.clock.alarmMinutes=alarmSettings.alarmMinute;
+        if(alarmSettings.status != Loader.Ready)
+            return;
 
-        timeDisplay.clock.alarmOn=alarmSettings.alarmOn;
+        timeDisplay.clock.alarmHours=alarmSettings.item.alarmHour;
+        timeDisplay.clock.alarmMinutes=alarmSettings.item.alarmMinute;
 
-        var date = new Date(0, 0, 0, alarmSettings.alarmHour, alarmSettings.alarmMinute);
+        timeDisplay.clock.alarmOn=alarmSettings.item.alarmOn;
+
+        var date = new Date(0, 0, 0, alarmSettings.item.alarmHour, alarmSettings.item.alarmMinute);
         timeDisplay.alarmTimeText="Alarm at "+Qt.formatTime(date, Qt.SystemLocaleShortDate);
+
+        non_user_action = true;
+        alarmSettings.item.updateUntilAlarm()
+        non_user_action = false;
     }
 
 
-    front: TimeDisplay{id:timeDisplay}
-    back: AlarmSettings{id:alarmSettings}
+    front: TimeDisplay {
+        id:timeDisplay
+    }
+    back: Loader {
+        id: alarmSettings
+        onLoaded: wakedo.showAlarmTime()
+    }
 
+    Timer {
+        interval: 500;
+        repeat: false;
+        running: true;
+        onTriggered: alarmSettings.source = "AlarmSettings.qml";
+    }
 
     states: [State {
         name: "backstate"; when: wakedo.flipped
@@ -32,7 +48,7 @@ Flipable {
             // this is negative to make rotation go reverse, i.e. to have paper fold approach user
             angle: -wakedo.angle }
     },State {
-    name: "alarmOn"; when: alarmSettings.alarmOn
+    name: "alarmOn"; when: alarmSettings.item.alarmOn
         StateChangeScript {
             script: showAlarmTime();
         }
@@ -49,7 +65,7 @@ Flipable {
             visible:false
         }
     },State {
-    name: "alarmOff"; when: !alarmSettings.alarmOn
+    name: "alarmOff"; when: !alarmSettings.item.alarmOn
         StateChangeScript {
             script: showAlarmTime();
         }
@@ -61,7 +77,7 @@ Flipable {
     }]
     transform: Rotation {
         id: rotation1; origin.x: wakedo.width / 2; origin.y: wakedo.height / 2
-        axis.x: wakedo.xAxis; axis.y: wakedo.yAxis; axis.z: 0;
+        axis.x: 0; axis.y: 1; axis.z: 0;
     }
 
     transitions: Transition {

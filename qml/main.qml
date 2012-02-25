@@ -2,6 +2,7 @@ import Qt 4.7
 
 Rectangle{
     color: "#141518"
+    width: 800; height: 424
     id: window
     signal selectAlarmType()
     signal showAlarmHistory(int hours, int minutes)
@@ -23,8 +24,6 @@ Rectangle{
     property string ui_alarm_type: ""
 
     Wakedo {
-        angle: 180
-        yAxis: 1
         anchors.centerIn: parent
     }
 }
