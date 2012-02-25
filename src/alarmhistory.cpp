@@ -26,7 +26,7 @@ AlarmHistory::AlarmHistory(QWidget *parent, int hours, int minutes) :
     QVBoxLayout *layout = new QVBoxLayout(this);
 
     QHBoxLayout *header_layout = new QHBoxLayout();
-    QLabel *help_text = new QLabel(tr("Tap time to set alarm!"));
+    QLabel *help_text = new QLabel(tr("Tap time to set alarm, long press to remove."));
     add_to_favorites_button = new QPushButton(tr("Add %1 to favorites").arg(current_alarm_time.toString(Qt::SystemLocaleShortDate)));
 
     header_layout->addWidget(help_text);
