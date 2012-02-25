@@ -19,6 +19,7 @@ cleanup()
     then
         kill $SLEEPPID
     fi
+    exit 0
 }
 
 if [ $# -eq 0 ]
