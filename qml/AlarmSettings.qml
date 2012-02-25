@@ -143,26 +143,11 @@ Image {
                 delegate: Text { font.pixelSize: 40; text: index; height: parent.itemHeight+10; width: (index>9)?40:20; }
 
                 onCurrentIndexChanged: {
-                    //console.log("hourspinner changed")
                     if(!non_user_action) {
                         updateUntilAlarmTimer.start();
-                        if(!alarmSwitch.on){
-                            // when user touches spinner, turn alarm on
-                            // commented out: usability testing shows
-                            // that some users tend to want to toggle the
-                            // switch without actually paying attention to
-                            // the state it visually expresses;
-                            // if it is turned on automatically,
-                            // the next thing the user will do is
-                            // to turn it off again, assuming they
-                            // are turning it on.
-                            //alarmSwitch.aswitch.toggle();
-                        }
-
                     }
                 }
             }
-
         }
         Column {
             y: 83; x: 278; spacing: 40
@@ -181,15 +166,8 @@ Image {
                 }
 
                 onCurrentIndexChanged: {
-                    //console.log("minutespinner changed")
                     if(!non_user_action) {
                         updateUntilAlarmTimer.start();
-                        if(!alarmSwitch.on){
-                            // when user touches spinner, turn alarm on
-                            // commented out: see comment above in spinnerHour
-
-                            //alarmSwitch.aswitch.toggle();
-                        }
                     }
                 }
             }

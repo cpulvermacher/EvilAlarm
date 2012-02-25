@@ -1,9 +1,8 @@
 import Qt 4.7
 
-Rectangle {
+Item {
     width: 420
     height: 200
-    color: "#00000000"
     property alias alarmTime: alarmText
     property alias alarmTimeText: alarmText.text
     property alias alarm: alarmBox
@@ -14,7 +13,6 @@ Rectangle {
         id: currentTime
         x: 10
         y: 0
-        //anchors.horizontalCenter: parent.horizontalCenter
         color: "#dddddd"
         font.family: "Nokia Sans"
         font.pixelSize: 100
@@ -26,7 +24,6 @@ Rectangle {
         y: 130
         text: ""
         visible: true
-        //anchors.horizontalCenter: parent.horizontalCenter
         color: "#777777"
         font.family: "Nokia Sans"
         font.pixelSize: 30

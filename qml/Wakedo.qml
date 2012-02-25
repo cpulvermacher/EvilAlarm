@@ -2,7 +2,6 @@ import Qt 4.7
 
 Flipable {
     id: wakedo
-
     width: 800; height: 424
 
     property int angle: 180

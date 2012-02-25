@@ -1,10 +1,8 @@
 import Qt 4.7
 
-Rectangle {
-    id: rectangle1
+Item {
     width: 173
     height: 150
-    color: "#00000000"
     Text {
         color: "#aaaaaa"
         text: "Ok!"

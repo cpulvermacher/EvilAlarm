@@ -1,9 +1,8 @@
 import Qt 4.7
 
-Rectangle {
+Item {
     width: 168
     height: 123
-    color: "#00000000"
     Image{
         anchors.bottom: parent.bottom;
         anchors.right: parent.right;

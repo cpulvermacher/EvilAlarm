@@ -1,9 +1,8 @@
 import Qt 4.7
 
-Rectangle {
+Item {
     width: 200
     height: 143
-    color: "#00000000"
     x: 5
     y: 0
     property alias on: aswitch.on
