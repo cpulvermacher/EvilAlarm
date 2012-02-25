@@ -3,7 +3,7 @@ import Qt 4.7
 Flipable {
     id: wakedo
 
-    width: 800; height: 430
+    width: 800; height: 424
 
     property int xAxis: 0
     property int yAxis: 0

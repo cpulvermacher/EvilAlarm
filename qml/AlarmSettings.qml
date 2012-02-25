@@ -2,8 +2,9 @@ import Qt 4.7
 
 Image {
     id: alarmSettings
-    width: 800; height: 430
-    source: "background.png"
+    width: 800; height: 424
+    y: 1
+    source: "plain-bg.png"
 
     property alias alarmHour: spinnerHour.currentIndex
     property alias alarmMinute: spinnerMinute.currentIndex

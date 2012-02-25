@@ -42,7 +42,7 @@ import Qt 4.7
 
 Item {
     id: clock
-    width: 320; height: 430
+    width: 320; height: 424
 
     property int hours
     property int minutes
@@ -79,9 +79,6 @@ Item {
         repeat: true;
         onTriggered: clock.timeChanged()
     }
-
-    Image { id: background; source: "anvil-clock-small-sans-anvil.png"; }
-
 
     Image {
         x: 154.5; y: 164

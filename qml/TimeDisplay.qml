@@ -7,12 +7,13 @@ Image {
         x:0;
         y:0;
         width:800;
-        height:430;
+        height:424;
         z: 0
     }
     id: rectangle1
-    width: 800; height: 430
-    source: "background.png"
+    width: 800; height: 424
+    y: 1
+    source: "time-display-bg.png"
     property alias alarmTime: timeText.alarmTime
     property alias alarmTimeText: timeText.alarmTimeText
     property alias alarm: timeText.alarm
@@ -23,6 +24,7 @@ Image {
     Clock2{
         id:clock
         x: 30
+        y: 0
         z: 3
     }
 
