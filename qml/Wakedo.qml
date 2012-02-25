@@ -16,7 +16,7 @@ Flipable {
 
         timeDisplay.clock.alarmOn=alarmSettings.alarmOn;
 
-        var date = new Date(0, 0, 0, alarmSettings.alarmHour, alarmSettings.alarmMinute); 
+        var date = new Date(0, 0, 0, alarmSettings.alarmHour, alarmSettings.alarmMinute);
         timeDisplay.alarmTimeText="Alarm at "+Qt.formatTime(date, Qt.SystemLocaleShortDate);
     }
 
@@ -49,16 +49,16 @@ Flipable {
             visible:false
         }
     },State {
-            name: "alarmOff"; when: !alarmSettings.alarmOn
-                StateChangeScript {
-                    script: showAlarmTime();
-                }
-                PropertyChanges {
-                    target: timeDisplay.noAlarm;
-                    text: "No alarm"
-                    visible: true
-                }
-            }]
+    name: "alarmOff"; when: !alarmSettings.alarmOn
+        StateChangeScript {
+            script: showAlarmTime();
+        }
+        PropertyChanges {
+            target: timeDisplay.noAlarm;
+            text: "No alarm"
+            visible: true
+        }
+    }]
     transform: Rotation {
         id: rotation1; origin.x: wakedo.width / 2; origin.y: wakedo.height / 2
         axis.x: wakedo.xAxis; axis.y: wakedo.yAxis; axis.z: 0;

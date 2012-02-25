@@ -73,7 +73,7 @@ install: build
 	dh_install qml/alarmHand.png $(QMLDIR)
 	dh_install qml/time-display-bg.png $(QMLDIR)
 	dh_install qml/plain-bg.png $(QMLDIR)
-	dh_install qml/switch-background.svg $(QMLDIR)
+	dh_install qml/switch-background.png $(QMLDIR)
 	dh_install qml/bell.png $(QMLDIR)
 	dh_install qml/hour.svg $(QMLDIR)
 	dh_install qml/metalball2.png $(QMLDIR)

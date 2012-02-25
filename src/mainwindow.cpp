@@ -71,13 +71,11 @@ MainWindow::MainWindow(QWidget *parent) :
         QMaemo5InformationBox::information(this, tr("Can't write settings to /home/user/.config/EvilAlarm/EvilAlarm - Please fix its file permissions and restart EvilAlarm"));
     }
 
-    QStringList file_paths;
-    file_paths << "/opt/evilalarm/bin/keepvolume.sh";
-    foreach(const QString &file_path, file_paths) {
-        if(!QFile::permissions(file_path).testFlag(QFile::ExeOther)) {
-            QMaemo5InformationBox::information(this, tr("Can't execute %1 - Please reinstall EvilAlarm!").arg(file_path));
-        }
+    const QString file_path("/opt/evilalarm/bin/keepvolume.sh");
+    if(!QFile::permissions(file_path).testFlag(QFile::ExeOther)) {
+        QMaemo5InformationBox::information(this, tr("Can't execute %1 - Please reinstall EvilAlarm!").arg(file_path));
     }
+    //QTimer::singleShot(200, this, SLOT(close()));
 }
 
 MainWindow::~MainWindow()

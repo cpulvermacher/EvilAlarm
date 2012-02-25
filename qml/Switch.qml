@@ -63,7 +63,7 @@ Item {
 
     Image {
         id: background
-        source: "switch-background.svg"
+        source: "switch-background.png"
         sourceSize.width: 247;
         sourceSize.height: 129;
 
