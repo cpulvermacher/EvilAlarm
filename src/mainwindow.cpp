@@ -75,7 +75,6 @@ MainWindow::MainWindow(QWidget *parent) :
     if(!QFile::permissions(file_path).testFlag(QFile::ExeOther)) {
         QMaemo5InformationBox::information(this, tr("Can't execute %1 - Please reinstall EvilAlarm!").arg(file_path));
     }
-    //QTimer::singleShot(200, this, SLOT(close()));
 }
 
 MainWindow::~MainWindow()

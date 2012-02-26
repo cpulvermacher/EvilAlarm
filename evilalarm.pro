@@ -5,6 +5,11 @@ CONFIG += silent release warn_on
 
 QMAKE_CXXFLAGS_WARN_ON = -Wall -Wundef -Wextra
 
+QMAKE_CFLAGS_RELEASE -= -O3
+QMAKE_CFLAGS_RELEASE += -Os
+QMAKE_CXXFLAGS_RELEASE -= -O3
+QMAKE_CXXFLAGS_RELEASE += -Os
+
 OBJECTS_DIR = $${PWD}/tmp
 MOC_DIR = $${PWD}/tmp
 UI_DIR = $${PWD}/tmp
