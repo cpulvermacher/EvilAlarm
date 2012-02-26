@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
 #include "selectalarmtype.h"
 #include "alarmhistory.h"
 #include "settings.h"
@@ -7,6 +6,7 @@
 #include "daemon.h"
 
 #include <QDeclarativeContext>
+#include <QDeclarativeView>
 #include <QDBusConnection>
 #include <QSettings>
 #include <QGraphicsObject>
@@ -21,11 +21,14 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    view(new QDeclarativeView(this))
 {
-    ui->setupUi(this);
+    setWindowTitle("EvilAlarm");
     setAttribute(Qt::WA_Maemo5StackedWindow);
 
+    menuBar()->addAction(tr("Settings"), this, SLOT(showSettings()));
+    menuBar()->addAction(tr("About"), this, SLOT(showAbout()));
+    menuBar()->addAction(tr("Test Alarm"), this, SLOT(testAlarm()));
 
     QString path;
     const QString maemo_install_path("/opt/evilalarm/qml/main.qml");
@@ -35,15 +38,16 @@ MainWindow::MainWindow(QWidget *parent) :
         path = QApplication::applicationDirPath()+"/../qml/qml/main.qml";
     }
 
-    //now load UI
-    ui->view->setSource(QUrl::fromLocalFile(path));
-    QGraphicsObject *root_object = ui->view->rootObject();
-
     //avoid flicker at start
     setAttribute(Qt::WA_OpaquePaintEvent);
     setAttribute(Qt::WA_NoSystemBackground);
-    ui->view->setAttribute(Qt::WA_OpaquePaintEvent);
-    ui->view->setAttribute(Qt::WA_NoSystemBackground);
+    view->setAttribute(Qt::WA_OpaquePaintEvent);
+    view->setAttribute(Qt::WA_NoSystemBackground);
+
+    //now load UI
+    view->setSource(QUrl::fromLocalFile(path));
+    QGraphicsObject *root_object = view->rootObject();
+
 
     //load alarm
     QSettings settings;
@@ -79,7 +83,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    delete ui;
+    delete view;
 }
 
 void MainWindow::showAlarmTypeSelector()
@@ -87,7 +91,7 @@ void MainWindow::showAlarmTypeSelector()
     SelectAlarmType* selectAlarmType = new SelectAlarmType(this);
     selectAlarmType->exec();
 
-    QGraphicsObject *root_object = ui->view->rootObject();
+    QGraphicsObject *root_object = view->rootObject();
     QSettings settings;
     root_object->setProperty("ui_alarm_type", settings.value("module", "Normal").toString());
 
@@ -145,7 +149,7 @@ void MainWindow::unsetEvilAlarm()
     settings.sync();
 }
 
-void MainWindow::on_actionSettings_triggered()
+void MainWindow::showSettings()
 {
     Settings *settingsWindow = new Settings(this);
     settingsWindow->setAttribute(Qt::WA_Maemo5StackedWindow);
@@ -153,12 +157,12 @@ void MainWindow::on_actionSettings_triggered()
     settingsWindow->exec();
     delete settingsWindow;
 
-    QGraphicsObject *root_object = ui->view->rootObject();
+    QGraphicsObject *root_object = view->rootObject();
     QSettings settings;
     root_object->setProperty("ui_alarm_type", settings.value("module", "Normal").toString());
 }
 
-void MainWindow::on_actionAbout_triggered()
+void MainWindow::showAbout()
 {
     static About *about = new About(this);
     about->setAttribute(Qt::WA_Maemo5StackedWindow);
@@ -166,7 +170,7 @@ void MainWindow::on_actionAbout_triggered()
     about->show();
 }
 
-void MainWindow::on_actionTest_Alarm_triggered()
+void MainWindow::testAlarm()
 {
     QProcess::startDetached(QString("evilalarm --test"));
 }
@@ -174,7 +178,7 @@ void MainWindow::on_actionTest_Alarm_triggered()
 void MainWindow::displayStateChanged(QString state)
 {
     const bool display_on = (state != "off");
-    QGraphicsObject *root_object = ui->view->rootObject();
+    QGraphicsObject *root_object = view->rootObject();
     root_object->setProperty("displayOn", display_on);
 }
 
@@ -190,7 +194,7 @@ void MainWindow::showAlarmHistory(int hours, int minutes)
 //set alarm in UI (onChanged handlers are triggered)
 void MainWindow::setUIAlarm(int hours, int minutes)
 {
-    QGraphicsObject *root_object = ui->view->rootObject();
+    QGraphicsObject *root_object = view->rootObject();
     //disable old alarm first
     //(changing hours / minutes to something else is required to trigger the onChanged slots...)
     root_object->setProperty("ui_alarm_active", false);

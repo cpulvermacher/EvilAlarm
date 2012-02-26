@@ -3,10 +3,7 @@
 #include <QMainWindow>
 #include <QString>
 
-namespace Ui
-{
-class MainWindow;
-}
+class QDeclarativeView;
 
 class MainWindow : public QMainWindow
 {
@@ -15,7 +12,6 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    //void setAlarm(int hours,int minutes);
 
 public slots:
     //(de)activate alarm (i.e. start/stop daemon)
@@ -32,15 +28,15 @@ public slots:
     void setUIAlarm(int hours, int minutes);
 
     //other dialogs
-    void on_actionSettings_triggered();
-    void on_actionAbout_triggered();
-    void on_actionTest_Alarm_triggered();
+    void showSettings();
+    void showAbout();
+    void testAlarm();
 
     //if display is off, stop all animations
     void displayStateChanged(QString state);
 
 private:
-    Ui::MainWindow *ui;
+    QDeclarativeView *view;
 };
 
 #endif // MAINWINDOW_H
