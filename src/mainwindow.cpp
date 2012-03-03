@@ -101,7 +101,7 @@ void MainWindow::showAlarmTypeSelector()
 
 void MainWindow::setEvilAlarm(int hours, int minutes)
 {
-    std::cout << "setEvilAlarm(" << hours << ", " << minutes << ")\n";
+    //std::cout << "setEvilAlarm(" << hours << ", " << minutes << ")\n";
     QSettings settings;
 
     const QTime wake_at(hours, minutes);
@@ -129,7 +129,7 @@ void MainWindow::setEvilAlarm(int hours, int minutes)
 
 void MainWindow::unsetEvilAlarm()
 {
-    std::cout << "unsetEvilAlarm()\n";
+    //std::cout << "unsetEvilAlarm()\n";
     Daemon::stop();
 
     //since unsetEvilAlarm() is only called when the user deactivates a set alarm, remove the most recent alarm from history
@@ -191,17 +191,15 @@ void MainWindow::showAlarmHistory(int hours, int minutes)
     delete alarmHistory;
 }
 
-//set alarm in UI (onChanged handlers are triggered)
+//set alarm in UI (which in turn starts the daemon)
 void MainWindow::setUIAlarm(int hours, int minutes)
 {
-    QGraphicsObject *root_object = view->rootObject();
+    //std::cout << "setUIalarm: " << hours << ", " << minutes << "\n";
+    QObject *root_object = view->rootObject();
+
     //disable old alarm first
     //(changing hours / minutes to something else is required to trigger the onChanged slots...)
-    root_object->setProperty("ui_alarm_active", false);
-    root_object->setProperty("ui_alarm_hours", -1);
-    root_object->setProperty("ui_alarm_minutes", -1);
+    QMetaObject::invokeMethod(root_object, "setUiAlarm", Q_ARG(int, -1), Q_ARG(int, -1), Q_ARG(bool, false));
 
-    root_object->setProperty("ui_alarm_hours", hours);
-    root_object->setProperty("ui_alarm_minutes", minutes);
-    root_object->setProperty("ui_alarm_active", true);
+    QMetaObject::invokeMethod(root_object, "setUiAlarm", Q_ARG(int, hours), Q_ARG(int, minutes), Q_ARG(bool, true));
 }

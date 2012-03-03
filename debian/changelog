@@ -1,6 +1,7 @@
 evilalarm (1.1) unstable; urgency=low
 
   * Avoid bug that would hang with 100% CPU instead of starting alarm.
+  * Fix compatibility with CSSU
   * Note that the volume may be louder than in previous versions, please
     recheck your settings
 

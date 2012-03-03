@@ -1,6 +1,7 @@
 import Qt 4.7
 
 Image {
+    id: alarmSettingsObject
     width: 800; height: 424
     y: 1
     source: "plain-bg.png"
@@ -10,6 +11,21 @@ Image {
     property alias alarmOn: alarmSwitch.on
 
     property int alarmTimeMinutes: -1; //hold current alarm time as 60*h+m, or -1 if none is set
+
+    Component.onCompleted: {
+        non_user_action = true;
+        setUiAlarm(ui_alarm_hours, ui_alarm_minutes, ui_alarm_active);
+        non_user_action = false;
+
+        window.setUiAlarm.connect(alarmSettingsObject.setUiAlarm)
+    }
+
+
+    function setUiAlarm(hours, minutes, on) {
+        alarmHour = hours;
+        alarmMinute = minutes;
+        alarmOn = on;
+    }
 
 
     function updateUntilAlarm() {
@@ -89,12 +105,13 @@ Image {
 
     AlarmSwitch{
         id: alarmSwitch
-        on: ui_alarm_active
+        on: false
         x: 534
         y: 12
         width: 248
         height: 223
         onOnChanged: {
+           // console.log("alarmswitch toggled: " + on);
             updateUntilAlarm();
         }
     }
@@ -135,7 +152,7 @@ Image {
 
             Spinner {
                 id: spinnerHour
-                currentIndex: ui_alarm_hours;
+                currentIndex: 0;
                 width: 240; height: 275
                 focus: true
                 model: 24
@@ -153,7 +170,7 @@ Image {
             y: 83; x: 278; spacing: 40
             Spinner {
                 id: spinnerMinute
-                currentIndex: ui_alarm_minutes;
+                currentIndex: 0;
                 width: 240; height: 275
                 focus: true
                 model: 60
