@@ -6,9 +6,7 @@ Item {
     Image{
         anchors.bottom: parent.bottom;
         anchors.right: parent.right;
-        source: "TimeDisplayCorner.svg"
-        sourceSize.width: 240
-        sourceSize.height: 150
+        source: "TimeDisplayCorner.png"
         width: 240;
         height: 150;
         Image{

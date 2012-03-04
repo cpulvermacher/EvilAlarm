@@ -12,19 +12,14 @@ Item {
         font.bold: false
         font.pixelSize: 36
         id: text1
-        x: 92
-        y: 93
         anchors.bottom: parent.bottom;
         anchors.right: parent.right;
     }
     Image{
         id: image1
-        x: 0
         anchors.right: parent.right
-        anchors.rightMargin: 0
-        source: "TimeDisplayCorner.svg"
-        sourceSize.width: 240
-        sourceSize.height: 150
+        anchors.bottom: parent.bottom;
+        source: "TimeDisplayCorner.png"
         width: 240;
         height: 150;
     }

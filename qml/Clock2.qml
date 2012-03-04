@@ -86,7 +86,7 @@ Item {
     Image {
         x: 154.5; y: 164
         z:2
-        source: "hour.svg"
+        source: "hour.png"
         smooth: true
         transform: Rotation {
             id: hourRotation
@@ -116,7 +116,7 @@ Item {
 
     Image {
         x: 156.5; y: 141
-        source: "minute.svg"
+        source: "minute.png"
         z:2
         smooth: true
         transform: Rotation {
@@ -131,7 +131,6 @@ Item {
 
     Image {
         x: 157.5; y: 170
-        fillMode: Image.PreserveAspectFit
         source: "second.png"
         smooth: true
         transform: Rotation {
