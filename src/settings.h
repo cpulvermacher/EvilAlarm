@@ -5,7 +5,7 @@
 #include <QMaemo5ValueButton>
 
 //default values
-const QString SOUND_FILE = "/home/user/MyDocs/.sounds/Ringtones/Beep.aac";
+const QString SOUND_FILE = "/usr/share/sounds/ui-clock_alarm_default.aac";
 const float MAX_VOLUME = 80;
 const int INACTIVITY_TIMEOUT = 4; //seconds before noise will restart after device has stopped moving
 const int ALARM_TIMEOUT = 5; //minutes the device is armed after initial alarm
