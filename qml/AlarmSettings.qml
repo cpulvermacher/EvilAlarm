@@ -102,7 +102,6 @@ Image {
     }
 
 
-
     AlarmSwitch{
         id: alarmSwitch
         on: false
@@ -119,8 +118,6 @@ Image {
     AlarmSettingsCorner{
         id:alarmSettingsCorner
         z: 3
-        anchors.bottom: parent.bottom;
-        anchors.right: parent.right;
     }
 
     Item {

@@ -1,8 +1,11 @@
 import Qt 4.7
 
-Item {
-    width: 173
-    height: 150
+Image{
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom;
+    source: "TimeDisplayCorner.png"
+    width: 240;
+    height: 150;
     Text {
         color: "#aaaaaa"
         text: "Ok!"
@@ -15,24 +18,16 @@ Item {
         anchors.bottom: parent.bottom;
         anchors.right: parent.right;
     }
-    Image{
-        id: image1
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom;
-        source: "TimeDisplayCorner.png"
-        width: 240;
-        height: 150;
-    }
 
     MouseArea {
         onClicked: wakedo.flipped = !wakedo.flipped
         anchors.top: parent.top
-        anchors.topMargin: 0
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 0
         anchors.left: parent.left
-        anchors.leftMargin: -4
         anchors.right: parent.right
+        anchors.topMargin: 0
+        anchors.bottomMargin: 0
+        anchors.leftMargin: -4
         anchors.rightMargin: -5
     }
 }

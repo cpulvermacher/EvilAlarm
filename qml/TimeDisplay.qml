@@ -35,7 +35,5 @@ Image {
     TimeDisplayCorner{
         id: timeDisplayCorner
         z: 3
-        anchors.bottom: parent.bottom;
-        anchors.right: parent.right;
     }
 }
