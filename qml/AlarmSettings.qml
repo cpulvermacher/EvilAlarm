@@ -123,7 +123,7 @@ Image {
         anchors.right: parent.right;
     }
 
-    Rectangle {
+    Item {
         x: -1
         y: -7
         width: 0; height: 0
@@ -153,10 +153,8 @@ Image {
             Spinner {
                 id: spinnerHour
                 currentIndex: 0;
-                width: 240; height: 275
                 focus: true
                 model: 24
-                itemHeight: 52
                 delegate: Text { font.pixelSize: 40; text: index; height: parent.itemHeight+10; width: (index>9)?40:20; }
 
                 onCurrentIndexChanged: {
@@ -171,10 +169,8 @@ Image {
             Spinner {
                 id: spinnerMinute
                 currentIndex: 0;
-                width: 240; height: 275
                 focus: true
                 model: 60
-                itemHeight: 52
                 delegate: Text {
                     font.pixelSize: 40;
                     text: index;

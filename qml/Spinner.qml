@@ -45,9 +45,9 @@ Image {
     property alias delegate: view.delegate
     property alias currentIndex: view.currentIndex
     property alias moving: view.moving
-    property real itemHeight: 30
-    opacity: 1
+    property real itemHeight: 52
 
+    width: 240; height: 275
     source: "spinner-bg.png"
     clip: true
 
@@ -58,7 +58,6 @@ Image {
         pathItemCount: height/itemHeight
         preferredHighlightBegin: 0.5
         preferredHighlightEnd: 0.5
-        highlight: Image { source: "spinner-select.png"; width: view.width; height: itemHeight+4 }
         dragMargin: view.width/2
 
         path: Path {
