@@ -27,10 +27,10 @@ class Backend : public QObject
 {
     Q_OBJECT
 public:
-    Backend(QObject *parent);
+    explicit Backend(QObject *parent);
     ~Backend();
-    bool isPlaying(); //audio is playing
-    bool isVibrating(); //is vibrator on right _now_ ?
+    bool isPlaying() const; //audio is playing
+    bool isVibrating() const; //is vibrator on right _now_ ?
 public slots:
     void play();
     void pause();

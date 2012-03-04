@@ -111,9 +111,9 @@ void Backend::setVolume(qreal v)
 
 void Backend::repeatSound() { noise->enqueue(noise->currentSource()); }
 
-bool Backend::isPlaying() { return alarm_playing; }
+bool Backend::isPlaying() const { return alarm_playing; }
 
-bool Backend::isVibrating() { return is_vibrating; }
+bool Backend::isVibrating() const { return is_vibrating; }
 
 //used to change status after some delay, see stopVibrator()
 void Backend::setVibratorStateOff() { is_vibrating = false; }

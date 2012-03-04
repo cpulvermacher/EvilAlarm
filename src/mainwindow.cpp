@@ -30,12 +30,9 @@ MainWindow::MainWindow(QWidget *parent) :
     menuBar()->addAction(tr("About"), this, SLOT(showAbout()));
     menuBar()->addAction(tr("Test Alarm"), this, SLOT(testAlarm()));
 
-    QString path;
-    const QString maemo_install_path("/opt/evilalarm/qml/main.qml");
-    if(QFile::exists(maemo_install_path)) {
-        path = maemo_install_path;
-    } else { //for QtCreator
-        path = QApplication::applicationDirPath()+"/../qml/qml/main.qml";
+    QString path("/opt/evilalarm/qml/main.qml");
+    if(!QFile::exists(path)) { //for QtCreator
+        path = QApplication::applicationDirPath() + "/../qml/qml/main.qml";
     }
 
     //avoid flicker at start
@@ -90,18 +87,16 @@ void MainWindow::showAlarmTypeSelector()
 {
     SelectAlarmType* selectAlarmType = new SelectAlarmType(this);
     selectAlarmType->exec();
+    delete selectAlarmType;
 
     QGraphicsObject *root_object = view->rootObject();
     QSettings settings;
     root_object->setProperty("ui_alarm_type", settings.value("module", "Normal").toString());
-
-    delete selectAlarmType;
 }
 
 
 void MainWindow::setEvilAlarm(int hours, int minutes)
 {
-    //std::cout << "setEvilAlarm(" << hours << ", " << minutes << ")\n";
     QSettings settings;
 
     const QTime wake_at(hours, minutes);
@@ -129,7 +124,6 @@ void MainWindow::setEvilAlarm(int hours, int minutes)
 
 void MainWindow::unsetEvilAlarm()
 {
-    //std::cout << "unsetEvilAlarm()\n";
     Daemon::stop();
 
     //since unsetEvilAlarm() is only called when the user deactivates a set alarm, remove the most recent alarm from history
@@ -172,7 +166,7 @@ void MainWindow::showAbout()
 
 void MainWindow::testAlarm()
 {
-    QProcess::startDetached(QString("evilalarm --test"));
+    QProcess::execute(QString("evilalarm --test"));
 }
 
 void MainWindow::displayStateChanged(QString state)
@@ -194,7 +188,6 @@ void MainWindow::showAlarmHistory(int hours, int minutes)
 //set alarm in UI (which in turn starts the daemon)
 void MainWindow::setUIAlarm(int hours, int minutes)
 {
-    //std::cout << "setUIalarm: " << hours << ", " << minutes << "\n";
     QObject *root_object = view->rootObject();
 
     //disable old alarm first
