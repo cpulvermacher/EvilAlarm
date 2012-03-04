@@ -67,15 +67,6 @@ Image {
         }
     }
 
-    Image {
-        id: image1
-        x: 0
-        y: 0
-        width: parent.width
-        height: parent.height
-        source: "spinner-bg-hover.png"
-    }
-
     Keys.onDownPressed: view.incrementCurrentIndex()
     Keys.onUpPressed: view.decrementCurrentIndex()
 }
