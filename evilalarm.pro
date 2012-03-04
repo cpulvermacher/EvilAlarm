@@ -41,34 +41,37 @@ FORMS += \
     settings.ui
 
 
-#QtCreator stuff
-maemo5 {
-    target.path = /opt/evilalarm/bin
-    INSTALLS += target
+#QtCreator stuff, not used when qmake is executed from debian/rules
+isEmpty(NOQTCREATOR) {
+    message("using qt creator stuff!")
+    maemo5 {
+        target.path = /opt/evilalarm/bin
+        INSTALLS += target
+    }
+
+    #files shown in project pane
+    OTHER_FILES += \
+        qml/main.qml \
+        qml/AlarmSwitch.qml \
+        qml/TimeDisplayCorner.qml \
+        qml/AlarmSettingsCorner.qml \
+        qml/TimeText.qml \
+        qml/TimeDisplay.qml \
+        qml/Spinner.qml \
+        qml/Wakedo.qml \
+        qml/Switch.qml \
+        qml/Clock2.qml \
+        qml/AlarmSettings.qml
+
+    # Add more folders to ship with the application, here
+    folder_01.source = qml
+    folder_01.target = qml
+    DEPLOYMENTFOLDERS = folder_01 folder_02
+
+    include(Wakedo/qmlapplicationviewer/qmlapplicationviewer.pri)
+    qtcAddDeployment()
+
+
+    # Additional import path used to resolve QML modules in Creator's code model
+    QML_IMPORT_PATH =
 }
-
-#files shown in project pane
-OTHER_FILES += \
-    qml/main.qml \
-    qml/AlarmSwitch.qml \
-    qml/TimeDisplayCorner.qml \
-    qml/AlarmSettingsCorner.qml \
-    qml/TimeText.qml \
-    qml/TimeDisplay.qml \
-    qml/Spinner.qml \
-    qml/Wakedo.qml \
-    qml/Switch.qml \
-    qml/Clock2.qml \
-    qml/AlarmSettings.qml
-
-# Add more folders to ship with the application, here
-folder_01.source = qml
-folder_01.target = qml
-DEPLOYMENTFOLDERS = folder_01 folder_02
-
-include(Wakedo/qmlapplicationviewer/qmlapplicationviewer.pri)
-qtcAddDeployment()
-
-
-# Additional import path used to resolve QML modules in Creator's code model
-QML_IMPORT_PATH =

@@ -13,7 +13,7 @@ DESKTOP_DIR=usr/share/applications/hildon/
 build:
 	dh_testdir
 	install -d ${BUILDDIR}
-	qmake-qt4 -after "DESTDIR=debian/build"
+	qmake-qt4 "NOQTCREATOR=true" -after "DESTDIR=debian/build"
 	$(MAKE)
 	touch build
 
