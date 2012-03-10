@@ -78,8 +78,4 @@ Flipable {
         id: rotation1; origin.x: wakedo.width / 2; origin.y: wakedo.height / 2
         axis.x: 0; axis.y: 1; axis.z: 0;
     }
-
-    transitions: Transition {
-        NumberAnimation { target: rotation1; properties: "angle"; duration: 250; }
-    }
 }
