@@ -64,8 +64,6 @@ Item {
     Image {
         id: background
         source: "switch-background.png"
-        sourceSize.width: 247;
-        sourceSize.height: 129;
 
         MouseArea {
             anchors.fill: parent; onClicked: toggle()
@@ -83,19 +81,16 @@ Item {
                 id: image1
                 x: 147
                 y: 9
-                fillMode: Image.PreserveAspectFit
-                z: 92
                 source: "Wakedo.png"
 
             }
-
             Text {
                 id: text2
-                x: 152
-                y: 60
+                anchors.horizontalCenter: image1.horizontalCenter
+                anchors.top: image1.bottom
+                anchors.topMargin: -13
                 color: "#b5b5b5"
                 text: "ON"
-                visible: true
                 font.pixelSize: 41
             }
         }
