@@ -4,9 +4,11 @@ evilalarm (1.1) unstable; urgency=low
   * Fix compatibility with CSSU
   * Note that the volume may be louder than in previous versions, please
     recheck your settings
-  * Reduced startup time by ~50%
+  * Changed default alarm sound (was too quiet)
+  * Remove colour steps in background
+  * Reduced startup time by ~50%, plus other performance improvements
 
- -- Christian Pulvermacher <pulvermacher@gmx.de>  Fri, 17 Feb 2012 21:22:37 +0100
+ -- Christian Pulvermacher <pulvermacher@gmx.de>  Sat, 17 Mar 2012 12:54:32 +0100
 
 evilalarm (1.0) unstable; urgency=low
 
