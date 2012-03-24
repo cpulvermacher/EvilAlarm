@@ -24,8 +24,6 @@
 #include <QtDBus>
 #include <QtGui>
 
-#include <iostream>
-
 AlarmMovement::AlarmMovement(QWidget *parent, bool test):
     Alarm(parent, test),
     label(new QLabel(this)),
@@ -65,9 +63,6 @@ AlarmMovement::AlarmMovement(QWidget *parent, bool test):
         QDBusConnection::systemBus().connect("", "/com/nokia/bme/signal", "com.nokia.bme.signal", "charger_connected",
                                              this, SLOT(close()));
     }
-
-    //TODO: remove
-    //	QTimer::singleShot(1000, this, SLOT(close()));
 }
 
 //starts/restarts the alarm
@@ -89,8 +84,6 @@ void AlarmMovement::restart()
         snooze_button->setEnabled(num_snooze < num_snooze_max);
         snooze_button->setText(tr("Snooze (%1/%2)").arg(num_snooze).arg(num_snooze_max));
     }
-
-
 
     Alarm::restart();
 }
