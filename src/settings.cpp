@@ -83,7 +83,7 @@ Settings::Settings(QWidget *parent) :
     QLabel *alarm_timeout_label = new QLabel(tr("Completely shut down alarm after"));
     alarm_timeout = new QSpinBox();
     alarm_timeout->setSuffix(" min");
-    alarm_timeout->setRange(1, 60);
+    alarm_timeout->setRange(1, 10*60);
     alarm_timeout->setValue(settings.value("alarm_timeout", ALARM_TIMEOUT).toInt());
     ui->alarmtype->addWidget(alarm_timeout_label, row, 0);
     ui->alarmtype->addWidget(alarm_timeout, row, 1);
