@@ -50,7 +50,11 @@ Image {
 
             var hoursLeft = Math.floor(millisecondsUntilAlarm / (1000 * 3600));
             var minutesLeft = Math.floor(millisecondsUntilAlarm / (1000 * 60)) % 60;
-            untilAlarm.text = "Until alarm:\n"+hoursLeft+" hours "+minutesLeft+" minutes"
+            if(hoursLeft == 0)
+                untilAlarm.text = "Until alarm:\n"+minutesLeft+" minutes"
+            else
+                untilAlarm.text = "Until alarm:\n"+hoursLeft+" hours "+minutesLeft+" minutes"
+
 
             if(!spinnerHour.moving && !spinnerMinute.moving //spinners have stopped
             && alarmTimeMinutes != alarmHour*60+alarmMinute) { //and alarm isn't set yet
