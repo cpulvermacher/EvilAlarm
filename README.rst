@@ -11,7 +11,8 @@ Blubbels
 Movement
   Moving the phone will silence the alarm for a short while, the alarm
   will stop a fixed time after it started. The idea is to, e.g. put the phone in
-  your pocket while you walk around and make breakfast.
+  your pocket while you walk around and make breakfast. Optionally, you can
+  also turn off the alarm by plugging in the AC adapter.
 
 * Project homepage: https://github.com/cpulvermacher/EvilAlarm
 * Information about UI redesign & screenshots: http://www.pilpi.net/software/evilalarm/
