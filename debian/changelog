@@ -1,3 +1,9 @@
+evilalarm (1.2) unstable; urgency=low
+
+  * Increase max. time alarm can be active to 10 hours.
+
+ -- Christian Pulvermacher <pulvermacher@gmx.de>  Sat, 31 Mar 2012 16:20:13 +0200
+
 evilalarm (1.1) unstable; urgency=low
 
   * Avoid bug that would hang with 100% CPU instead of starting alarm.
