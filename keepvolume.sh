@@ -5,7 +5,7 @@
 #seems to occur only while playing audio and shortly afterwards; results in 100% CPU usage, clone() syscall that it should be doing at this point never appears in strace output
 #somehow looks similar to this: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=575534
 
-pgrep -f evilalarm | grep $PPID > /dev/null
+pgrep -f evilalarm | grep "^$PPID$" > /dev/null
 if [ $? -ne 0 ]
 then
 	echo "$0 needs to be started by evilalarm"
