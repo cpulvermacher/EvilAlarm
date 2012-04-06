@@ -1,6 +1,7 @@
 evilalarm (1.2) unstable; urgency=low
 
   * Increase max. time alarm can be active to 10 hours.
+  * Prevent multiple instances of evilalarm --wakeup
 
  -- Christian Pulvermacher <pulvermacher@gmx.de>  Sat, 31 Mar 2012 16:20:13 +0200
 

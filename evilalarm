@@ -1,15 +1,8 @@
 #!/bin/sh
 #wrapper for starting evilalarm
-usagehint()
-{
-    echo "Usage: $0               to start the UI"
-    echo "or:    $0 --daemon SECS start alarm in SECS seconds"
-    echo "or:    $0 --test        start alarm right now, but allow closing"
-    echo "or:    $0 --wakeup      start alarm right now (equivalent to --daemon 0)"
-    echo -e "\nNote that any daemon you start yourself will not show up inside EvilAlarm."
-}
 
 OPTBINDIR=/opt/evilalarm/bin
+LOCKDIR=/tmp/evilalarm-wakeup.lock
 SLEEPPID=0
 ARGS=""
 
@@ -20,6 +13,52 @@ cleanup()
         kill $SLEEPPID
     fi
     exit 0
+}
+
+usagehint()
+{
+    echo "Usage: $0               to start the UI"
+    echo "or:    $0 --daemon SECS start alarm in SECS seconds"
+    echo "or:    $0 --test        start alarm right now, but allow closing"
+    echo "or:    $0 --wakeup      start alarm right now (equivalent to --daemon 0)"
+    echo -e "\nNote that any daemon you start yourself will not show up inside EvilAlarm."
+}
+
+getLock() {
+    #acquires a lock by atomically creating a directory
+    #flock would be a lot cleaner but isn't included in the default busybox install
+    if mkdir "$LOCKDIR"
+    then
+        # Remove LOCKDIR when the script finishes, or when it receives a signal
+        trap 'rm -rf "$LOCKDIR"' 0 2
+
+        #save our PID to allow checking for stale lock
+        echo "$$" > $LOCKDIR/daemon.pid
+
+    else
+        echo "$LOCKDIR exists!"
+        sleep 3 #avoid race conditions
+
+        DAEMONPID=`cat $LOCKDIR/daemon.pid`
+        if [ "$DAEMONPID" -ne "$DAEMONPID" ] 2>/dev/null
+        then
+            #not an integer!
+            DAEMONPID=0 #some sane default
+        fi
+
+        pgrep -f evilalarm | grep "^$DAEMONPID$" > /dev/null
+        if [ $? -ne 0 ]
+        then
+            #process terminated or not an evilalarm process, remove lock
+            echo "removing stale lockdir..."
+            rm -rf "$LOCKDIR" || exit 1
+
+            getLock
+        else
+            echo >&2 "cannot acquire lock, giving up on $LOCKDIR"
+            exit 1
+        fi
+    fi
 }
 
 if [ $# -eq 0 ]
@@ -51,7 +90,8 @@ else
     exit 1
 fi
 
-#start alarm
+getLock
+echo "Starting alarm..."
 
 #separate script to prevent changes to volume/profile
 #will exit once this evilalarm-daemon process shuts down
@@ -61,3 +101,5 @@ until $OPTBINDIR/evilalarm-ui --wakeup $ARGS #repeat until this returns 0
 do
     echo "EvilAlarm killed, restarting"
 done
+
+#lock automatically released
