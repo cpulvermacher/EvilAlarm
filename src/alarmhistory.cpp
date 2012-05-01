@@ -139,7 +139,7 @@ void AlarmHistory::loadAlarmList(QString listname, QHBoxLayout *list_layout, int
         qSort(alarm_list.begin(), alarm_list.end(), &historyItemUsedMoreOften);
 
         for(int i = 0; i < max_items && cutoff != alarm_list.end(); i++)
-            cutoff++;
+            ++cutoff;
     } else {
         cutoff = alarm_list.end();
     }
@@ -149,7 +149,7 @@ void AlarmHistory::loadAlarmList(QString listname, QHBoxLayout *list_layout, int
 
     //and display them
     QList<AlarmHistoryItem*>::iterator i;
-    for(i = alarm_list.begin(); i != cutoff; i++) {
+    for(i = alarm_list.begin(); i != cutoff; ++i) {
         AlarmHistoryItem *item = *i;
 
         list_layout->addWidget(item);
@@ -163,7 +163,7 @@ void AlarmHistory::loadAlarmList(QString listname, QHBoxLayout *list_layout, int
     //delete unused alarm items (or they'll end up still being shown as they're children of this dialog)
     while(cutoff != alarm_list.end()) {
         delete *cutoff;
-        cutoff++;
+        ++cutoff;
     }
 
     //add some space on the right side if there's few buttons
